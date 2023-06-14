@@ -1,15 +1,15 @@
 #ifndef RYANLIB_LOGGER_LOGGING_H_
 #define RYANLIB_LOGGER_LOGGING_H_
 
-#include <cstdio>
-#include <sys/time.h>
 #include <errno.h>
 #include <string.h>
+#include <sys/time.h>
+
+#include <cstdio>
 #include <functional>
 
-#include "timestamp.h"
 #include "log_stream.h"
-
+#include "timestamp.h"
 
 // SourceFile的作用是提取文件名
 class SourceFile {
@@ -75,15 +75,13 @@ class Logger {
     SourceFile basename_;
   };
 
-  // Logger's member variable 
+  // Logger's member variable
   Impl impl_;
 };
 
 extern Logger::LogLevel g_LogLevel;
 
-inline Logger::LogLevel LogLevel() {
-    return g_LogLevel;
-}
+inline Logger::LogLevel LogLevel() { return g_LogLevel; }
 
 // 获取errno信息
 const char* GetErrnoMsg(int saved_errno);
@@ -92,12 +90,13 @@ const char* GetErrnoMsg(int saved_errno);
  * 当日志等级小于对应等级才会输出
  * 比如设置等级为FATAL，则logLevel等级大于DEBUG和INFO，DEBUG和INFO等级的日志就不会输出
  */
-#define LOG_DEBUG if (LogLevel() <= Logger::DEBUG) \
+#define LOG_DEBUG                  \
+  if (LogLevel() <= Logger::DEBUG) \
   Logger(__FILE__, __LINE__, Logger::DEBUG, __func__).stream()
-#define LOG_INFO if (LogLevel() <= Logger::INFO) \
-  Logger(__FILE__, __LINE__).stream()
+#define LOG_INFO \
+  if (LogLevel() <= Logger::INFO) Logger(__FILE__, __LINE__).stream()
 #define LOG_WARN Logger(__FILE__, __LINE__, Logger::WARN).stream()
 #define LOG_ERROR Logger(__FILE__, __LINE__, Logger::ERROR).stream()
 #define LOG_FATAL Logger(__FILE__, __LINE__, Logger::FATAL).stream()
 
-#endif //RYANLIB_LOGGER_LOGGING_H_
+#endif  // RYANLIB_LOGGER_LOGGING_H_

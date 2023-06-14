@@ -7,16 +7,15 @@
 #include "noncopyable.h"
 
 //比如SourceFile类和时间类就会用到
-//const char* data_;
-//int size_;
+// const char* data_;
+// int size_;
 
 class GeneralTemplate : public Noncopyable {
  public:
   GeneralTemplate() : data_(nullptr), len(0) {}
   //此处为什么用explicit
   explicit GeneralTemplate(const char* data, int len)
-      : data_(data),
-        len_(len) {}
+      : data_(data), len_(len) {}
 
   const char* data_;
   int len_;
@@ -53,26 +52,13 @@ class LogStream : Noncopyable {
   //(const char*, int)的重载
   LogStream& operator<<(const GeneralTemplate& g);
 
-
  private:
   static const int kMaxNumericSize = 48;
   //对于整型需要特殊处理
-  template<typename T>
+  template <typename T>
   void FormatInteger(T);
 
   Buffer buffer_;
 };
 
-#endif // RYANLIB_LOGGER_LOG_STREAM_H_
-
-
-
-
-
-
-
-
-
-
-
-
+#endif  // RYANLIB_LOGGER_LOG_STREAM_H_

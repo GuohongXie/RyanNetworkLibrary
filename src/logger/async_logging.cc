@@ -1,11 +1,10 @@
+#include "async_logging.h"
+
 #include <cstdio>
 
-#include "async_logging.h"
 #include "timestamp.h"
 
-
-AsyncLogging::AsyncLogging(const std::string& basename,
-                           off_t roll_size,
+AsyncLogging::AsyncLogging(const std::string& basename, off_t roll_size,
                            int flush_interval)
     : flush_interval_(flush_interval),
       running_(false),
@@ -27,7 +26,7 @@ void AsyncLogging::Append(const char* logline, int len) {
   std::lock_guard<std::mutex> lock(mutex_);
   // 缓冲区剩余空间足够则直接写入
   if (current_buffer_->Avail() > len) {
-      current_buffer_->Append(logline, len);
+    current_buffer_->Append(logline, len);
   } else {
     // 当前缓冲区空间不够，将新信息写入备用缓冲区
     buffers_.push_back(std::move(current_buffer_));
@@ -59,8 +58,8 @@ void AsyncLogging::ThreadFunc() {
       // 互斥锁保护，这样别的线程在这段时间就无法向前端Buffer数组写入数据
       std::unique_lock<std::mutex> lock(mutex_);
       if (buffers_.empty()) {
-          // 等待三秒也会接触阻塞
-          cond_.wait_for(lock, std::chrono::seconds(3));
+        // 等待三秒也会接触阻塞
+        cond_.wait_for(lock, std::chrono::seconds(3));
       }
 
       // 此时正使用得buffer也放入buffer数组中（没写完也放进去，避免等待太久才刷新一次）
@@ -70,7 +69,7 @@ void AsyncLogging::ThreadFunc() {
       // 后端缓冲区和前端缓冲区交换
       buffersToWrite.swap(buffers_);
       if (!next_buffer_) {
-          next_buffer_ = std::move(new_buffer2);
+        next_buffer_ = std::move(new_buffer2);
       }
     }
 
@@ -98,8 +97,8 @@ void AsyncLogging::ThreadFunc() {
       new_buffer2->Reset();
     }
 
-    buffersToWrite.clear(); // 清空后端缓冲区队列
-    output.Flush(); //清空文件缓冲区
+    buffersToWrite.clear();  // 清空后端缓冲区队列
+    output.Flush();          //清空文件缓冲区
   }
   output.Flush();
 }

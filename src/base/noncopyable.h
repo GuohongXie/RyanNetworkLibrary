@@ -16,4 +16,4 @@ class Noncopyable {
   ~Noncopyable() = default;
 };
 
-#endif //RYANLIB_BASE_NONCOPYABLE_H_
+#endif  // RYANLIB_BASE_NONCOPYABLE_H_

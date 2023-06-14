@@ -1,8 +1,6 @@
 #include "log_file.h"
 
-LogFile::LogFile(const std::string& basename,
-                 off_t rollSize,
-                 int flushInterval,
+LogFile::LogFile(const std::string& basename, off_t rollSize, int flushInterval,
                  int checkEveryN)
     : basename_(basename),
       rollSize_(rollSize),
@@ -13,7 +11,7 @@ LogFile::LogFile(const std::string& basename,
       startOfPeriod_(0),
       lastRoll_(0),
       lastFlush_(0) {
-    RollFile();
+  RollFile();
 }
 
 LogFile::~LogFile() = default;
@@ -44,36 +42,32 @@ void LogFile::AppendInLock(const char* data, int len) {
   }
 }
 
-
-void LogFile::Flush()
-{
+void LogFile::Flush() {
   // std::lock_guard<std::mutex> lock(*mutex_);
   file_->Flush();
 }
 
 // 滚动日志
 // basename + time + hostname + pid + ".log"
-bool LogFile::RollFile()
-{
-    time_t now = 0;
-    std::string filename = GetLogFileName(basename_, &now);
-    // 计算现在是第几天 now/kRollPerSeconds求出现在是第几天，再乘以秒数相当于是当前天数0点对应的秒数
-    time_t start = now / kRollPerSeconds_ * kRollPerSeconds_;
+bool LogFile::RollFile() {
+  time_t now = 0;
+  std::string filename = GetLogFileName(basename_, &now);
+  // 计算现在是第几天
+  // now/kRollPerSeconds求出现在是第几天，再乘以秒数相当于是当前天数0点对应的秒数
+  time_t start = now / kRollPerSeconds_ * kRollPerSeconds_;
 
-    if (now > last_roll_)
-    {
-        last_roll_ = now;
-        last_flush_ = now;
-        start_of_period_ = start;
-        // 让file_指向一个名为filename的文件，相当于新建了一个文件
-        file_.Reset(new FileUtil(filename));
-        return true;
-    }
-    return false;
+  if (now > last_roll_) {
+    last_roll_ = now;
+    last_flush_ = now;
+    start_of_period_ = start;
+    // 让file_指向一个名为filename的文件，相当于新建了一个文件
+    file_.Reset(new FileUtil(filename));
+    return true;
+  }
+  return false;
 }
 
-std::string LogFile::GetLogFileName(const std::string& basename, time_t* now)
-{
+std::string LogFile::GetLogFileName(const std::string& basename, time_t* now) {
   std::string filename;
   filename.reserve(basename.size() + 64);
   filename = basename;

@@ -1,22 +1,21 @@
 #ifndef RYANLIB_LOGGER_ASYNC_LOGGING_H_
 #define RYANLIB_LOGGER_ASYNC_LOGGING_H_
 
-#include <vector>
+#include <condition_variable>
 #include <memory>
 #include <mutex>
-#include <condition_variable>
 #include <string>
+#include <vector>
 
+#include "fixed_buffer.h"
+#include "log_file.h"
+#include "log_stream.h"
 #include "noncopyable.h"
 #include "thread.h"
-#include "fixed_buffer.h"
-#include "log_stream.h"
-#include "log_file.h"
 
 class AsyncLogging {
  public:
-  AsyncLogging(const std::string& basename,
-               off_t rollSize,
+  AsyncLogging(const std::string& basename, off_t rollSize,
                int flushInterval = 3);
   ~AsyncLogging() {
     if (running_) {
@@ -58,5 +57,4 @@ class AsyncLogging {
   BufferVector buffers_;
 };
 
-
-#endif //RYANLIB_LOGGER_ASYNC_LOGGING_H_
+#endif  // RYANLIB_LOGGER_ASYNC_LOGGING_H_

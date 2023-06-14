@@ -1,17 +1,16 @@
 #include "async_logging.h"
+
+#include <unistd.h>
+
+#include <cstdio>
+
 #include "logging.h"
 #include "timestamp.h"
 
-#include <cstdio>
-#include <unistd.h>
-
-static const off_t kRollSize = 1*1024*1024;
+static const off_t kRollSize = 1 * 1024 * 1024;
 AsyncLogging* g_asyncLog = NULL;
 
-inline AsyncLogging* getAsyncLog()
-{
-    return g_asyncLog;
-}
+inline AsyncLogging* getAsyncLog() { return g_asyncLog; }
 
 void test_Logging() {
   LOG_DEBUG << "debug";
@@ -49,8 +48,8 @@ int main(int argc, char* argv[]) {
   sleep(1);
 
   g_asyncLog = &log;
-  Logger::setOutput(AsyncLog); // 为Logger设置输出回调, 重新配接输出位置
-  log.start(); // 开启日志后端线程
+  Logger::setOutput(AsyncLog);  // 为Logger设置输出回调, 重新配接输出位置
+  log.start();                  // 开启日志后端线程
 
   test_Logging();
   test_AsyncLogging();

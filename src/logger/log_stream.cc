@@ -1,9 +1,9 @@
-#include <algorithm>
 #include "log_stream.h"
+
+#include <algorithm>
 
 static const char digits[] = {'9', '8', '7', '6', '5', '4', '3', '2', '1', '0',
                               '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-
 
 template <typename T>
 void LogStream::FormatInteger(T num) {
@@ -11,7 +11,7 @@ void LogStream::FormatInteger(T num) {
     char* start = buffer_.current();
     char* cur = start;
     const char* zero = digits + 9;
-    bool negative = (num < 0); // 是否为负数
+    bool negative = (num < 0);  // 是否为负数
 
     // 末尾取值加入，最后反转
     do {
@@ -24,7 +24,7 @@ void LogStream::FormatInteger(T num) {
     }
     *cur = '\0';
     std::reverse(start, cur);
-    buffer_.add(static_cast<int>(cur - start)); // cur_向后移动
+    buffer_.add(static_cast<int>(cur - start));  // cur_向后移动
   }
 }
 
@@ -74,10 +74,9 @@ LogStream& LogStream::operator<<(float v) {
 }
 
 LogStream& LogStream::operator<<(double v) {
-  if (buffer_.avail() >= kMaxNumericSize)
-  {
+  if (buffer_.avail() >= kMaxNumericSize) {
     char buf[32];
-    int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v); 
+    int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v);
     buffer_.add(len);
     return *this;
   }
@@ -89,13 +88,12 @@ LogStream& LogStream::operator<<(char c) {
 }
 
 LogStream& LogStream::operator<<(const void* data) {
-  *this << static_cast<const char*>(data); 
+  *this << static_cast<const char*>(data);
   return *this;
 }
 
 LogStream& LogStream::operator<<(const char* str) {
-  if (str)
-  {
+  if (str) {
     buffer_.append(str, strlen(str));
   } else {
     buffer_.append("(null)", 6);
