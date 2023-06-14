@@ -39,87 +39,85 @@ LogStream& LogStream::operator<<(unsigned short v) {
 }
 
 LogStream& LogStream::operator<<(int v) {
-    formatInteger(v);
-    return *this;
+  formatInteger(v);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(unsigned int v) {
-    formatInteger(v);
-    return *this;
+  formatInteger(v);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(long v) {
-    formatInteger(v);
-    return *this;
+  formatInteger(v);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(unsigned long v) {
-    formatInteger(v);
-    return *this;
+  formatInteger(v);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(long long v) {
-    formatInteger(v);
-    return *this;
+  formatInteger(v);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(unsigned long long v) {
-    formatInteger(v);
-    return *this;
+  formatInteger(v);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(float v) {
-    *this << static_cast<double>(v);
-    return *this;
+  *this << static_cast<double>(v);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(double v) {
-    if (buffer_.avail() >= kMaxNumericSize)
-    {
-        char buf[32];
-        int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v); 
-        buffer_.add(len);
-        return *this;
-    }
+  if (buffer_.avail() >= kMaxNumericSize)
+  {
+    char buf[32];
+    int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v); 
+    buffer_.add(len);
+    return *this;
+  }
 }
 
 LogStream& LogStream::operator<<(char c) {
-    buffer_.append(&c, 1);
-    return *this;
+  buffer_.append(&c, 1);
+  return *this;
 }
 
 LogStream& LogStream::operator<<(const void* data) {
-    *this << static_cast<const char*>(data); 
-    return *this;
+  *this << static_cast<const char*>(data); 
+  return *this;
 }
 
 LogStream& LogStream::operator<<(const char* str) {
-    if (str)
-    {
-        buffer_.append(str, strlen(str));
-    }
-    else 
-    {
-        buffer_.append("(null)", 6);
-    }
-    return *this;
+  if (str)
+  {
+    buffer_.append(str, strlen(str));
+  } else {
+    buffer_.append("(null)", 6);
+  }
+  return *this;
 }
 
 LogStream& LogStream::operator<<(const unsigned char* str) {
-    return operator<<(reinterpret_cast<const char*>(str));
+  return operator<<(reinterpret_cast<const char*>(str));
 }
 
 LogStream& LogStream::operator<<(const std::string& str) {
-    buffer_.append(str.c_str(), str.size());
-    return *this;
+  buffer_.append(str.c_str(), str.size());
+  return *this;
 }
 
 LogStream& LogStream::operator<<(const Buffer& buf) {
-    *this << buf.toString();
-    return *this;
+  *this << buf.toString();
+  return *this;
 }
 
 LogStream& LogStream::operator<<(const GeneralTemplate& g) {
-    buffer_.append(g.data_, g.len_);
-    return *this;
+  buffer_.append(g.data_, g.len_);
+  return *this;
 }
