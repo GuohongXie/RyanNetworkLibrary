@@ -28,7 +28,7 @@ Logger::LogLevel InitLogLevel() {
 Logger::LogLevel g_LogLevel = InitLogLevel();
 
 static void DefaultOutput(const char* data, int len) {
-  fwrite(data, len, sizeof(char), stdout);
+  ::fwrite(data, len, sizeof(char), stdout);
 }
 
 static void DefaultFlush() {
@@ -44,25 +44,25 @@ Logger::Impl::Impl(Logger::LogLevel level, int saved_errno, const char* file, in
       level_(level),
       line_(line),
       basename_(file) {
-    // 输出流 -> time
-    FormatTime();
-    // 写入日志等级
-    stream_ << GeneralTemplate(get_level_name[level], 6);
-    // TODO:error
-    if (saved_errno != 0) {
-      stream_ << getErrnoMsg(saved_errno) << " (errno=" << saved_errno << ") ";
-    }
+  // 输出流 -> time
+  FormatTime();
+  // 写入日志等级
+  stream_ << GeneralTemplate(get_level_name[level], 6);
+  // TODO:error
+  if (saved_errno != 0) {
+    stream_ << getErrnoMsg(saved_errno) << " (errno=" << saved_errno << ") ";
+  }
 }
 
 // Timestamp::toString方法的思路，只不过这里需要输出到流
 void Logger::Impl::FormatTime() {
-    Timestamp now = Timestamp::now();
-    time_t seconds = static_cast<time_t>(now.microSecondsSinceEpoch() / Timestamp::kMicroSecondsPerSecond);
-    int microseconds = static_cast<int>(now.microSecondsSinceEpoch() % Timestamp::kMicroSecondsPerSecond);
+  Timestamp now = Timestamp::now();
+  time_t seconds = static_cast<time_t>(now.microSecondsSinceEpoch() / Timestamp::kMicroSecondsPerSecond);
+  int microseconds = static_cast<int>(now.microSecondsSinceEpoch() % Timestamp::kMicroSecondsPerSecond);
 
-    struct tm *tm_time = localtime(&seconds);
-    // 写入此线程存储的时间buf中
-    snprintf(thread_info::t_time, sizeof(thread_info::t_time), "%4d/%02d/%02d %02d:%02d:%02d",
+  struct tm *tm_time = ::localtime(&seconds);
+  // 写入此线程存储的时间buf中
+  snprintf(thread_info::t_time, sizeof(thread_info::t_time), "%4d/%02d/%02d %02d:%02d:%02d",
         tm_time->tm_year + 1900,
         tm_time->tm_mon + 1,
         tm_time->tm_mday,
@@ -70,19 +70,19 @@ void Logger::Impl::FormatTime() {
         tm_time->tm_min,
         tm_time->tm_sec);
     // 更新最后一次时间调用
-    thread_info::t_lastSecond = seconds;
+  thread_info::t_lastSecond = seconds;
 
-    // muduo使用Fmt格式化整数，这里我们直接写入buf
-    char buf[32] = {0};
-    snprintf(buf, sizeof(buf), "%06d ", microseconds);
+  // muduo使用Fmt格式化整数，这里我们直接写入buf
+  char buf[32] = {0};
+  snprintf(buf, sizeof(buf), "%06d ", microseconds);
 
-    // 输出时间，附有微妙(之前是(buf, 6),少了一个空格)
-    stream_ << GeneralTemplate(thread_info::t_time, 17) << GeneralTemplate(buf, 7);
+  // 输出时间，附有微妙(之前是(buf, 6),少了一个空格)
+  stream_ << GeneralTemplate(thread_info::t_time, 17) << GeneralTemplate(buf, 7);
 }
 
 void Logger::Impl::Finish() {
-    stream_ << " - " << GeneralTemplate(basename_.data_, basename_.size_) 
-            << ':' << line_ << '\n';
+  stream_ << " - " << GeneralTemplate(basename_.data_, basename_.size_) 
+          << ':' << line_ << '\n';
 }
 
 // level默认为INFO等级
@@ -96,8 +96,8 @@ Logger::Logger(const char* file, int line, Logger::LogLevel level)
 
 // 可以打印调用函数
 Logger::Logger(const char* file, int line, Logger::LogLevel level, const char* func)
-  : impl_(level, 0, file, line) {
-    impl_.stream_ << func << ' ';
+    : impl_(level, 0, file, line) {
+  impl_.stream_ << func << ' ';
 }
 
 
@@ -109,19 +109,19 @@ Logger::~Logger() {
   g_output(buf.data(), buf.length());
   // FATAL情况终止程序
   if (impl_.level_ == FATAL) {
-      g_flush();
-      abort();
+    g_flush();
+    abort();
   }
 }
 
 void Logger::SetLogLevel(Logger::LogLevel level) {
-    g_LogLevel = level;
+  g_LogLevel = level;
 }
 
 void Logger::SetOutput(OutputFunc out) {
-    g_output = out;
+  g_output = out;
 }
 
 void Logger::SetFlush(FlushFunc flush) {
-    g_flush = flush;
+  g_flush = flush;
 }

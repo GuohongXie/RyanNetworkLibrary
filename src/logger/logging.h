@@ -21,7 +21,7 @@ class SourceFile {
     if (slash) {
       data_ = slash + 1;
     }
-    size_ = static_cast<int>(strlen(data_));
+    size_ = static_cast<int>(::strlen(data_));
   }
 
   const char* data_;
