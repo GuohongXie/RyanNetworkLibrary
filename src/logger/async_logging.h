@@ -28,13 +28,13 @@ class AsyncLogging {
 
   void Start() {
     running_ = true;
-    thread_.start();
+    thread_.Start();
   }
 
   void Stop() {
     running_ = false;
     cond_.notify_one();
-    thread_.join();
+    thread_.Join();
   }
 
  private:

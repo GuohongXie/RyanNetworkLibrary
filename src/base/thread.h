@@ -15,8 +15,8 @@ class Thread : public Noncopyable {
   explicit Thread(ThreadFunc, const std::string& name = std::string());
   ~Thread();
 
-  void start();
-  void join();
+  void Start();
+  void Join();
 
   bool started() const { return started_; }
   pid_t tid() const { return tid_; }

@@ -24,7 +24,7 @@ Thread::~Thread() {
   }
 }
 
-void Thread::start() {
+void Thread::Start() {
   started_ = true;
   sem_t sem;
   ::sem_init(&sem, false, 0);
@@ -43,7 +43,7 @@ void Thread::start() {
   sem_wait(&sem);
 }
 
-void Thread::join() {
+void Thread::Join() {
   joined_ = true;
   //等待线程执行完毕
   thread_->join();
