@@ -9,9 +9,11 @@ cmake_minimum_required(VERSION 3.15)
 include_directories(
     ${PROJECT_SOURCE_DIR}/../../buffer
     ${PROJECT_SOURCE_DIR}/../../logger
+    ${PROJECT_SOURCE_DIR}/../../base
+    ${Boost_INCLUDE_DIRS}
     )
 
-#
+find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 # 包含这些目录下的.cc文件
 # 下面这两个会把目录及其子目录的所有.cc文件都包括
@@ -35,4 +37,4 @@ set(CXX_FLAGS
 add_executable(buffer_unittest ${SRC_MAIN} ${SRC_LOG} ${SRC_BUFFER})
 
 
-#target_link_libraries(buffer_unittest pthread)
+target_link_libraries(buffer_unittest ${Boost_LIBRARIES})

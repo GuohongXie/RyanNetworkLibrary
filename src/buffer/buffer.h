@@ -43,7 +43,7 @@ class Buffer {
   // 返回缓冲区中可读数据的起始地址
   const char* Peek() const { return Begin() + reader_index_; }
 
-  void RetrieveUntil(const char* end) { Retrieve(end - peek()); }
+  void RetrieveUntil(const char* end) { Retrieve(end - Peek()); }
 
   // onMessage string <- Buffer
   // 需要进行复位操作
@@ -57,6 +57,12 @@ class Buffer {
     else {
       RetrieveAll();
     }
+  }
+
+  void Prepend(const void* /*restrict*/ data, size_t len) {
+    reader_index_ -= len;
+    const char* d = static_cast<const char*>(data);
+    std::copy(d, d+len, Begin()+reader_index_);
   }
 
   // 全部读完，则直接将可读缓冲区指针移动到写缓冲区指针那
@@ -79,7 +85,7 @@ class Buffer {
   }
 
   std::string RetrieveAsString(size_t len) {
-    // peek()可读数据的起始地址
+    // Peek()可读数据的起始地址
     std::string result(Peek(), len);
     // 上面一句把缓冲区中可读取的数据读取出来，所以要将缓冲区复位
     Retrieve(len);
@@ -127,10 +133,10 @@ class Buffer {
  private:
   char* Begin() {
     // 获取buffer_起始地址
-    return &(*buffer_.Begin());
+    return &(*buffer_.begin());
   }
 
-  const char* Begin() const { return &(*buffer_ Begin()); }
+  const char* Begin() const { return &(*buffer_.begin()); }
 
   // TODO:扩容操作
   void MakeSpace(int len) {
