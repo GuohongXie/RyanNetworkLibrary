@@ -14,7 +14,7 @@ class LogFile {
 
   void Append(const char* data, int len);
   void Flush();
-  void RollFile();  //滚动日志
+  bool RollFile();  //滚动日志
 
  private:
   static std::string GetLogFileName(const std::string& basename, time_t* now);
@@ -33,7 +33,7 @@ class LogFile {
   time_t last_flush_;
   std::unique_ptr<FileUtil> file_;
 
-  const static int kPollPerSeconds_ = 60 * 60 * 24;
+  const static int kRollPerSeconds_ = 60 * 60 * 24;
 };
 
 #endif  // RYANLIB_LOGGER_LOG_FILE_H_

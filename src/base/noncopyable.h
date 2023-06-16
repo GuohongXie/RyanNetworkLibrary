@@ -11,7 +11,7 @@ class Noncopyable {
   Noncopyable(const Noncopyable&) = delete;
   Noncopyable& operator=(const Noncopyable&) = delete;
 
- private:
+ protected:
   Noncopyable() = default;
   ~Noncopyable() = default;
 };

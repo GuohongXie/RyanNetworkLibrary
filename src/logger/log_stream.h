@@ -12,7 +12,7 @@
 
 class GeneralTemplate : public Noncopyable {
  public:
-  GeneralTemplate() : data_(nullptr), len(0) {}
+  GeneralTemplate() : data_(nullptr), len_(0) {}
   //此处为什么用explicit
   explicit GeneralTemplate(const char* data, int len)
       : data_(data), len_(len) {}
@@ -25,7 +25,7 @@ class LogStream : Noncopyable {
  public:
   using Buffer = FixedBuffer<kSmallBuffer>;
 
-  void Append(const char* data, int len) { buffer_.append(data, len); }
+  void Append(const char* data, int len) { buffer_.Append(data, len); }
   const Buffer& buffer() const { return buffer_; }
   void ResetBuffer() { buffer_.Reset(); }
 

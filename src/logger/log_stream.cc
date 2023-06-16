@@ -8,7 +8,7 @@ static const char digits[] = {'9', '8', '7', '6', '5', '4', '3', '2', '1', '0',
 template <typename T>
 void LogStream::FormatInteger(T num) {
   if (buffer_.Avail() >= kMaxNumericSize) {
-    char* start = buffer_.current();
+    char* start = buffer_.Current();
     char* cur = start;
     const char* zero = digits + 9;
     bool negative = (num < 0);  // 是否为负数
@@ -24,7 +24,7 @@ void LogStream::FormatInteger(T num) {
     }
     *cur = '\0';
     std::reverse(start, cur);
-    buffer_.add(static_cast<int>(cur - start));  // cur_向后移动
+    buffer_.Add(static_cast<int>(cur - start));  // cur_向后移动
   }
 }
 
@@ -39,32 +39,32 @@ LogStream& LogStream::operator<<(unsigned short v) {
 }
 
 LogStream& LogStream::operator<<(int v) {
-  formatInteger(v);
+  FormatInteger(v);
   return *this;
 }
 
 LogStream& LogStream::operator<<(unsigned int v) {
-  formatInteger(v);
+  FormatInteger(v);
   return *this;
 }
 
 LogStream& LogStream::operator<<(long v) {
-  formatInteger(v);
+  FormatInteger(v);
   return *this;
 }
 
 LogStream& LogStream::operator<<(unsigned long v) {
-  formatInteger(v);
+  FormatInteger(v);
   return *this;
 }
 
 LogStream& LogStream::operator<<(long long v) {
-  formatInteger(v);
+  FormatInteger(v);
   return *this;
 }
 
 LogStream& LogStream::operator<<(unsigned long long v) {
-  formatInteger(v);
+  FormatInteger(v);
   return *this;
 }
 
@@ -74,16 +74,16 @@ LogStream& LogStream::operator<<(float v) {
 }
 
 LogStream& LogStream::operator<<(double v) {
-  if (buffer_.avail() >= kMaxNumericSize) {
+  if (buffer_.Avail() >= kMaxNumericSize) {
     char buf[32];
-    int len = snprintf(buffer_.current(), kMaxNumericSize, "%.12g", v);
-    buffer_.add(len);
+    int len = snprintf(buffer_.Current(), kMaxNumericSize, "%.12g", v);
+    buffer_.Add(len);
     return *this;
   }
 }
 
 LogStream& LogStream::operator<<(char c) {
-  buffer_.append(&c, 1);
+  buffer_.Append(&c, 1);
   return *this;
 }
 
@@ -94,9 +94,9 @@ LogStream& LogStream::operator<<(const void* data) {
 
 LogStream& LogStream::operator<<(const char* str) {
   if (str) {
-    buffer_.append(str, strlen(str));
+    buffer_.Append(str, strlen(str));
   } else {
-    buffer_.append("(null)", 6);
+    buffer_.Append("(null)", 6);
   }
   return *this;
 }
@@ -106,16 +106,16 @@ LogStream& LogStream::operator<<(const unsigned char* str) {
 }
 
 LogStream& LogStream::operator<<(const std::string& str) {
-  buffer_.append(str.c_str(), str.size());
+  buffer_.Append(str.c_str(), str.size());
   return *this;
 }
 
 LogStream& LogStream::operator<<(const Buffer& buf) {
-  *this << buf.toString();
+  *this << buf.ToString();
   return *this;
 }
 
 LogStream& LogStream::operator<<(const GeneralTemplate& g) {
-  buffer_.append(g.data_, g.len_);
+  buffer_.Append(g.data_, g.len_);
   return *this;
 }

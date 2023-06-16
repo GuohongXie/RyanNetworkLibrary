@@ -33,7 +33,7 @@ Logger::FlushFunc g_flush = DefaultFlush;
 
 Logger::Impl::Impl(Logger::LogLevel level, int saved_errno, const char* file,
                    int line)
-    : time_(Timestamp::now()),
+    : time_(Timestamp::Now()),
       stream_(),
       level_(level),
       line_(line),
@@ -44,16 +44,16 @@ Logger::Impl::Impl(Logger::LogLevel level, int saved_errno, const char* file,
   stream_ << GeneralTemplate(get_level_name[level], 6);
   // TODO:error
   if (saved_errno != 0) {
-    stream_ << getErrnoMsg(saved_errno) << " (errno=" << saved_errno << ") ";
+    stream_ << GetErrnoMsg(saved_errno) << " (errno=" << saved_errno << ") ";
   }
 }
 
 // Timestamp::toString方法的思路，只不过这里需要输出到流
 void Logger::Impl::FormatTime() {
-  Timestamp now = Timestamp::now();
-  time_t seconds = static_cast<time_t>(now.microSecondsSinceEpoch() /
+  Timestamp now = Timestamp::Now();
+  time_t seconds = static_cast<time_t>(now.micro_seconds_since_epoch() /
                                        Timestamp::kMicroSecondsPerSecond);
-  int microseconds = static_cast<int>(now.microSecondsSinceEpoch() %
+  int microseconds = static_cast<int>(now.micro_seconds_since_epoch() %
                                       Timestamp::kMicroSecondsPerSecond);
 
   struct tm* tm_time = ::localtime(&seconds);
@@ -93,11 +93,11 @@ Logger::Logger(const char* file, int line, Logger::LogLevel level,
 }
 
 Logger::~Logger() {
-  impl_.finish();
+  impl_.Finish();
   // 获取buffer(stream_.buffer_)
   const LogStream::Buffer& buf(stream().buffer());
   // 输出(默认向终端输出)
-  g_output(buf.data(), buf.length());
+  g_output(buf.data(), buf.Length());
   // FATAL情况终止程序
   if (impl_.level_ == FATAL) {
     g_flush();

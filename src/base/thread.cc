@@ -6,7 +6,7 @@
 
 std::atomic_int32_t Thread::num_created_(0);
 
-Thread::Thread(ThreadFunc, const std::string& name)
+Thread::Thread(ThreadFunc func, const std::string& name)
     : started_(false),
       joined_(false),
       tid_(0),
@@ -53,7 +53,7 @@ void Thread::SetDefaultName() {
   int num = ++num_created_;
   if (name_.empty()) {
     char buf[32] = {0};
-    snprintf(buf, sizeo(buf), "Thread%d", num);
+    snprintf(buf, sizeof(buf), "Thread%d", num);
     name_ = buf;
   }
 }

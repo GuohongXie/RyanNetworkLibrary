@@ -3,14 +3,14 @@
 LogFile::LogFile(const std::string& basename, off_t rollSize, int flushInterval,
                  int checkEveryN)
     : basename_(basename),
-      rollSize_(rollSize),
-      flushInterval_(flushInterval),
-      checkEveryN_(checkEveryN),
+      roll_size_(rollSize),
+      flush_interval_(flushInterval),
+      check_every_n_(checkEveryN),
       count_(0),
       mutex_(new std::mutex),
-      startOfPeriod_(0),
-      lastRoll_(0),
-      lastFlush_(0) {
+      start_of_period_(0),
+      last_roll_(0),
+      last_flush_(0) {
   RollFile();
 }
 
@@ -22,21 +22,21 @@ void LogFile::Append(const char* data, int len) {
 }
 
 void LogFile::AppendInLock(const char* data, int len) {
-  file_->append(data, len);
+  file_->Append(data, len);
 
-  if (file_->writtenBytes() > rollSize_) {
-    rollFile();
+  if (file_->written_bytes() > roll_size_) {
+    RollFile();
   } else {
     ++count_;
-    if (count_ >= checkEveryN_) {
+    if (count_ >= check_every_n_) {
       count_ = 0;
       time_t now = ::time(NULL);
       time_t thisPeriod = now / kRollPerSeconds_ * kRollPerSeconds_;
-      if (thisPeriod != startOfPeriod_) {
-        rollFile();
-      } else if (now - lastFlush_ > flushInterval_) {
-        lastFlush_ = now;
-        file_->flush();
+      if (thisPeriod != start_of_period_) {
+        RollFile();
+      } else if (now - last_flush_ > flush_interval_) {
+        last_flush_ = now;
+        file_->Flush();
       }
     }
   }
@@ -61,7 +61,7 @@ bool LogFile::RollFile() {
     last_flush_ = now;
     start_of_period_ = start;
     // 让file_指向一个名为filename的文件，相当于新建了一个文件
-    file_.Reset(new FileUtil(filename));
+    file_.reset(new FileUtil(filename));
     return true;
   }
   return false;

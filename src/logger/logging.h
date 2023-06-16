@@ -47,10 +47,10 @@ class Logger {
   ~Logger();
 
   // 流是会改变的
-  LogStream& stream() const { return impl_.stream_; }
+  LogStream& stream() { return impl_.stream_; }
 
   // TODO:static关键字作用的函数必须在源文件实现?
-  static LogLevel LogLevel();
+  static LogLevel logLevel();
   static void SetLogLevel(LogLevel level);
 
   // 输出函数和刷新缓冲区函数

@@ -10,7 +10,7 @@ void CacheTid();
 
 //内联函数
 inline int Tid() {
-    if (__builtin_expect(t_cached_tid == 0, 0) {
+    if (__builtin_expect(t_cached_tid == 0, 0)) {
     CacheTid();
     }
     return t_cached_tid;

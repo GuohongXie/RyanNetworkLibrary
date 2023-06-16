@@ -8,9 +8,9 @@
 #include "timestamp.h"
 
 static const off_t kRollSize = 1 * 1024 * 1024;
-AsyncLogging* g_asyncLog = NULL;
+AsyncLogging* g_asyncLog = nullptr;
 
-inline AsyncLogging* getAsyncLog() { return g_asyncLog; }
+inline AsyncLogging* GetAsyncLog() { return g_asyncLog; }
 
 void test_Logging() {
   LOG_DEBUG << "debug";
@@ -33,14 +33,14 @@ void test_AsyncLogging() {
 }
 
 void AsyncLog(const char* msg, int len) {
-  AsyncLogging* logging = getAsyncLog();
+  AsyncLogging* logging = GetAsyncLog();
   if (logging) {
-    logging->append(msg, len);
+    logging->Append(msg, len);
   }
 }
 
 int main(int argc, char* argv[]) {
-  printf("pid = %d\n", getpid());
+  printf("pid = %d\n", ::getpid());
 
   AsyncLogging log(::basename(argv[0]), kRollSize);
   test_Logging();
@@ -48,13 +48,13 @@ int main(int argc, char* argv[]) {
   sleep(1);
 
   g_asyncLog = &log;
-  Logger::setOutput(AsyncLog);  // 为Logger设置输出回调, 重新配接输出位置
-  log.start();                  // 开启日志后端线程
+  Logger::SetOutput(AsyncLog);  // 为Logger设置输出回调, 重新配接输出位置
+  log.Start();                  // 开启日志后端线程
 
   test_Logging();
   test_AsyncLogging();
 
   sleep(1);
-  log.stop();
+  log.Stop();
   return 0;
 }

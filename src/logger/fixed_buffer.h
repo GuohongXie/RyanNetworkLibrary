@@ -18,16 +18,16 @@ class FixedBuffer : public Noncopyable {
   void Append(const char* buf, size_t len) {
     if (static_cast<size_t>(Avail()) > len) {
       memcpy(curr_, buf, len);
-      cur_ += len;
+      curr_ += len;
     }
     // TODO:超出缓冲区长度如何处理，待补充
   }
   const char* data() const { return data_; }
   int Length() const { return static_cast<int>(end() - data_); }
 
-  char* Aurrent() const { return curr_; }
+  char* Current() const { return curr_; }
   int Avail() const { return static_cast<int>(end() - curr_); }
-  void Add(size_t len) { cur += len; }
+  void Add(size_t len) { curr_ += len; }
   void Reset() { curr_ = data_; }
   void Bzero() { ::memset(&data_, sizeof(data_), 0); }
   std::string ToString() const { return std::string(data_, Length()); }

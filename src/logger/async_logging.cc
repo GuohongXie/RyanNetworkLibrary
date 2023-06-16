@@ -34,7 +34,7 @@ void AsyncLogging::Append(const char* logline, int len) {
       current_buffer_ = std::move(next_buffer_);
     } else {
       // 备用缓冲区也不够时，重新分配缓冲区，这种情况很少见
-      current_buffer_.Reset(new Buffer);
+      current_buffer_.reset(new Buffer);
     }
     current_buffer_->Append(logline, len);
     // 唤醒写入磁盘得后端线程
@@ -75,7 +75,7 @@ void AsyncLogging::ThreadFunc() {
 
     // 遍历所有 buffer，将其写入文件
     for (const auto& buffer : buffersToWrite) {
-      output.append(buffer->data(), buffer->length());
+      output.Append(buffer->data(), buffer->Length());
     }
 
     // 只保留两个缓冲区
