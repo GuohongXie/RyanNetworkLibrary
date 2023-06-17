@@ -61,4 +61,16 @@ inline Timestamp AddTime(Timestamp timestamp, double seconds) {
   return Timestamp(timestamp.micro_seconds_since_epoch() + delta);
 }
 
+///
+/// Gets time difference of two timestamps, result in seconds.
+///
+/// @param high, low
+/// @return (high-low) in seconds
+/// @c double has 52-bit precision, enough for one-microsecond
+/// resolution for next 100 years.
+inline double TimeDifference(Timestamp high, Timestamp low)
+{
+  int64_t diff = high.micro_seconds_since_epoch() - low.micro_seconds_since_epoch();
+  return static_cast<double>(diff) / Timestamp::kMicroSecondsPerSecond;
+}
 #endif  // RYANLIB_BASE_TIMESTAMP_H_

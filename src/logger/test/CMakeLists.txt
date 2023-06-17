@@ -16,7 +16,9 @@ set (SRC_THREAD
      ../../base/current_thread.cc
 )
 set (SRC_TIMESTAMP ../../base/timestamp.cc)
-set (SRC_MAIN async_logging_test.cc)
+
+set (SRC_ASYNC_LOGGING_TEST async_logging_test.cc)
+set (SRC_LOG_FILE_TEST log_file_test.cc)
 
 # 包含这些目录下的.cc文件
 aux_source_directory(${PROJECT_SOURCE_DIR}/../../logger SRC_LOG)
@@ -31,7 +33,8 @@ set(CXX_FLAGS
 
 
 #add an executable with the above sources
-add_executable(logger_test ${SRC_MAIN} ${SRC_TIMESTAMP} ${SRC_LOG} ${SRC_THREAD})
+add_executable(async_logging_test ${SRC_ASYNC_LOGGING_TEST} ${SRC_TIMESTAMP} ${SRC_LOG} ${SRC_THREAD})
+target_link_libraries(async_logging_test pthread)
 
-
-target_link_libraries(logger_test pthread)
+add_executable(log_file_test ${SRC_LOG_FILE_TEST} ${SRC_TIMESTAMP} ${SRC_LOG} ${SRC_THREAD})
+target_link_libraries(log_file_test pthread)

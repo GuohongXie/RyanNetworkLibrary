@@ -20,7 +20,7 @@ void Benchmark() {
   }
   printf("%s\n", stamps.front().ToString().c_str());
   printf("%s\n", stamps.back().ToString().c_str());
-  printf("%f\n", timeDifference(stamps.back(), stamps.front()));
+  printf("%f\n", TimeDifference(stamps.back(), stamps.front()));
 
   int increments[100] = {0};
   int64_t start = stamps.front().micro_seconds_since_epoch();

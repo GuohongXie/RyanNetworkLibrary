@@ -13,7 +13,7 @@ void CountDownLatch::CountDown() {
   std::unique_lock<std::mutex> lock(mutex_);
   --count_;
   if (count_ == 0) {
-    cv_.notifyAll();
+    cv_.notify_all();
   }
 }
 

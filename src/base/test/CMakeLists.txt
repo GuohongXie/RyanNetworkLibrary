@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.15)
 
 # 设置项目名称
-project(thread_pool_test C CXX)
+project(base_test C CXX)
 
 # 添加搜索路径
 include_directories(
@@ -20,7 +20,9 @@ include_directories(
 file(GLOB SRC_LOG ${PROJECT_SOURCE_DIR}/../../logger/*.cc)
 file(GLOB SRC_BASE ${PROJECT_SOURCE_DIR}/../../base/*.cc)
 
-set (SRC_MAIN  ${PROJECT_SOURCE_DIR}/thread_pool_test.cc)
+set (SRC_thread_pool_test  ${PROJECT_SOURCE_DIR}/thread_pool_test.cc)
+set (SRC_thread_test  ${PROJECT_SOURCE_DIR}/thread_test.cc)
+set (SRC_timestamp_unittest  ${PROJECT_SOURCE_DIR}/timestamp_unittest.cc)
 
 # 设置编译选项
 set(CXX_FLAGS
@@ -31,7 +33,11 @@ set(CXX_FLAGS
 
 
 #add an executable with the above sources
-add_executable(thread_pool_test  ${SRC_MAIN} ${SRC_LOG} ${SRC_BASE})
-
-
+add_executable(thread_pool_test  ${SRC_thread_pool_test} ${SRC_LOG} ${SRC_BASE})
 target_link_libraries(thread_pool_test  pthread)
+
+add_executable(thread_test  ${SRC_thread_test} ${SRC_LOG} ${SRC_BASE})
+target_link_libraries(thread_test  pthread)
+
+add_executable(timestamp_unittest  ${SRC_timestamp_unittest} ${SRC_LOG} ${SRC_BASE})
+target_link_libraries(timestamp_unittest  pthread)
