@@ -13,7 +13,13 @@ include_directories(
     ${Boost_INCLUDE_DIRS}
     )
 
-find_package(Boost REQUIRED COMPONENTS system filesystem)
+find_package(Boost REQUIRED COMPONENTS unit_test_framework)
+# check if boost was found
+if(Boost_FOUND)
+    message ("boost found")
+else()
+    message (FATAL_ERROR "Cannot find Boost")
+endif()
 
 # 包含这些目录下的.cc文件
 # 下面这两个会把目录及其子目录的所有.cc文件都包括
@@ -37,4 +43,12 @@ set(CXX_FLAGS
 add_executable(buffer_unittest ${SRC_MAIN} ${SRC_LOG} ${SRC_BUFFER})
 
 
-target_link_libraries(buffer_unittest ${Boost_LIBRARIES})
+target_link_libraries(buffer_unittest Boost::boost)
+
+
+
+###########################
+#  unit test
+# enable CTest testing 
+
+# add a testing executable
