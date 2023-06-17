@@ -30,8 +30,9 @@ ssize_t Buffer::ReadFd(int fd, int* saveErrno) {
 
   // 使用iovec分配两个连续的缓冲区
   struct iovec vec[2];
-  const size_t writable = WritableBytes();  // 这是Buffer底层缓冲区剩余的可写空间大小
-                                            // 不一定能完全存储从fd读出的数据
+  const size_t writable =
+      WritableBytes();  // 这是Buffer底层缓冲区剩余的可写空间大小
+                        // 不一定能完全存储从fd读出的数据
 
   // 第一块缓冲区，指向可写空间
   vec[0].iov_base = Begin() + writer_index_;

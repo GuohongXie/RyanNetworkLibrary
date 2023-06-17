@@ -3,8 +3,8 @@
 
 #include <functional>
 
-#include "timestamp.h"
 #include "noncopyable.h"
+#include "timestamp.h"
 
 /**
  * Timer用于描述一个定时器

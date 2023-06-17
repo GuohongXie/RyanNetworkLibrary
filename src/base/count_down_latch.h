@@ -1,14 +1,13 @@
 #ifndef RYANLIB_BASE_COUNT_DOWN_LATCH_H_
 #define RYANLIB_BASE_COUNT_DOWN_LATCH_H_
 
-#include <mutex>
 #include <condition_variable>
+#include <mutex>
 
 #include "noncopyable.h"
 
 class CountDownLatch : public Noncopyable {
  public:
-
   explicit CountDownLatch(int count);
 
   void Wait();

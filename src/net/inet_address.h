@@ -3,8 +3,8 @@
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <cstring>
 
+#include <cstring>
 #include <string>
 
 class InetAddress {

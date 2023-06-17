@@ -22,8 +22,8 @@ void ThreadPool::Start() {
     threads_[i]->Start();
   }
   // 不创建新线程
-  if (thread_size_ == 0 &&  thread_init_callback_) {
-     thread_init_callback_();
+  if (thread_size_ == 0 && thread_init_callback_) {
+    thread_init_callback_();
   }
 }
 
@@ -46,8 +46,8 @@ void ThreadPool::Add(ThreadFunction ThreadFunction) {
 
 void ThreadPool::RunInThread() {
   try {
-    if ( thread_init_callback_) {
-       thread_init_callback_();
+    if (thread_init_callback_) {
+      thread_init_callback_();
     }
     ThreadFunction task;
     // 之前写成了 while (true)，这会导致出不去循环

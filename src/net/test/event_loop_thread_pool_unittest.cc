@@ -1,25 +1,22 @@
 #include "event_loop_thread_pool.h"
-#include "event_loop.h"
-#include "thread.h"
 
 #include <stdio.h>
 #include <unistd.h>
 
+#include "event_loop.h"
+#include "thread.h"
 
-void Print(EventLoop* p = nullptr)
-{
-  printf("main(): pid = %d, tid = %d, loop = %p\n",
-         ::getpid(), CurrentThread::Tid(), p);
+void Print(EventLoop* p = nullptr) {
+  printf("main(): pid = %d, tid = %d, loop = %p\n", ::getpid(),
+         CurrentThread::Tid(), p);
 }
 
-void Init(EventLoop* p)
-{
-  printf("Init(): pid = %d, tid = %d, loop = %p\n",
-         ::getpid(), CurrentThread::Tid(), p);
+void Init(EventLoop* p) {
+  printf("Init(): pid = %d, tid = %d, loop = %p\n", ::getpid(),
+         CurrentThread::Tid(), p);
 }
 
-int main()
-{
+int main() {
   Print();
 
   EventLoop loop;
@@ -63,4 +60,3 @@ int main()
 
   loop.Loop();
 }
-

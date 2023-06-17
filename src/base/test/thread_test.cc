@@ -1,56 +1,44 @@
 #include "thread.h"
-#include "current_thread.h"
 
-#include <string>
 #include <stdio.h>
 #include <unistd.h>
 
-void Mysleep(int seconds)
-{
-  timespec t = { seconds, 0 };
+#include <string>
+
+#include "current_thread.h"
+
+void Mysleep(int seconds) {
+  timespec t = {seconds, 0};
   nanosleep(&t, NULL);
 }
 
-void ThreadFunc()
-{
-  printf("Tid=%d\n", CurrentThread::Tid());
-}
+void ThreadFunc() { printf("Tid=%d\n", CurrentThread::Tid()); }
 
-void ThreadFunc2(int x)
-{
-  printf("Tid=%d, x=%d\n", CurrentThread::Tid(), x);
-}
+void ThreadFunc2(int x) { printf("Tid=%d, x=%d\n", CurrentThread::Tid(), x); }
 
-void ThreadFunc3()
-{
+void ThreadFunc3() {
   printf("Tid=%d\n", CurrentThread::Tid());
   Mysleep(1);
 }
 
-class Foo
-{
+class Foo {
  public:
-  explicit Foo(double x)
-    : x_(x)
-  {
-  }
+  explicit Foo(double x) : x_(x) {}
 
-  void MemberFunc()
-  {
+  void MemberFunc() {
     printf("Tid=%d, Foo::x_=%f\n", CurrentThread::Tid(), x_);
   }
 
-  void MemberFunc2(const std::string& text)
-  {
-    printf("Tid=%d, Foo::x_=%f, text=%s\n", CurrentThread::Tid(), x_, text.c_str());
+  void MemberFunc2(const std::string& text) {
+    printf("Tid=%d, Foo::x_=%f, text=%s\n", CurrentThread::Tid(), x_,
+           text.c_str());
   }
 
  private:
   double x_;
 };
 
-int main()
-{
+int main() {
   printf("pid=%d, Tid=%d\n", ::getpid(), CurrentThread::Tid());
 
   Thread t1(ThreadFunc);
@@ -59,18 +47,19 @@ int main()
   t1.Join();
 
   Thread t2(std::bind(ThreadFunc2, 42),
-                   "thread for free function with argument");
+            "thread for free function with argument");
   t2.Start();
   printf("t2.Tid=%d\n", t2.Tid());
   t2.Join();
 
   Foo foo(87.53);
   Thread t3(std::bind(&Foo::MemberFunc, &foo),
-                   "thread for member function without argument");
+            "thread for member function without argument");
   t3.Start();
   t3.Join();
 
-  Thread t4(std::bind(&Foo::MemberFunc2, std::ref(foo), std::string("Shuo Chen")));
+  Thread t4(
+      std::bind(&Foo::MemberFunc2, std::ref(foo), std::string("Shuo Chen")));
   t4.Start();
   t4.Join();
 

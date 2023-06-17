@@ -2,8 +2,8 @@
 #define RYANLIB_NET_ACCEPTOR_H_
 
 #include "channel.h"
-#include "socket.h"
 #include "noncopyable.h"
+#include "socket.h"
 
 class EventLoop;
 class InetAddress;
@@ -15,7 +15,8 @@ class InetAddress;
 class Acceptor {
  public:
   // 接受新连接的回调函数
-  using NewConnectionCallback = std::function<void(int sockfd, const InetAddress&)>;
+  using NewConnectionCallback =
+      std::function<void(int sockfd, const InetAddress&)>;
   Acceptor(EventLoop* loop, const InetAddress& ListenAddr, bool reuseport);
   ~Acceptor();
 

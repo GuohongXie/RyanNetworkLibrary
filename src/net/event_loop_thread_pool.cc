@@ -35,7 +35,7 @@ void EventLoopThreadPool::Start(const ThreadInitCallback& cb) {
   // 整个服务端只有一个线程运行baseLoop
   if (num_threads_ == 0 && cb) {
     // 那么不用交给新线程去运行用户回调函数了
-    cb( base_loop_);
+    cb(base_loop_);
   }
 }
 
@@ -43,7 +43,7 @@ void EventLoopThreadPool::Start(const ThreadInitCallback& cb) {
 EventLoop* EventLoopThreadPool::GetNextLoop() {
   // 如果只设置一个线程 也就是只有一个mainReactor 无subReactor
   // 那么轮询只有一个线程 getNextLoop()每次都返回当前的baseLoop_
-  EventLoop* loop =  base_loop_;
+  EventLoop* loop = base_loop_;
 
   // 通过轮询获取下一个处理事件的loop
   // 如果没设置多线程数量，则不会进去，相当于直接返回baseLoop
@@ -61,7 +61,7 @@ EventLoop* EventLoopThreadPool::GetNextLoop() {
 
 std::vector<EventLoop*> EventLoopThreadPool::GetAllLoops() {
   if (loops_.empty()) {
-    return std::vector<EventLoop*>(1,  base_loop_);
+    return std::vector<EventLoop*>(1, base_loop_);
   } else {
     return loops_;
   }

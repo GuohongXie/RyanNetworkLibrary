@@ -21,4 +21,3 @@ int CountDownLatch::GetCount() const {
   std::unique_lock<std::mutex> lock(mutex_);
   return count_;
 }
-

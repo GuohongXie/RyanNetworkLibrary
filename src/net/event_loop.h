@@ -8,9 +8,9 @@
 #include <vector>
 
 #include "current_thread.h"
+#include "noncopyable.h"
 #include "timer_queue.h"
 #include "timestamp.h"
-#include "noncopyable.h"
 
 class Channel;
 class Poller;
@@ -74,8 +74,9 @@ class EventLoop : Noncopyable {
   using ChannelList = std::vector<Channel*>;
   std::atomic_bool looping_;  // 原子操作，通过CAS实现
   std::atomic_bool quit_;     // 标志退出事件循环
-  std::atomic_bool calling_pending_functors_;  // 标志当前loop是否有需要执行的回调操作
-  const pid_t thread_id_;      // 记录当前loop所在线程的id
+  std::atomic_bool
+      calling_pending_functors_;  // 标志当前loop是否有需要执行的回调操作
+  const pid_t thread_id_;       // 记录当前loop所在线程的id
   Timestamp poll_return_time_;  // poller返回发生事件的channels的返回时间
   std::unique_ptr<Poller> poller_;
   std::unique_ptr<TimerQueue> timer_queue_;
@@ -88,7 +89,7 @@ class EventLoop : Noncopyable {
   int wakeup_fd_;
   std::unique_ptr<Channel> wakeup_channel_;
 
-  ChannelList active_channels_;     // 活跃的Channel
+  ChannelList active_channels_;      // 活跃的Channel
   Channel* current_active_channel_;  // 当前处理的活跃channel
   std::mutex mutex_;  // 用于保护pendingFunctors_线程安全操作
   std::vector<Functor>

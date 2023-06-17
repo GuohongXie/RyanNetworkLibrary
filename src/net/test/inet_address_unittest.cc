@@ -7,9 +7,7 @@
 #define BOOST_TEST_DYN_LINK
 #include <boost/test/unit_test.hpp>
 
-
-BOOST_AUTO_TEST_CASE(testInetAddress)
-{
+BOOST_AUTO_TEST_CASE(testInetAddress) {
   InetAddress addr0(1234);
   BOOST_CHECK_EQUAL(addr0.ToIp(), std::string("0.0.0.0"));
   BOOST_CHECK_EQUAL(addr0.ToIpPort(), std::string("0.0.0.0:1234"));
@@ -30,5 +28,3 @@ BOOST_AUTO_TEST_CASE(testInetAddress)
   BOOST_CHECK_EQUAL(addr3.ToIpPort(), std::string("255.254.253.252:65535"));
   BOOST_CHECK_EQUAL(addr3.ToPort(), 65535);
 }
-
-

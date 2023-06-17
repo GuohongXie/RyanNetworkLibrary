@@ -7,8 +7,8 @@
 #include <vector>
 
 #include "logging.h"
-#include "thread.h"
 #include "noncopyable.h"
+#include "thread.h"
 
 class ThreadPool : Noncopyable {
  public:

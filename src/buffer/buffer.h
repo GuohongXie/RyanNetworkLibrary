@@ -62,7 +62,7 @@ class Buffer {
   void Prepend(const void* /*restrict*/ data, size_t len) {
     reader_index_ -= len;
     const char* d = static_cast<const char*>(data);
-    std::copy(d, d+len, Begin()+reader_index_);
+    std::copy(d, d + len, Begin() + reader_index_);
   }
 
   // 全部读完，则直接将可读缓冲区指针移动到写缓冲区指针那

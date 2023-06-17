@@ -33,12 +33,13 @@ class EventLoopThreadPool {
 
  private:
   EventLoop* base_loop_;  // 用户使用muduo创建的loop 如果线程数为1
-                         // 那直接使用用户创建的loop 否则创建多EventLoop
+                          // 那直接使用用户创建的loop 否则创建多EventLoop
   std::string name_;
-  bool started_;    // 开启线程池标志
+  bool started_;     // 开启线程池标志
   int num_threads_;  // 创建线程数量
-  size_t next_;     // 轮询的下标
-  std::vector<std::unique_ptr<EventLoopThread>> threads_;  // 保存所有的EventLoopThread容器
+  size_t next_;      // 轮询的下标
+  std::vector<std::unique_ptr<EventLoopThread>>
+      threads_;                    // 保存所有的EventLoopThread容器
   std::vector<EventLoop*> loops_;  // 保存创建的所有EventLoop
 };
 #endif  // RYANLIB_NET_EVENT_LOOP_THREAD_POOL_H_

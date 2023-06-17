@@ -1,8 +1,9 @@
 #include "timer_queue.h"
 
-#include <cstring>
 #include <sys/timerfd.h>
 #include <unistd.h>
+
+#include <cstring>
 
 #include "channel.h"
 #include "event_loop.h"

@@ -1,37 +1,31 @@
+#include <stdio.h>
+#include <unistd.h>
+
 #include "event_loop.h"
 #include "event_loop_thread.h"
 #include "thread.h"
 
-#include <stdio.h>
-#include <unistd.h>
-
-
 int cnt = 0;
 EventLoop* g_loop;
 
-void PrintTid()
-{
+void PrintTid() {
   printf("pid = %d, tid = %d\n", getpid(), CurrentThread::Tid());
   printf("now %s\n", Timestamp::Now().ToString().c_str());
 }
 
-void Print(const char* msg)
-{
+void Print(const char* msg) {
   printf("msg %s %s\n", Timestamp::Now().ToString().c_str(), msg);
-  if (++cnt == 20)
-  {
+  if (++cnt == 20) {
     g_loop->Quit();
   }
 }
 
-void Cancel(TimerId timer)
-{
+void Cancel(TimerId timer) {
   g_loop->Cancel(timer);
   printf("cancelled at %s\n", Timestamp::Now().ToString().c_str());
 }
 
-int main()
-{
+int main() {
   PrintTid();
   ::sleep(1);
   {

@@ -36,7 +36,7 @@ EventLoop::EventLoop()
   LOG_DEBUG << "EventLoop created wakeupFd " << wakeup_channel_->fd();
   if (t_loop_in_this_thread) {
     LOG_FATAL << "Another EventLoop" << t_loop_in_this_thread
-              << " exists in this thread " <<  thread_id_;
+              << " exists in this thread " << thread_id_;
   } else {
     t_loop_in_this_thread = this;
   }

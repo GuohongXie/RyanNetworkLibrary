@@ -1,22 +1,21 @@
 #include "event_loop.h"
-#include "thread.h"
 
 #include <assert.h>
 #include <stdio.h>
 #include <unistd.h>
 
+#include "thread.h"
 
 EventLoop* g_loop;
 
-void Callback()
-{
+void Callback() {
   printf("Callback(): pid = %d, tid = %d\n", ::getpid(), CurrentThread::Tid());
   EventLoop anotherLoop;
 }
 
-void ThreadFunc()
-{
-  printf("ThreadFunc(): pid = %d, tid = %d\n", ::getpid(), CurrentThread::Tid());
+void ThreadFunc() {
+  printf("ThreadFunc(): pid = %d, tid = %d\n", ::getpid(),
+         CurrentThread::Tid());
 
   assert(EventLoop::GetEventLoopOfCurrentThread() == nullptr);
   EventLoop loop;
@@ -25,8 +24,7 @@ void ThreadFunc()
   loop.Loop();
 }
 
-int main()
-{
+int main() {
   printf("main(): pid = %d, tid = %d\n", ::getpid(), CurrentThread::Tid());
 
   assert(EventLoop::GetEventLoopOfCurrentThread() == nullptr);
