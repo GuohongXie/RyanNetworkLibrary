@@ -7,19 +7,19 @@
 #include <string>
 #include <unordered_map>
 
-#include "Acceptor.h"
-#include "Callback.h"
-#include "EventLoop.h"
-#include "EventLoopThreadPool.h"
-#include "InetAddress.h"
-#include "TcpConnection.h"
+#include "acceptor.h"
+#include "callback.h"
+#include "event_loop.h"
+#include "event_loop_thread_pool.h"
+#include "inet_address.h"
+#include "tcp_connection.h"
 #include "noncopyable.h"
 
 /**
  * 我们用户编写的时候就是使用的TcpServer
  * 我们向里面注册各种回调函数
  */
-class TcpServer : noncopyable {
+class TcpServer : public Noncopyable {
  public:
   using ThreadInitCallback = std::function<void(EventLoop*)>;
 
@@ -33,33 +33,33 @@ class TcpServer : noncopyable {
   ~TcpServer();
 
   // 设置回调函数(用户自定义的函数传入)
-  void setThreadInitCallback(const ThreadInitCallback& cb) {
-    threadInitCallback_ = cb;
+  void SetThreadInitCallback(const ThreadInitCallback& cb) {
+    thread_init_callback_ = cb;
   }
-  void setConnectionCallback(const ConnectionCallback& cb) {
-    connectionCallback_ = cb;
+  void SetConnectionCallback(const ConnectionCallback& cb) {
+    connection_callback_ = cb;
   }
-  void setMessageCallback(const MessageCallback& cb) { messageCallback_ = cb; }
-  void setWriteCompleteCallback(const WriteCompleteCallback& cb) {
-    writeCompleteCallback_ = cb;
+  void SetMessageCallback(const MessageCallback& cb) { message_callback_ = cb; }
+  void SetWriteCompleteCallback(const WriteCompleteCallback& cb) {
+    write_complete_callback_ = cb;
   }
 
   // 设置底层subLoop的个数
-  void setThreadNum(int numThreads);
+  void SetThreadNum(int numThreads);
 
   // 开启服务器监听
-  void start();
+  void Start();
 
-  EventLoop* getLoop() const { return loop_; }
+  EventLoop* GetLoop() const { return loop_; }
 
   const std::string name() { return name_; }
 
-  const std::string ipPort() { return ipPort_; }
+  const std::string ip_port() { return ip_port_; }
 
  private:
-  void newConnection(int sockfd, const InetAddress& peerAddr);
-  void removeConnection(const TcpConnectionPtr& conn);
-  void removeConnectionInLoop(const TcpConnectionPtr& conn);
+  void NewConnection(int sockfd, const InetAddress& peerAddr);
+  void RemoveConnection(const TcpConnectionPtr& conn);
+  void RemoveConnectionInLoop(const TcpConnectionPtr& conn);
 
   /**
    * key:     std::string
@@ -68,20 +68,20 @@ class TcpServer : noncopyable {
   using ConnectionMap = std::unordered_map<std::string, TcpConnectionPtr>;
 
   EventLoop* loop_;                     // 用户定义的baseLoop
-  const std::string ipPort_;            // 传入的IP地址和端口号
+  const std::string ip_port_;            // 传入的IP地址和端口号
   const std::string name_;              // TcpServer名字
   std::unique_ptr<Acceptor> acceptor_;  // Acceptor对象负责监视
 
-  std::shared_ptr<EventLoopThreadPool> threadPool_;  // 线程池
+  std::shared_ptr<EventLoopThreadPool> thread_pool_;  // 线程池
 
-  ConnectionCallback connectionCallback_;  // 有新连接时的回调函数
-  MessageCallback messageCallback_;        // 有读写消息时的回调函数
-  WriteCompleteCallback writeCompleteCallback_;  // 消息发送完成以后的回调函数
+  ConnectionCallback connection_callback_;  // 有新连接时的回调函数
+  MessageCallback message_callback_;        // 有读写消息时的回调函数
+  WriteCompleteCallback write_complete_callback_;  // 消息发送完成以后的回调函数
 
-  ThreadInitCallback threadInitCallback_;  // loop线程初始化的回调函数
+  ThreadInitCallback thread_init_callback_;  // loop线程初始化的回调函数
   std::atomic_int started_;                // TcpServer
 
-  int nextConnId_;             // 连接索引
+  int next_conn_id_;             // 连接索引
   ConnectionMap connections_;  // 保存所有的连接
 };
 
