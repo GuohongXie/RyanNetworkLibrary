@@ -6,6 +6,8 @@
 #include <boost/test/unit_test.hpp>
 
 using std::string;
+const size_t Buffer::kCheapPrepend;
+const size_t Buffer::kInitialSize;
 
 BOOST_AUTO_TEST_CASE(testBufferAppendRetrieve) {
   Buffer buf;

@@ -28,6 +28,7 @@ endif()
 #如果想要不包含子目录下的文件，则使用file
 file(GLOB SRC_LOG ${PROJECT_SOURCE_DIR}/../../logger/*.cc)
 file(GLOB SRC_BUFFER ${PROJECT_SOURCE_DIR}/../../buffer/*.cc)
+file(GLOB SRC_BASE ${PROJECT_SOURCE_DIR}/../../base/*.cc)
 
 set (SRC_MAIN  ${PROJECT_SOURCE_DIR}/buffer_unittest.cc)
 
@@ -40,10 +41,8 @@ set(CXX_FLAGS
 
 
 #add an executable with the above sources
-add_executable(buffer_unittest ${SRC_MAIN} ${SRC_LOG} ${SRC_BUFFER})
-
-
-target_link_libraries(buffer_unittest Boost::boost)
+add_executable(buffer_unittest ${SRC_MAIN} ${SRC_LOG} ${SRC_BUFFER} ${SRC_BASE})
+target_link_libraries(buffer_unittest ${Boost_LIBRARIES} pthread)
 
 
 
