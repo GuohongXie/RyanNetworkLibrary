@@ -8,10 +8,10 @@ class EchoServer {
   EchoServer(EventLoop* loop, const InetAddress& addr, const std::string& name)
       : server_(loop, addr, name), loop_(loop) {
     // 注册回调函数
-    server_.setConnectionCallback(
+    server_.SetConnectionCallback(
         std::bind(&EchoServer::OnConnection, this, std::placeholders::_1));
 
-    server_.setMessageCallback(
+    server_.SetMessageCallback(
         std::bind(&EchoServer::OnMessage, this, std::placeholders::_1,
                   std::placeholders::_2, std::placeholders::_3));
 
@@ -24,11 +24,11 @@ class EchoServer {
  private:
   // 连接建立或断开的回调函数
   void OnConnection(const TcpConnectionPtr& conn) {
-    if (conn->connected()) {
-      LOG_INFO << "Connection UP : " << conn->peerAddress().toIpPort().c_str();
+    if (conn->Connected()) {
+      LOG_INFO << "Connection UP : " << conn->PeerAddress().ToIpPort().c_str();
     } else {
       LOG_INFO << "Connection DOWN : "
-               << conn->peerAddress().toIpPort().c_str();
+               << conn->PeerAddress().ToIpPort().c_str();
     }
   }
 

@@ -102,7 +102,7 @@ void TcpConnection::SendInLoop(const void* data, size_t len) {
   }
 
   // channel第一次写数据，且缓冲区没有待发送数据
-  if (!channel_->IsWriting() && outputBuffer_.ReadableBytes() == 0) {
+  if (!channel_->IsWriting() && output_buffer_.ReadableBytes() == 0) {
     nwrote = ::write(channel_->fd(), data, len);
     if (nwrote >= 0) {
       // 判断有没有一次性写完
@@ -127,16 +127,16 @@ void TcpConnection::SendInLoop(const void* data, size_t len) {
 
   // 说明一次性并没有发送完数据，剩余数据需要保存到缓冲区中，且需要改channel注册写事件
   if (!faultError && remaining > 0) {
-    size_t oldLen = outputBuffer_.ReadableBytes();
+    size_t oldLen = output_buffer_.ReadableBytes();
     if (oldLen + remaining >= high_watermark_ && oldLen < high_watermark_ &&
         high_watermark_callback_) {
       // TODO
       loop_->QueueInLoop(std::bind(high_watermark_callback_, shared_from_this(),
                                    oldLen + remaining));
     }
-    outputBuffer_.append((char*)data + nwrote, remaining);
+    output_buffer_.Append((char*)data + nwrote, remaining);
     if (!channel_->IsWriting()) {
-      channel_->enableWriting();  // 这里一定要注册channel的写事件
+      channel_->EnableWriting();  // 这里一定要注册channel的写事件
                                   // 否则poller不会给channel通知epollout
     }
   }
@@ -153,7 +153,7 @@ void TcpConnection::Shutdown() {
 void TcpConnection::ShutdownInLoop() {
   if (!channel_->IsWriting())  // 说明当前outputBuffer_的数据全部向外发送完成
   {
-    socket_->shutdownWrite();
+    socket_->ShutdownWrite();
   }
 }
 
@@ -188,11 +188,11 @@ void TcpConnection::ConnectDestroyed() {
 void TcpConnection::HandleRead(Timestamp receiveTime) {
   int savedErrno = 0;
   // TcpConnection会从socket读取数据，然后写入inpuBuffer
-  ssize_t n = inputBuffer_.ReadFd(channel_->fd(), &savedErrno);
+  ssize_t n = input_buffer_.ReadFd(channel_->fd(), &savedErrno);
   if (n > 0) {
     // 已建立连接的用户，有可读事件发生，调用用户传入的回调操作
     // TODO:shared_from_this
-    message_callback_(shared_from_this(), &inputBuffer_, receiveTime);
+    message_callback_(shared_from_this(), &input_buffer_, receiveTime);
   } else if (n == 0) {
     // 没有数据，说明客户端关闭连接
     HandleClose();
@@ -207,13 +207,13 @@ void TcpConnection::HandleRead(Timestamp receiveTime) {
 void TcpConnection::HandleWrite() {
   if (channel_->IsWriting()) {
     int saveErrno = 0;
-    ssize_t n = outputBuffer_.writeFd(channel_->fd(), &saveErrno);
+    ssize_t n = output_buffer_.WriteFd(channel_->fd(), &saveErrno);
     // 正确读取数据
     if (n > 0) {
-      outputBuffer_.Retrieve(n);
+      output_buffer_.Retrieve(n);
       // 说明buffer可读数据都被TcpConnection读取完毕并写入给了客户端
       // 此时就可以关闭连接，否则还需继续提醒写事件
-      if (outputBuffer_.ReadableBytes() == 0) {
+      if (output_buffer_.ReadableBytes() == 0) {
         channel_->DisableWriting();
         // 调用用户自定义的写完数据处理函数
         if (write_complete_callback_) {
@@ -242,7 +242,7 @@ void TcpConnection::HandleClose() {
 
   TcpConnectionPtr connPtr(shared_from_this());
   connection_callback_(connPtr);
-  closeCallback_(connPtr);  // 关闭连接得回调
+  close_callback_(connPtr);  // 关闭连接得回调
 }
 
 void TcpConnection::HandleError() {

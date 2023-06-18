@@ -24,12 +24,12 @@ class EchoServer {
  private:
   // 连接建立或断开的回调函数
   void OnConnection(const TcpConnectionPtr& conn) {
-    if (conn->connected()) {
-      LOG_INFO << "Connection UP : " << conn->PeerAddress().toIpPort().c_str();
-      // LOG_INFO("Connection UP : %s", conn->PeerAddress().toIpPort().c_str());
+    if (conn->Connected()) {
+      LOG_INFO << "Connection UP : " << conn->PeerAddress().ToIpPort().c_str();
+      // LOG_INFO("Connection UP : %s", conn->PeerAddress().ToIpPort().c_str());
     } else {
       LOG_INFO << "Connection DOWN : "
-               << conn->PeerAddress().toIpPort().c_str();
+               << conn->PeerAddress().ToIpPort().c_str();
     }
   }
 
@@ -53,7 +53,7 @@ std::unique_ptr<AsyncLogging> g_asyncLog;
 void AsyncOutput(const char* msg, int len) { g_asyncLog->Append(msg, len); }
 
 void SetLogging(const char* argv0) {
-  Logger::setOutput(AsyncOutput);
+  Logger::SetOutput(AsyncOutput);
   char name[256];
   strncpy(name, argv0, 256);
   g_asyncLog.reset(new AsyncLogging(::basename(name), kRollSize));

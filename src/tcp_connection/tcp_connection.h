@@ -62,7 +62,7 @@ class TcpConnection : public Noncopyable,
     kConnected,     // 已连接
     kDisconnecting  // 正在断开连接
   };
-  void setState(StateE state) { state_ = state; }
+  void SetState(StateE state) { state_ = state; }
 
   // 注册到channel上的回调函数，poller通知后会调用这些函数处理
   // 然后这些函数最后会再调用从用户那里传来的回调函数

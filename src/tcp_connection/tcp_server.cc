@@ -38,7 +38,7 @@ TcpServer::~TcpServer() {
     TcpConnectionPtr conn(item.second);
     // 把原始的智能指针复位 让栈空间的TcpConnectionPtr conn指向该对象
     // 当conn出了其作用域 即可释放智能指针指向的对象
-    item.second.Reset();
+    item.second.reset();
     // 销毁连接
     conn->GetLoop()->RunInLoop(
         std::bind(&TcpConnection::ConnectDestroyed, conn));
@@ -56,7 +56,7 @@ void TcpServer::Start() {
     // 启动底层的lopp线程池
     thread_pool_->Start(thread_init_callback_);
     // acceptor_.get()绑定时候需要地址
-    loop_->RunInLoop(std::bind(&Acceptor::Listen, acceptor_.Get()));
+    loop_->RunInLoop(std::bind(&Acceptor::Listen, acceptor_.get()));
   }
 }
 
@@ -99,7 +99,7 @@ void TcpServer::NewConnection(int sockfd, const InetAddress& peer_addr) {
   conn->SetCloseCallback(
       std::bind(&TcpServer::RemoveConnection, this, std::placeholders::_1));
 
-  io_loop->RunInLoop(std::bind(&TcpConnection::connectEstablished, conn));
+  io_loop->RunInLoop(std::bind(&TcpConnection::Connected, conn));
 }
 
 void TcpServer::RemoveConnection(const TcpConnectionPtr& conn) {
