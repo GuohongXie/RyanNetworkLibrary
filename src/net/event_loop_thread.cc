@@ -6,7 +6,7 @@ EventLoopThread::EventLoopThread(const ThreadInitCallback& cb,
                                  const std::string& name)
     : loop_(nullptr),
       exiting_(false),
-      thread_(std::bind(&EventLoopThread::threadFunc, this),
+      thread_(std::bind(&EventLoopThread::ThreadFunc, this),
               name)  // 新线程绑定此函数
       ,
       mutex_(),
@@ -60,7 +60,7 @@ void EventLoopThread::ThreadFunc() {
   }
   // 执行EventLoop的loop() 开启了底层的Poller的poll()
   // 这个是subLoop
-  loop.loop();
+  loop.Loop();
   // loop是一个事件循环，如果往下执行说明停止了事件循环，需要关闭eventLoop
   // 此处是获取互斥锁再置loop_为空
   std::unique_lock<std::mutex> lock(mutex_);

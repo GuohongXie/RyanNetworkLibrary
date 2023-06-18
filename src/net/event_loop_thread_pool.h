@@ -18,7 +18,7 @@ class EventLoopThreadPool {
   ~EventLoopThreadPool();
 
   // 设置线程数量
-  void SetThreadNum(int numThreads) { numThreads_ = numThreads; }
+  void SetThreadNum(int num_threads) { num_threads_ = num_threads; }
 
   // 启动线程池
   void Start(const ThreadInitCallback& cb = ThreadInitCallback());

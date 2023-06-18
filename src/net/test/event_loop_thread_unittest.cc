@@ -9,7 +9,7 @@
 
 void Print(EventLoop* p = NULL) {
   printf("Print: pid = %d, tid = %d, loop = %p\n", ::getpid(),
-         CurrentThread::Tid(), p);
+         current_thread::Tid(), p);
 }
 
 void Quit(EventLoop* p) {
@@ -29,14 +29,14 @@ int main() {
     EventLoopThread thr2;
     EventLoop* loop = thr2.StartLoop();
     loop->RunInLoop(std::bind(Print, loop));
-    CurrentThread::SleepUsec(500 * 1000);
+    current_thread::SleepUsec(500 * 1000);
   }
 
   {
     // quit() before dtor
     EventLoopThread thr3;
     EventLoop* loop = thr3.StartLoop();
-    loop->RunInLoop(std::bind(quit, loop));
-    CurrentThread::SleepUsec(500 * 1000);
+    loop->RunInLoop(std::bind(Quit, loop));
+    current_thread::SleepUsec(500 * 1000);
   }
 }

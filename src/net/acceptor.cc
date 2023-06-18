@@ -24,7 +24,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& ListenAddr,
                    bool reuseport)
     : loop_(loop),
       accept_socket_(CreateNonblocking()),
-      accept_channel_(loop, accept_socket_.fd()),
+      accept_channel_(loop, accept_socket_.Fd()),
       listenning_(false) {
   LOG_DEBUG << "Acceptor create nonblocking socket, [fd = "
             << accept_channel_.fd() << "]";
@@ -39,7 +39,7 @@ Acceptor::Acceptor(EventLoop* loop, const InetAddress& ListenAddr,
    * 有新用户的连接，需要执行一个回调函数
    * 因此向封装了acceptSocket_的channel注册回调函数
    */
-  accept_channel_.SetReadCallback(std::bind(&Acceptor::handleRead, this));
+  accept_channel_.SetReadCallback(std::bind(&Acceptor::HandleRead, this));
 }
 
 Acceptor::~Acceptor() {
@@ -53,9 +53,9 @@ Acceptor::~Acceptor() {
 void Acceptor::Listen() {
   // 表示正在监听
   listenning_ = true;
-  accept_socket_.listen();
+  accept_socket_.Listen();
   // 将acceptChannel的读事件注册到poller
-  accept_channel_.enableReading();
+  accept_channel_.EnableReading();
 }
 
 // listenfd有事件发生了，就是有新用户连接了
@@ -64,7 +64,7 @@ void Acceptor::HandleRead() {
   // 之前为了不加载头文件使用了前置声明
   InetAddress peer_addr;
   // 接受新连接
-  int connfd = accept_socket_.accept(&peer_addr);
+  int connfd = accept_socket_.Accept(&peer_addr);
   // 确实有新连接到来
   if (connfd >= 0) {
     // TcpServer::NewConnectionCallback_

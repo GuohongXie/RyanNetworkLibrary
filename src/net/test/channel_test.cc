@@ -13,9 +13,9 @@
 void Print(const char* msg) {
   static std::map<const char*, Timestamp> lasts;
   Timestamp& last = lasts[msg];
-  Timestamp now = Timestamp::now();
+  Timestamp now = Timestamp::Now();
   printf("%s tid %d %s delay %f\n", now.ToString().c_str(),
-         CurrentThread::tid(), msg, timeDifference(now, last));
+         current_thread::Tid(), msg, TimeDifference(now, last));
   last = now;
 }
 
@@ -27,7 +27,7 @@ class PeriodicTimer {
  public:
   PeriodicTimer(EventLoop* loop, double interval, const TimerCallback& cb)
       : loop_(loop),
-        timerfd_(muduo::net::detail::CreateTimerfd()),
+        timerfd_(CreateTimerfd()),
         timerfd_channel_(loop, timerfd_),
         interval_(interval),
         cb_(cb) {
@@ -43,7 +43,7 @@ class PeriodicTimer {
     spec.it_value = spec.it_interval;
     int ret = ::timerfd_settime(timerfd_, 0 /* relative timer */, &spec, NULL);
     if (ret) {
-      LOG_SYSERR << "timerfd_settime()";
+      LOG_ERROR << "timerfd_settime()";
     }
   }
 
@@ -54,10 +54,10 @@ class PeriodicTimer {
   }
 
  private:
-  using TimerCallback = std::function<void()>;
+  typedef std::function<void()> TimerCallback;
   void HandleRead() {
-    loop_->assertInLoopThread();
-    ReadTimerfd(timerfd_, Timestamp::now());
+    loop_->AssertInLoopThread();
+    ReadTimerfd(timerfd_, Timestamp::Now());
     if (cb_) cb_();
   }
 
@@ -81,11 +81,11 @@ class PeriodicTimer {
 };
 
 int main(int argc, char* argv[]) {
-  LOG_INFO << "pid = " << getpid() << ", tid = " << CurrentThread::tid()
+  LOG_INFO << "pid = " << getpid() << ", tid = " << current_thread::Tid()
            << " Try adjusting the wall clock, see what happens.";
   EventLoop loop;
   PeriodicTimer timer(&loop, 1, std::bind(Print, "PeriodicTimer"));
   timer.Start();
-  loop.runEvery(1, std::bind(Print, "EventLoop::runEvery"));
-  loop.loop();
+  loop.RunEvery(1, std::bind(Print, "EventLoop::runEvery"));
+  loop.Loop();
 }

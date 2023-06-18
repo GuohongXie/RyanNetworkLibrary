@@ -44,11 +44,11 @@ class Timestamp {
 };
 
 //这里传值或者传引用都可以，因为Timestamp类只有一个non-static成员变量
-inline bool operator<(Timestamp& lhs, Timestamp& rhs) {
+inline bool operator<(const Timestamp& lhs, const Timestamp& rhs) {
   return lhs.micro_seconds_since_epoch() < rhs.micro_seconds_since_epoch();
 }
 
-inline bool operator==(Timestamp& lhs, Timestamp& rhs) {
+inline bool operator==(const Timestamp& lhs, const Timestamp& rhs) {
   return lhs.micro_seconds_since_epoch() == rhs.micro_seconds_since_epoch();
 }
 

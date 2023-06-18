@@ -9,13 +9,13 @@
 EventLoop* g_loop;
 
 void Callback() {
-  printf("Callback(): pid = %d, tid = %d\n", ::getpid(), CurrentThread::Tid());
+  printf("Callback(): pid = %d, tid = %d\n", ::getpid(), current_thread::Tid());
   EventLoop anotherLoop;
 }
 
 void ThreadFunc() {
   printf("ThreadFunc(): pid = %d, tid = %d\n", ::getpid(),
-         CurrentThread::Tid());
+         current_thread::Tid());
 
   assert(EventLoop::GetEventLoopOfCurrentThread() == nullptr);
   EventLoop loop;
@@ -25,7 +25,7 @@ void ThreadFunc() {
 }
 
 int main() {
-  printf("main(): pid = %d, tid = %d\n", ::getpid(), CurrentThread::Tid());
+  printf("main(): pid = %d, tid = %d\n", ::getpid(), current_thread::Tid());
 
   assert(EventLoop::GetEventLoopOfCurrentThread() == nullptr);
   EventLoop loop;

@@ -29,7 +29,7 @@ void EventLoopThreadPool::Start(const ThreadInitCallback& cb) {
     threads_.push_back(std::unique_ptr<EventLoopThread>(t));
     // 底层创建线程 绑定一个新的EventLoop 并返回该loop的地址
     // 此时已经开始执行新线程了
-    loops_.push_back(t->startLoop());
+    loops_.push_back(t->StartLoop());
   }
 
   // 整个服务端只有一个线程运行baseLoop

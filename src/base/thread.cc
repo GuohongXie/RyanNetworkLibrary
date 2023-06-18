@@ -1,4 +1,5 @@
 #include "thread.h"
+#include "logging.h"
 
 #include <semaphore.h>
 
@@ -56,4 +57,11 @@ void Thread::SetDefaultName() {
     snprintf(buf, sizeof(buf), "Thread%d", num);
     name_ = buf;
   }
+}
+
+void current_thread::SleepUsec(int64_t usec) {
+  struct timespec ts = { 0, 0 };
+  ts.tv_sec = static_cast<time_t>(usec / Timestamp::kMicroSecondsPerSecond);
+  ts.tv_nsec = static_cast<long>(usec % Timestamp::kMicroSecondsPerSecond * 1000);
+  ::nanosleep(&ts, NULL);
 }

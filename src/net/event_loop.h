@@ -48,13 +48,18 @@ class EventLoop : Noncopyable {
   bool HasChannel(Channel* channel);
 
   // 判断EventLoop是否在自己的线程
-  bool IsInLoopThread() const { return thread_id_ == CurrentThread::Tid(); }
+  bool IsInLoopThread() const { return thread_id_ == current_thread::Tid(); }
+  void AssertInLoopThread() {
+    if (!IsInLoopThread()) {
+      AbortNotInLoopThread();
+    }
+  }
 
   /**
    * 定时任务相关函数
    */
   void RunAt(Timestamp timestamp, Functor&& cb) {
-    timerQueue_->AddTimer(std::move(cb), timestamp, 0.0);
+    timer_queue_->AddTimer(std::move(cb), timestamp, 0.0);
   }
 
   void RunAfter(double waitTime, Functor&& cb) {
@@ -64,10 +69,13 @@ class EventLoop : Noncopyable {
 
   void RunEvery(double interval, Functor&& cb) {
     Timestamp timestamp(AddTime(Timestamp::Now(), interval));
-    timerQueue_->AddTimer(std::move(cb), timestamp, interval);
+    timer_queue_->AddTimer(std::move(cb), timestamp, interval);
   }
 
+  static EventLoop* GetEventLoopOfCurrentThread();
+
  private:
+  void AbortNotInLoopThread();
   void HandleRead();
   void DoPendingFunctors();
 

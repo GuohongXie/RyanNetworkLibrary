@@ -32,8 +32,8 @@ TimerQueue::TimerQueue(EventLoop* loop)
 }
 
 TimerQueue::~TimerQueue() {
-  timerfdChannel_.DisableAll();
-  timerfdChannel_.Remove();
+  timerfd_channel_.DisableAll();
+  timerfd_channel_.Remove();
   ::close(timerfd_);
   // 删除所有定时器
   for (const Entry& timer : timers_) {
@@ -112,7 +112,7 @@ void TimerQueue::HandleRead() {
   // 遍历到期的定时器，调用回调函数
   calling_expired_timers_ = true;
   for (const Entry& it : expired) {
-    it.second->run();
+    it.second->Run();
   }
   calling_expired_timers_ = false;
 
@@ -124,9 +124,9 @@ void TimerQueue::Reset(const std::vector<Entry>& expired, Timestamp now) {
   Timestamp nextExpire;
   for (const Entry& it : expired) {
     // 重复任务则继续执行
-    if (it.second->Repeat()) {
+    if (it.second->repeat()) {
       auto timer = it.second;
-      timer->Restart(Timestamp::now());
+      timer->Restart(Timestamp::Now());
       Insert(timer);
     } else {
       delete it.second;
@@ -134,7 +134,7 @@ void TimerQueue::Reset(const std::vector<Entry>& expired, Timestamp now) {
 
     // 如果重新插入了定时器，需要继续重置timerfd
     if (!timers_.empty()) {
-      resetTimerfd(timerfd_, (timers_.begin()->second)->expiration());
+      ResetTimerfd(timerfd_, (timers_.begin()->second)->expiration());
     }
   }
 }
@@ -149,7 +149,7 @@ bool TimerQueue::Insert(Timer* timer) {
   }
 
   // 定时器管理红黑树插入此新定时器
-  timers_.Insert(Entry(when, timer));
+  timers_.insert(Entry(when, timer));
 
   return earliestChanged;
 }

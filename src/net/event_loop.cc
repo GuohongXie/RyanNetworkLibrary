@@ -22,11 +22,15 @@ int CreateEventfd() {
   return evfd;
 }
 
+EventLoop* EventLoop::GetEventLoopOfCurrentThread() {
+  return t_loop_in_this_thread;
+}
+
 EventLoop::EventLoop()
     : looping_(false),
       quit_(false),
       calling_pending_functors_(false),
-      thread_id_(CurrentThread::Tid()),
+      thread_id_(current_thread::Tid()),
       poller_(Poller::NewDefaultPoller(this)),
       timer_queue_(new TimerQueue(this)),
       wakeup_fd_(CreateEventfd()),
@@ -42,16 +46,16 @@ EventLoop::EventLoop()
   }
 
   // 设置wakeupfd的事件类型以及发生事件的回调函数
-  wakeupChannel_->setReadCallback(std::bind(&EventLoop::HandleRead, this));
+  wakeup_channel_->SetReadCallback(std::bind(&EventLoop::HandleRead, this));
   // 每一个EventLoop都将监听wakeupChannel的EPOLLIN事件
-  wakeupChannel_->enableReading();
+  wakeup_channel_->EnableReading();
 }
 
 EventLoop::~EventLoop() {
   // channel移除所有感兴趣事件
-  wakeupChannel_->DisableAll();
+  wakeup_channel_->DisableAll();
   // 将channel从EventLoop中删除
-  wakeupChannel_->Remove();
+  wakeup_channel_->Remove();
   // 关闭 wakeup_fd_
   ::close(wakeup_fd_);
   // 指向EventLoop指针为空
@@ -66,7 +70,7 @@ void EventLoop::Loop() {
 
   while (!quit_) {
     // 清空activeChannels_
-    activeChannels_.Clear();
+    active_channels_.clear();
     // 获取
     poll_return_time_ = poller_->Poll(kPollTimeMs, &active_channels_);
     for (Channel* channel : active_channels_) {
@@ -77,7 +81,7 @@ void EventLoop::Loop() {
      * IO thread：mainLoop accept fd 打包成 chennel 分发给 subLoop
      * mainLoop实现注册一个回调，交给subLoop来执行，wakeup subLoop
      * 之后，让其执行注册的回调操作 这些回调函数在 std::vector<Functor>
-     * pendingFunctors_; 之中
+     * pending_functors_; 之中
      */
     DoPendingFunctors();
   }
@@ -114,7 +118,7 @@ void EventLoop::RunInLoop(Functor cb) {
 void EventLoop::QueueInLoop(Functor cb) {
   {
     std::unique_lock<std::mutex> lock(mutex_);
-    pendingFunctors_.emplace_back(cb);  // 使用了std::move
+    pending_functors_.emplace_back(cb);  // 使用了std::move
   }
 
   // 唤醒相应的，需要执行上面回调操作的loop线程
@@ -129,6 +133,12 @@ void EventLoop::QueueInLoop(Functor cb) {
     // 唤醒loop所在的线程
     Wakeup();
   }
+}
+
+void EventLoop::AbortNotInLoopThread() {
+  LOG_FATAL << "EventLoop::AbortNotInLoopThread - EventLoop " << this
+            << " was created in thread_id_ = " << thread_id_
+            << ", current thread id = " <<  current_thread::Tid();
 }
 
 void EventLoop::Wakeup() {

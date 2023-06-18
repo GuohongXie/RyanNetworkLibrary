@@ -8,12 +8,12 @@
 
 void Print(EventLoop* p = nullptr) {
   printf("main(): pid = %d, tid = %d, loop = %p\n", ::getpid(),
-         CurrentThread::Tid(), p);
+         current_thread::Tid(), p);
 }
 
 void Init(EventLoop* p) {
   printf("Init(): pid = %d, tid = %d, loop = %p\n", ::getpid(),
-         CurrentThread::Tid(), p);
+         current_thread::Tid(), p);
 }
 
 int main() {
@@ -38,7 +38,7 @@ int main() {
     model.SetThreadNum(1);
     model.Start(Init);
     EventLoop* nextLoop = model.GetNextLoop();
-    nextLoop->runAfter(2, std::bind(Print, nextLoop));
+    nextLoop->RunAfter(2, std::bind(Print, nextLoop));
     assert(nextLoop != &loop);
     assert(nextLoop == model.GetNextLoop());
     assert(nextLoop == model.GetNextLoop());
@@ -51,7 +51,7 @@ int main() {
     model.SetThreadNum(3);
     model.Start(Init);
     EventLoop* nextLoop = model.GetNextLoop();
-    nextLoop->runInLoop(std::bind(Print, nextLoop));
+    nextLoop->RunInLoop(std::bind(Print, nextLoop));
     assert(nextLoop != &loop);
     assert(nextLoop != model.GetNextLoop());
     assert(nextLoop != model.GetNextLoop());

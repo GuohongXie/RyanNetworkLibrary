@@ -51,8 +51,8 @@ Timestamp EpollPoller::Poll(int timeoutMs, ChannelList* activeChannels) {
 }
 
 /**
- * Channel::update => EventLoop::updateChannel => Poller::updateChannel
- * Channel::remove => EventLoop::removeChannel => Poller::removeChannel
+ * Channel::Update => EventLoop::updateChannel => Poller::updateChannel
+ * Channel::remove => EventLoop::RemoveChannel => Poller::RemoveChannel
  */
 void EpollPoller::UpdateChannel(Channel* channel) {
   // TODO:__FUNCTION__
@@ -71,18 +71,18 @@ void EpollPoller::UpdateChannel(Channel* channel) {
     // 修改channel的状态，此时是已添加状态
     channel->set_index(kAdded);
     // 向epoll对象加入channel
-    update(EPOLL_CTL_ADD, channel);
+    Update(EPOLL_CTL_ADD, channel);
   }
   // channel已经在poller上注册过
   else {
     // 没有感兴趣事件说明可以从epoll对象中删除该channel了
-    if (channel->isNoneEvent()) {
-      update(EPOLL_CTL_DEL, channel);
+    if (channel->IsNoneEvent()) {
+      Update(EPOLL_CTL_DEL, channel);
       channel->set_index(kDeleted);
     }
     // 还有事件说明之前的事件删除，但是被修改了
     else {
-      update(EPOLL_CTL_MOD, channel);
+      Update(EPOLL_CTL_MOD, channel);
     }
   }
 }
@@ -98,7 +98,7 @@ void EpollPoller::FillActiveChannels(int num_events,
   }
 }
 
-void EpollPoller::removeChannel(Channel* channel) {
+void EpollPoller::RemoveChannel(Channel* channel) {
   // 从Map中删除
   int fd = channel->fd();
   channels_.erase(fd);
@@ -106,13 +106,13 @@ void EpollPoller::removeChannel(Channel* channel) {
   int index = channel->index();
   if (index == kAdded) {
     // 如果此fd已经被添加到Poller中，则还需从epoll对象中删除
-    update(EPOLL_CTL_DEL, channel);
+    Update(EPOLL_CTL_DEL, channel);
   }
   // 重新设置channel的状态为未被Poller注册
   channel->set_index(kNew);
 }
 
-void EpollPoller::update(int operation, Channel* channel) {
+void EpollPoller::Update(int operation, Channel* channel) {
   epoll_event event;
   ::memset(&event, 0, sizeof(event));
 
