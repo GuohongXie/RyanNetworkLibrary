@@ -1,9 +1,9 @@
 #include "thread.h"
-#include "logging.h"
 
 #include <semaphore.h>
 
 #include "current_thread.h"
+#include "logging.h"
 
 std::atomic_int32_t Thread::num_created_(0);
 
@@ -60,8 +60,9 @@ void Thread::SetDefaultName() {
 }
 
 void current_thread::SleepUsec(int64_t usec) {
-  struct timespec ts = { 0, 0 };
+  struct timespec ts = {0, 0};
   ts.tv_sec = static_cast<time_t>(usec / Timestamp::kMicroSecondsPerSecond);
-  ts.tv_nsec = static_cast<long>(usec % Timestamp::kMicroSecondsPerSecond * 1000);
+  ts.tv_nsec =
+      static_cast<long>(usec % Timestamp::kMicroSecondsPerSecond * 1000);
   ::nanosleep(&ts, NULL);
 }

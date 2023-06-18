@@ -1,7 +1,6 @@
 #include "tcp_server.h"
 
 #include <cstring>
-
 #include <functional>
 
 #include "logging.h"

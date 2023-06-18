@@ -1,11 +1,11 @@
+#include "memory_pool.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 
 #include <chrono>
 #include <iostream>
 #include <vector>
-
-#include "memory_pool.h"
 using std::cout;
 using std::endl;
 using std::vector;

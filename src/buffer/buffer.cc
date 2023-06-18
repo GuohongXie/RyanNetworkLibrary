@@ -10,7 +10,6 @@ const char Buffer::kCRLF[] = "\r\n";
 static size_t kCheapPrepend = 8;
 static size_t kInitialSize = 1024;
 
-
 /**
  * 从fd上读取数据 Poller工作在LT模式
  * Buffer缓冲区是有大小的！ 但是从fd上读取数据的时候 却不知道tcp数据的最终大小

@@ -23,7 +23,7 @@ struct LargeNode {
 
 struct Pool {
   LargeNode* large_list_;  // 管理大块内存链表
-  SmallNode* head_;       // 头节点
+  SmallNode* head_;        // 头节点
   SmallNode*
       current_;  // 指向当前分配的块，这样可以避免遍历前面已经不能分配的块
 };

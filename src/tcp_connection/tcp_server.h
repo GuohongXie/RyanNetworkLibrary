@@ -12,8 +12,8 @@
 #include "event_loop.h"
 #include "event_loop_thread_pool.h"
 #include "inet_address.h"
-#include "tcp_connection.h"
 #include "noncopyable.h"
+#include "tcp_connection.h"
 
 /**
  * 我们用户编写的时候就是使用的TcpServer
@@ -68,7 +68,7 @@ class TcpServer : public Noncopyable {
   using ConnectionMap = std::unordered_map<std::string, TcpConnectionPtr>;
 
   EventLoop* loop_;                     // 用户定义的baseLoop
-  const std::string ip_port_;            // 传入的IP地址和端口号
+  const std::string ip_port_;           // 传入的IP地址和端口号
   const std::string name_;              // TcpServer名字
   std::unique_ptr<Acceptor> acceptor_;  // Acceptor对象负责监视
 
@@ -79,9 +79,9 @@ class TcpServer : public Noncopyable {
   WriteCompleteCallback write_complete_callback_;  // 消息发送完成以后的回调函数
 
   ThreadInitCallback thread_init_callback_;  // loop线程初始化的回调函数
-  std::atomic_int started_;                // TcpServer
+  std::atomic_int started_;                  // TcpServer
 
-  int next_conn_id_;             // 连接索引
+  int next_conn_id_;           // 连接索引
   ConnectionMap connections_;  // 保存所有的连接
 };
 

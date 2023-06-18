@@ -8,8 +8,8 @@
 #include "buffer.h"
 #include "callback.h"
 #include "inet_address.h"
-#include "timestamp.h"
 #include "noncopyable.h"
+#include "timestamp.h"
 
 class Channel;
 class EventLoop;
@@ -91,8 +91,8 @@ class TcpConnection : public Noncopyable,
    * 用户自定义的这些事件的处理函数，然后传递给 TcpServer
    * TcpServer 再在创建 TcpConnection 对象时候设置这些回调函数到 TcpConnection中
    */
-  ConnectionCallback connection_callback_;        // 有新连接时的回调
-  MessageCallback message_callback_;              // 有读写消息时的回调
+  ConnectionCallback connection_callback_;  // 有新连接时的回调
+  MessageCallback message_callback_;        // 有读写消息时的回调
   WriteCompleteCallback write_complete_callback_;  // 消息发送完成以后的回调
   CloseCallback close_callback_;  // 客户端关闭连接的回调
   HighWaterMarkCallback high_watermark_callback_;  // 超出水位实现的回调
