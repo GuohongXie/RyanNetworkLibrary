@@ -54,7 +54,7 @@ void test1() {
 
   // 申请30个512字节的内存块
   for (int i = 0; i < 50; i++) {
-    memoryVector[i] = pool.Malloc(512);
+    memoryVector[i] = pool.malloc(512);
   }
   ShowInfo(&pool, "申请50个512字节的内存块");
 
@@ -66,7 +66,7 @@ void test1() {
 
   // 申请30个5120字节的内存块
   for (int i = 0; i < 30; i++) {
-    memoryVector[i] = pool.Malloc(5120);
+    memoryVector[i] = pool.malloc(5120);
   }
   ShowInfo(&pool, "申请30个5120字节的内存块");
 
@@ -89,7 +89,7 @@ void test2() {
   // vector<void*> memoryVector(100);
   void* memory[ALLOCATE_COUNT];
 
-  cout << "use Malloc free time" << endl;
+  cout << "use malloc free time" << endl;
   cout << "--------------------" << endl;
   auto start = std::chrono::steady_clock::now();
   for (int i = 0; i < ALLOCATE_COUNT; i++) {
@@ -120,7 +120,7 @@ void test2() {
   cout << "--------------------" << endl;
   start = std::chrono::steady_clock::now();
   for (int i = 0; i < ALLOCATE_COUNT; i++) {
-    memory[i] = pool.Malloc(10);
+    memory[i] = pool.malloc(10);
   }
   end = std::chrono::steady_clock::now();
   cout << "the time cost of construct: "

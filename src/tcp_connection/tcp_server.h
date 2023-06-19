@@ -1,5 +1,5 @@
-#ifndef TCP_SERVER_H
-#define TCP_SERVER_H
+#ifndef RYANLIB_TCP_CONNECTION_TCP_SERVER_H_
+#define RYANLIB_TCP_CONNECTION_TCP_SERVER_H_
 
 #include <atomic>
 #include <functional>
@@ -19,7 +19,7 @@
  * 我们用户编写的时候就是使用的TcpServer
  * 我们向里面注册各种回调函数
  */
-class TcpServer : public Noncopyable {
+class TcpServer : Noncopyable {
  public:
   using ThreadInitCallback = std::function<void(EventLoop*)>;
 
@@ -85,4 +85,4 @@ class TcpServer : public Noncopyable {
   ConnectionMap connections_;  // 保存所有的连接
 };
 
-#endif  // TCP_SERVER_H
+#endif  // RYANLIB_TCP_CONNECTION_TCP_SERVER_H_

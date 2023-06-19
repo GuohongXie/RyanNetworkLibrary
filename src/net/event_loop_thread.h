@@ -10,7 +10,7 @@
 
 // one loop per thread
 class EventLoop;
-class EventLoopThread : public Noncopyable {
+class EventLoopThread : Noncopyable {
  public:
   using ThreadInitCallback = std::function<void(EventLoop*)>;
 

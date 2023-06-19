@@ -1,5 +1,5 @@
-#ifndef RYANLIB_NET_EPOLL_POLLER_H
-#define RYANLIB_NET_EPOLL_POLLER_H
+#ifndef RYANLIB_NET_EPOLL_POLLER_H_
+#define RYANLIB_NET_EPOLL_POLLER_H_
 
 #include <sys/epoll.h>
 #include <unistd.h>
@@ -40,4 +40,4 @@ class EpollPoller : public Poller {
   EventList events_;  // 用于存放epoll_wait返回的所有发生的事件的文件描述符
 };
 
-#endif  // RYANLIB_NET_EPOLL_POLLER_H
+#endif  // RYANLIB_NET_EPOLL_POLLER_H_

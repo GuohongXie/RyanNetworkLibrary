@@ -1,5 +1,5 @@
-#ifndef RYANLIB_NET_POLLER_H
-#define RYANLIB_NET_POLLER_H
+#ifndef RYANLIB_NET_POLLER_H_
+#define RYANLIB_NET_POLLER_H_
 
 #include <unordered_map>
 #include <vector>
@@ -42,4 +42,4 @@ class Poller : Noncopyable {
   EventLoop* owner_loop_;  // 定义Poller所属的事件循环EventLoop
 };
 
-#endif  // RYANLIB_NET_POLLER_H
+#endif  // RYANLIB_NET_POLLER_H_

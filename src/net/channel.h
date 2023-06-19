@@ -18,7 +18,7 @@ class Timestamp;
  * Channel 理解为通道，封装了sockfd和其感兴趣的event，如EPOLLIN,EPOLLOUT
  * 还绑定了poller返回的具体事件
  */
-class Channel : public Noncopyable {
+class Channel : Noncopyable {
  public:
   using EventCallback = std::function<void()>;
   using ReadEventCallback = std::function<void(Timestamp)>;

@@ -54,7 +54,7 @@ class MemoryPool {
    * @brief 申请内存的接口，内部会判断创建大块还是小块内存
    * @param[in] size 分配内存大小
    */
-  void* Malloc(unsigned long size);
+  void* malloc(unsigned long size);
 
   /**
    * @brief 申请内存且将内存清零，内部调用 malloc

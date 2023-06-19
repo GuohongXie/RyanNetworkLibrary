@@ -79,7 +79,7 @@ void* MemoryPool::MallocLargeNode(unsigned long size) {
 
   // 没有找到空闲的large结构体，分配一个新的large
   // 比如第一次分配large的时候
-  large_node = (LargeNode*)this->Malloc(sizeof(LargeNode));
+  large_node = (LargeNode*)this->malloc(sizeof(LargeNode));
   if (large_node == nullptr) {
     free(addr);  // 申请节点内存失败，需要释放之前申请的大内存
     return nullptr;
@@ -130,7 +130,7 @@ void* MemoryPool::MallocSmallNode(unsigned long size) {
   return addr;
 }
 
-void* MemoryPool::Malloc(unsigned long size) {
+void* MemoryPool::malloc(unsigned long size) {
   if (size <= 0) {
     return nullptr;
   }
@@ -162,7 +162,7 @@ void* MemoryPool::Malloc(unsigned long size) {
 }
 
 void* MemoryPool::Calloc(unsigned long size) {
-  void* addr = Malloc(size);
+  void* addr = malloc(size);
   if (addr != nullptr) {
     memset(addr, 0, size);
   }

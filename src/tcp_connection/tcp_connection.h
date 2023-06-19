@@ -15,7 +15,7 @@ class Channel;
 class EventLoop;
 class Socket;
 
-class TcpConnection : public Noncopyable,
+class TcpConnection : Noncopyable,
                       public std::enable_shared_from_this<TcpConnection> {
  public:
   TcpConnection(EventLoop* loop, const std::string& nameArg, int sockfd,
@@ -45,7 +45,7 @@ class TcpConnection : public Noncopyable,
     write_complete_callback_ = cb;
   }
   void SetCloseCallback(const CloseCallback& cb) { close_callback_ = cb; }
-  void SetHighWatermarkCallback(const HighWaterMarkCallback& cb,
+  void SetHighWatermarkCallback(const HighWatermarkCallback& cb,
                                 size_t highWaterMark) {
     high_watermark_callback_ = cb;
     high_watermark_ = highWaterMark;
@@ -95,7 +95,7 @@ class TcpConnection : public Noncopyable,
   MessageCallback message_callback_;        // 有读写消息时的回调
   WriteCompleteCallback write_complete_callback_;  // 消息发送完成以后的回调
   CloseCallback close_callback_;  // 客户端关闭连接的回调
-  HighWaterMarkCallback high_watermark_callback_;  // 超出水位实现的回调
+  HighWatermarkCallback high_watermark_callback_;  // 超出水位实现的回调
   size_t high_watermark_;
 
   Buffer input_buffer_;   // 读取数据的缓冲区

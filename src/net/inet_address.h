@@ -1,5 +1,5 @@
-#ifndef RYANLIB_NET_INET_ADDRESS_H
-#define RYANLIB_NET_INET_ADDRESS_H
+#ifndef RYANLIB_NET_INET_ADDRESS_H_
+#define RYANLIB_NET_INET_ADDRESS_H_
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -23,4 +23,4 @@ class InetAddress {
   sockaddr_in addr_;
 };
 
-#endif  // RYANLIB_NET_INET_ADDRESS_H
+#endif  // RYANLIB_NET_INET_ADDRESS_H_

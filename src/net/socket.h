@@ -6,7 +6,7 @@
 class InetAddress;
 
 // 封装socket fd
-class Socket : public Noncopyable {
+class Socket : Noncopyable {
  public:
   explicit Socket(int sockfd) : sockfd_(sockfd) {}
   ~Socket();
