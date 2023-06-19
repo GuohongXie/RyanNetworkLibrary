@@ -38,18 +38,18 @@ MysqlConnPool::~MysqlConnPool() {
 
 // 解析JSON配置文件
 bool MysqlConnPool::ParseJsonFile() {
-  std::ifstream file("/home/guohong/ryan_cc_project/ryanlib/src/mysql/test/conf.json");
+  std::ifstream file("conf.json");
   json conf = json::parse(file);
 
   ip_ = conf["ip"];
-  user_ = conf["user_name"];
+  user_ = conf["username"];
   passwd_ = conf["password"];
-  db_name_ = conf["db_name"];
+  db_name_ = conf["dbname"];
   port_ = conf["port"];
-  min_size_ = conf["min_size"];
-  max_size_ = conf["max_size"];
+  min_size_ = conf["minsize"];
+  max_size_ = conf["maxsize"];
   timeout_ = conf["timeout"];
-  max_idle_time_ = conf["max_idle_time"];
+  max_idle_time_ = conf["maxidletime"];
   return true;
 }
 
