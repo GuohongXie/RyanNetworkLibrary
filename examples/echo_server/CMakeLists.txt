@@ -1,10 +1,11 @@
 # 设置项目名称
 project(echo_server C CXX)
-enable_testing()
+#enable_testing()
 
 # 指定使用 CMake 的最低版本号
 cmake_minimum_required(VERSION 3.15)
-
+set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_CXX_FLAGS_DEBUG "-g -O0")
 
 # 添加搜索路径
 include_directories(
