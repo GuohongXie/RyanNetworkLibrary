@@ -42,14 +42,14 @@ bool MysqlConnPool::ParseJsonFile() {
   json conf = json::parse(file);
 
   ip_ = conf["ip"];
-  user_ = conf["username"];
+  user_ = conf["user_name"];
   passwd_ = conf["password"];
-  db_name_ = conf["dbname"];
+  db_name_ = conf["db_name"];
   port_ = conf["port"];
-  min_size_ = conf["minsize"];
-  max_size_ = conf["maxsize"];
+  min_size_ = conf["min_size"];
+  max_size_ = conf["max_size"];
   timeout_ = conf["timeout"];
-  max_idle_time_ = conf["maxidletime"];
+  max_idle_time_ = conf["max_idle_time"];
   return true;
 }
 

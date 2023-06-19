@@ -1,11 +1,11 @@
 {
   "ip":"127.0.0.1",
   "port":3306,
-  "username":"guohong",
+  "user_name":"guohong",
   "password":"aiao1023",
-  "dbname":"ryanlib_test",
-  "minsize":2,
-  "maxsize":4,
-  "maxidletime":5000,
+  "db_name":"ryanlib_test",
+  "min_size":2,
+  "max_size":4,
+  "max_idle_time":5000,
   "timeout":10
 }
