@@ -49,11 +49,11 @@ class EventLoop : Noncopyable {
 
   // 判断EventLoop是否在自己的线程
   bool IsInLoopThread() const { return thread_id_ == current_thread::Tid(); }
-  void AssertInLoopThread() {
-    if (!IsInLoopThread()) {
-      AbortNotInLoopThread();
-    }
-  }
+  //void AssertInLoopThread() {
+  //  if (!IsInLoopThread()) {
+  //    AbortNotInLoopThread();
+  //  }
+  //}
 
   /**
    * 定时任务相关函数
@@ -72,10 +72,10 @@ class EventLoop : Noncopyable {
     timer_queue_->AddTimer(std::move(cb), timestamp, interval);
   }
 
-  static EventLoop* GetEventLoopOfCurrentThread();
+//  static EventLoop* GetEventLoopOfCurrentThread();
 
  private:
-  void AbortNotInLoopThread();
+  //void AbortNotInLoopThread();
   void HandleRead();
   void DoPendingFunctors();
 

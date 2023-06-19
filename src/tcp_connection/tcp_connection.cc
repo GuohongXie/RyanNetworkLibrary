@@ -16,24 +16,24 @@
 
 static EventLoop* CheckLoopNotNull(EventLoop* loop) {
   // 如果传入EventLoop没有指向有意义的地址则出错
-  // 正常来说在 TcpServer::start 这里就生成了新线程和对应的EventLoop
+  // 正常来说在 TcpServer::Start 这里就生成了新线程和对应的EventLoop
   if (loop == nullptr) {
     LOG_FATAL << "mainLoop is null!";
   }
   return loop;
 }
 
-TcpConnection::TcpConnection(EventLoop* loop, const std::string& nameArg,
-                             int sockfd, const InetAddress& localAddr,
-                             const InetAddress& peerAddr)
+TcpConnection::TcpConnection(EventLoop* loop, const std::string& name_arg,
+                             int sockfd, const InetAddress& local_addr,
+                             const InetAddress& peer_addr)
     : loop_(CheckLoopNotNull(loop)),
-      name_(nameArg),
+      name_(name_arg),
       state_(kConnecting),
       reading_(true),
       socket_(new Socket(sockfd)),
       channel_(new Channel(loop, sockfd)),
-      local_addr_(localAddr),
-      peer_addr_(peerAddr),
+      local_addr_(local_addr),
+      peer_addr_(peer_addr),
       high_watermark_(64 * 1024 * 1024)  // 64M 避免发送太快对方接受太慢
 {
   // 下面给channel设置相应的回调函数 poller给channel通知感兴趣的事件发生了
@@ -255,6 +255,6 @@ void TcpConnection::HandleError() {
   } else {
     err = optval;
   }
-  LOG_ERROR << "cpConnection::HandleError name:" << name_.c_str()
+  LOG_ERROR << "TcpConnection::HandleError name:" << name_.c_str()
             << " - SO_ERROR:" << err;
 }

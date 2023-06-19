@@ -22,9 +22,9 @@ int CreateEventfd() {
   return evfd;
 }
 
-EventLoop* EventLoop::GetEventLoopOfCurrentThread() {
-  return t_loop_in_this_thread;
-}
+//EventLoop* EventLoop::GetEventLoopOfCurrentThread() {
+//  return t_loop_in_this_thread;
+//}
 
 EventLoop::EventLoop()
     : looping_(false),
@@ -135,11 +135,11 @@ void EventLoop::QueueInLoop(Functor cb) {
   }
 }
 
-void EventLoop::AbortNotInLoopThread() {
-  LOG_FATAL << "EventLoop::AbortNotInLoopThread - EventLoop " << this
-            << " was created in thread_id_ = " << thread_id_
-            << ", current thread id = " << current_thread::Tid();
-}
+//void EventLoop::AbortNotInLoopThread() {
+//  LOG_FATAL << "EventLoop::AbortNotInLoopThread - EventLoop " << this
+//            << " was created in thread_id_ = " << thread_id_
+//            << ", current thread id = " << current_thread::Tid();
+//}
 
 void EventLoop::Wakeup() {
   uint64_t one = 1;
