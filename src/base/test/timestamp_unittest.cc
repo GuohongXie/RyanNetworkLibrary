@@ -1,14 +1,15 @@
 #include "timestamp.h"
 
 #include <stdio.h>
+#include <iostream>
 
 #include <vector>
 
 void PassByConstReference(const Timestamp& x) {
-  printf("%s\n", x.ToString().c_str());
+  printf("Timestamp now value: %s\n", x.ToString().c_str());
 }
 
-void PassByValue(Timestamp x) { printf("%s\n", x.ToString().c_str()); }
+void PassByValue(Timestamp x) { printf("Timestamp now value: %s\n", x.ToString().c_str()); }
 
 void Benchmark() {
   const int kNumber = 1000 * 1000;
@@ -44,8 +45,14 @@ void Benchmark() {
 
 int main() {
   Timestamp now(Timestamp::Now());
-  printf("%s\n", now.ToString().c_str());
+  printf("Timestamp now value: %s\n", now.ToString().c_str());
+  std::cout << "==========PassByValue test=========" << std::endl;
   PassByValue(now);
+  std::cout << "==========PassByReference test=========" << std::endl;
   PassByConstReference(now);
-  Benchmark();
+  std::cout << "==========Timestamp::ToFormattedString test=========" << std::endl;
+  std::cout << now.ToFormattedString() << std::endl;
+  std::cout << "==========Timestamp::ToFormattedString(true) test=========" << std::endl;
+  std::cout << now.ToFormattedString(true) << std::endl;
+  //Benchmark();
 }

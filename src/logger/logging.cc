@@ -70,7 +70,8 @@ void Logger::Impl::FormatTime() {
   snprintf(buf, sizeof(buf), "%06d ", microseconds);
 
   // 输出时间，附有微妙(之前是(buf, 6),少了一个空格)
-  stream_ << GeneralTemplate(thread_info::t_time, 17)
+  stream_ << GeneralTemplate(thread_info::t_time, 20)
+          << ":"
           << GeneralTemplate(buf, 7);
 }
 
