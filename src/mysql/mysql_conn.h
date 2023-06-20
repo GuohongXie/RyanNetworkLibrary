@@ -1,5 +1,5 @@
-#ifndef RYANLIB_MYSQL_MYSQL_CONN_H_ 
-#define RYANLIB_MYSQL_MYSQL_CONN_H_ 
+#ifndef RYANLIB_MYSQL_MYSQL_CONN_H_
+#define RYANLIB_MYSQL_MYSQL_CONN_H_
 
 #include <mysql/mysql.h>
 
@@ -45,4 +45,4 @@ class MysqlConn {
   std::chrono::steady_clock::time_point m_alivetime;
 };
 
-#endif  // RYANLIB_MYSQL_MYSQL_CONN_H_  
+#endif  // RYANLIB_MYSQL_MYSQL_CONN_H_

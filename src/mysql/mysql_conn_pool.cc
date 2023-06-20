@@ -97,7 +97,7 @@ void MysqlConnPool::RecycleConnection() {
 void MysqlConnPool::AddConnection() {
   MysqlConn* conn = new MysqlConn;
   conn->Connect(user_, passwd_, db_name_, ip_, port_);
-  conn->RefreshAliveTime();     // 刷新起始的空闲时间点
+  conn->RefreshAliveTime();      // 刷新起始的空闲时间点
   connection_queue_.push(conn);  // 记录新连接
   current_size_++;
 }

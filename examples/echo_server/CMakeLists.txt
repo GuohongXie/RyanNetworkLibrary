@@ -58,7 +58,8 @@ set(CXX_FLAGS
 #target_link_libraries(channel_test  pthread)
 
 add_executable(echo_server ${SRC_echo_server} ${SRC_BASE} ${SRC_BUFFER} ${SRC_LOG} ${SRC_MEMORY_POOL} ${SRC_NET} ${SRC_TCP_CONNECTION} ${SRC_TIMER})
-target_link_libraries(echo_server  pthread)
+target_link_libraries(echo_server  pthread epoll)
+target_include_directories(YourExecutableOrLibrary PUBLIC /path/to/epoll/header)
 
 add_executable(echo_server_async ${SRC_echo_server_async} ${SRC_BASE} ${SRC_BUFFER} ${SRC_LOG} ${SRC_MEMORY_POOL} ${SRC_NET} ${SRC_TCP_CONNECTION} ${SRC_TIMER})
 target_link_libraries(echo_server_async pthread)

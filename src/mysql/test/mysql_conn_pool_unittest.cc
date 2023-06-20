@@ -1,8 +1,9 @@
+#include "mysql_conn_pool.h"
+
 #include <iostream>
 #include <memory>
 #include <thread>
 
-#include "mysql_conn_pool.h"
 #include "mysql_conn.h"
 using namespace std;
 // 1. 单线程: 使用/不使用连接池
@@ -16,7 +17,8 @@ void Op1(int begin, int end) {
     char sql[1024] = {0};
     snprintf(sql, sizeof(sql),
              "insert into user values(%d, 'zhang san', '221B')", i);
-    conn.Update(sql); }
+    conn.Update(sql);
+  }
 }
 
 // 连接池
