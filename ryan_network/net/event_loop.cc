@@ -153,7 +153,7 @@ void EventLoop::HandleRead() {
   uint64_t one = 1;
   ssize_t n = ::read(wakeup_fd_, &one, sizeof(one));
   if (n != sizeof(one)) {
-    LOG_ERROR << "EventLoop::handleRead() reads " << n << " bytes instead of 8";
+    LOG_ERROR << "EventLoop::HandleRead() reads " << n << " bytes instead of 8";
   }
 }
 

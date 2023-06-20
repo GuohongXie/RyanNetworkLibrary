@@ -29,7 +29,7 @@ class FixedBuffer : public Noncopyable {
   int Avail() const { return static_cast<int>(end() - curr_); }
   void Add(size_t len) { curr_ += len; }
   void Reset() { curr_ = data_; }
-  void Bzero() { ::memset(&data_, sizeof(data_), 0); }
+  void Bzero() { ::bzero(&data_, sizeof(data_)); }
   std::string ToString() const { return std::string(data_, Length()); }
 
  private:

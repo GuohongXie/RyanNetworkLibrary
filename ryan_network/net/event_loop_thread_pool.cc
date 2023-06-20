@@ -22,7 +22,7 @@ void EventLoopThreadPool::Start(const ThreadInitCallback& cb) {
   // 循环创建线程
   for (int i = 0; i < num_threads_; ++i) {
     char buf[name_.size() + 32];
-    snprintf(buf, sizeof(buf), "%s%d", name_.c_str(), i);
+    snprintf(buf, sizeof buf, "%s%d", name_.c_str(), i);
     // 创建EventLoopThread对象
     EventLoopThread* t = new EventLoopThread(cb, buf);
     // 加入此EventLoopThread入容器

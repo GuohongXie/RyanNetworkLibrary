@@ -66,7 +66,7 @@ void TcpServer::NewConnection(int sockfd, const InetAddress& peer_addr) {
   EventLoop* io_loop = thread_pool_->GetNextLoop();
   // 提示信息
   char buf[64] = {0};
-  snprintf(buf, sizeof(buf), "-%s#%d", ip_port_.c_str(), next_conn_id_);
+  snprintf(buf, sizeof buf, "-%s#%d", ip_port_.c_str(), next_conn_id_);
   // 这里没有设置为原子类是因为其只在mainloop中执行 不涉及线程安全问题
   ++next_conn_id_;
   // 新连接名字

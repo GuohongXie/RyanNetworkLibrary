@@ -59,7 +59,7 @@ int main() {
   t3.Join();
 
   Thread t4(
-      std::bind(&Foo::MemberFunc2, std::ref(foo), std::string("Shuo Chen")));
+      std::bind(&Foo::MemberFunc2, std::ref(foo), std::string("ryan")));
   t4.Start();
   t4.Join();
 
