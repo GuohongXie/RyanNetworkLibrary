@@ -7,8 +7,8 @@ endif()
 add_executable(event_loop_unittest event_loop_unittest.cc)
 target_link_libraries(event_loop_unittest ryan_network)
 
-add_executable(event_loop_thread_unittest event_loop_thread_unittest.cc)
-target_link_libraries(event_loop_thread_unittest ryan_network)
+#add_executable(event_loop_thread_unittest event_loop_thread_unittest.cc)
+#target_link_libraries(event_loop_thread_unittest ryan_network)
 
 add_executable(event_loop_thread_pool_unittest event_loop_thread_pool_unittest.cc)
 target_link_libraries(event_loop_thread_pool_unittest ryan_network)

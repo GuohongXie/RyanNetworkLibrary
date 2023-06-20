@@ -1,8 +1,10 @@
 #ifndef RYANLIB_LOGGER_FIXED_BUFFER_H_
 #define RYANLIB_LOGGER_FIXED_BUFFER_H_
 
-#include <cassert>
-#include <cstring>
+#include <assert.h>
+#include <string.h>
+#include <strings.h>
+
 #include <string>
 
 #include "noncopyable.h"
@@ -11,7 +13,7 @@ const int kSmallBuffer = 4000;
 const int kLargeBuffer = 4000 * 1000;
 
 template <int SIZE>
-class FixedBuffer : public Noncopyable {
+class FixedBuffer : Noncopyable {
  public:
   FixedBuffer() : curr_(data_) {}  //这个构造函数是什么鬼
 
@@ -25,11 +27,13 @@ class FixedBuffer : public Noncopyable {
   const char* data() const { return data_; }
   int Length() const { return static_cast<int>(end() - data_); }
 
-  char* Current() const { return curr_; }
+  char* Current() { return curr_; } // why not const
   int Avail() const { return static_cast<int>(end() - curr_); }
   void Add(size_t len) { curr_ += len; }
+
   void Reset() { curr_ = data_; }
   void Bzero() { ::bzero(&data_, sizeof(data_)); }
+
   std::string ToString() const { return std::string(data_, Length()); }
 
  private:

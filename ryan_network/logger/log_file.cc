@@ -74,10 +74,10 @@ std::string LogFile::GetLogFileName(const std::string& basename, time_t* now) {
 
   char timebuf[32];
   struct tm tm;
-  *now = ::time(nullptr);
-  ::localtime_r(now, &tm);
+  *now = time(NULL);
+  localtime_r(now, &tm);
   // 写入时间
-  ::strftime(timebuf, sizeof timebuf, ".%Y%m%d-%H%M%S", &tm);
+  strftime(timebuf, sizeof timebuf, ".%Y%m%d-%H%M%S", &tm);
   filename += timebuf;
 
   filename += ".log";

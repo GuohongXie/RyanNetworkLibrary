@@ -68,6 +68,6 @@ void ThreadPool::RunInThread() {
       }
     }
   } catch (...) {
-    LOG_WARN << "runInThread throw exception";
+    LOG_WARN << "RunInThread throw exception";
   }
 }

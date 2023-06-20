@@ -9,7 +9,7 @@ __thread time_t t_lastSecond;
 };  // namespace thread_info
 
 const char* GetErrnoMsg(int saved_errno) {
-  return ::strerror_r(saved_errno, thread_info::t_errnobuf,
+  return strerror_r(saved_errno, thread_info::t_errnobuf,
                       sizeof(thread_info::t_errnobuf));
 }
 
@@ -23,10 +23,10 @@ Logger::LogLevel InitLogLevel() { return Logger::INFO; }
 Logger::LogLevel g_LogLevel = InitLogLevel();
 
 static void DefaultOutput(const char* data, int len) {
-  ::fwrite(data, len, sizeof(char), stdout);
+  fwrite(data, len, sizeof(char), stdout);
 }
 
-static void DefaultFlush() { ::fflush(stdout); }
+static void DefaultFlush() { fflush(stdout); }
 
 Logger::OutputFunc g_output = DefaultOutput;
 Logger::FlushFunc g_flush = DefaultFlush;
@@ -56,7 +56,7 @@ void Logger::Impl::FormatTime() {
   int microseconds = static_cast<int>(now.micro_seconds_since_epoch() %
                                       Timestamp::kMicroSecondsPerSecond);
 
-  struct tm* tm_time = ::localtime(&seconds);
+  struct tm* tm_time = localtime(&seconds);
   // 写入此线程存储的时间buf中
   snprintf(thread_info::t_time, sizeof(thread_info::t_time),
            "%4d/%02d/%02d %02d:%02d:%02d", tm_time->tm_year + 1900,

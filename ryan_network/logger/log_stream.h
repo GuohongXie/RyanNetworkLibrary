@@ -10,7 +10,7 @@
 // const char* data_;
 // int size_;
 
-class GeneralTemplate : public Noncopyable {
+class GeneralTemplate : Noncopyable {
  public:
   GeneralTemplate() : data_(nullptr), len_(0) {}
   //此处为什么用explicit
