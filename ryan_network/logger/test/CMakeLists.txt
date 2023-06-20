@@ -1,0 +1,5 @@
+add_executable(async_logging_test async_logging_test.cc)
+target_link_libraries(async_logging_test ryan_network)
+
+add_executable(log_file_test log_file_test.cc)
+target_link_libraries(log_file_test ryan_network)
