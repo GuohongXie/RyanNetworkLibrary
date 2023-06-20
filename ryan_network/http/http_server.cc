@@ -50,22 +50,22 @@ void HttpServer::OnMessage(const TcpConnectionPtr& conn, Buffer* buf,
 
 #if 0
     // 打印请求报文
-    std::string Request = buf->GetBufferAllAsString();
-    std::cout << Request << std::endl;
+    std::string request = buf->GetBufferAllAsString();
+    std::cout << request << std::endl;
 #endif
 
   // 进行状态机解析
   // 错误则发送 BAD REQUEST 半关闭
   if (!context->ParseRequest(buf, receiveTime)) {
     LOG_INFO << "ParseRequest failed!";
-    conn->Send("HTTP/1.1 400 Bad Request\r\n\r\n");
+    conn->Send("HTTP/1.1 400 Bad request\r\n\r\n");
     conn->Shutdown();
   }
 
   // 如果成功解析
   if (context->GotAll()) {
     LOG_INFO << "ParseRequest success!";
-    OnRequest(conn, context->Request());
+    OnRequest(conn, context->request());
     context->Reset();
   }
 }

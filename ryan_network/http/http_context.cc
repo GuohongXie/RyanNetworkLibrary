@@ -21,7 +21,7 @@ bool HttpContext::ProcessRequestLine(const char* begin, const char* end) {
         // 设置访问路径
         request_.SetPath(start, question);
         // 设置访问变量
-        request_.setQuery(question, space);
+        request_.SetQuery(question, space);
       } else {
         request_.SetPath(start, space);
       }

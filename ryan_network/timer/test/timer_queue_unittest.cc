@@ -9,7 +9,7 @@ int cnt = 0;
 EventLoop* g_loop;
 
 void PrintTid() {
-  printf("pid = %d, tid = %d\n", getpid(), CurrentThread::Tid());
+  printf("pid = %d, tid = %d\n", getpid(), current_thread::Tid());
   printf("now %s\n", Timestamp::Now().ToString().c_str());
 }
 
