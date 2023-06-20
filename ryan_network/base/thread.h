@@ -9,7 +9,7 @@
 
 #include "noncopyable.h"
 
-class Thread : public Noncopyable {
+class Thread : Noncopyable {
  public:
   using ThreadFunc = std::function<void()>;
   explicit Thread(ThreadFunc, const std::string& name = std::string());

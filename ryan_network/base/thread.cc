@@ -3,7 +3,6 @@
 #include <semaphore.h>
 
 #include "current_thread.h"
-#include "logging.h"
 
 std::atomic_int32_t Thread::num_created_(0);
 
