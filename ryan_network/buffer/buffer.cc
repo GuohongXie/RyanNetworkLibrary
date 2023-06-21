@@ -7,8 +7,8 @@
 #include "logging.h"
 
 const char Buffer::kCRLF[] = "\r\n";
-static size_t kCheapPrepend = 8;
-static size_t kInitialSize = 1024;
+//static size_t kCheapPrepend = 8;
+//static size_t kInitialSize = 1024;
 
 /**
  * 从fd上读取数据 Poller工作在LT模式
