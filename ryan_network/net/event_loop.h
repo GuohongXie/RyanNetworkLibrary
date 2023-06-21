@@ -8,9 +8,9 @@
 #include <vector>
 
 #include "current_thread.h"
-#include "noncopyable.h"
 #include "timer_queue.h"
 #include "timestamp.h"
+#include "noncopyable.h"
 
 class Channel;
 class Poller;

@@ -1,6 +1,7 @@
 #include "tcp_server.h"
 
-#include <cstring>
+#include <string.h>
+
 #include <functional>
 
 #include "logging.h"
@@ -99,7 +100,7 @@ void TcpServer::NewConnection(int sockfd, const InetAddress& peer_addr) {
   conn->SetCloseCallback(
       std::bind(&TcpServer::RemoveConnection, this, std::placeholders::_1));
 
-  io_loop->RunInLoop(std::bind(&TcpConnection::Connected, conn));
+  io_loop->RunInLoop(std::bind(&TcpConnection::ConnectEstablished, conn));
 }
 
 void TcpServer::RemoveConnection(const TcpConnectionPtr& conn) {

@@ -8,8 +8,8 @@
 #include "buffer.h"
 #include "callback.h"
 #include "inet_address.h"
-#include "noncopyable.h"
 #include "timestamp.h"
+#include "noncopyable.h"
 
 class Channel;
 class EventLoop;
@@ -81,7 +81,7 @@ class TcpConnection : Noncopyable,
   bool reading_;
 
   std::unique_ptr<Socket> socket_;
-  ;
+
   std::unique_ptr<Channel> channel_;
 
   const InetAddress local_addr_;  // 本服务器地址

@@ -7,8 +7,8 @@
 #include <memory>
 
 #include "logging.h"
-#include "noncopyable.h"
 #include "timestamp.h"
+#include "noncopyable.h"
 
 // 前置声明，不引用头文件防止暴露太多信息
 class EventLoop;

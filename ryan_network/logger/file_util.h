@@ -1,7 +1,7 @@
 #ifndef RYANLIB_LOGGER_FILE_UTIL_H_
 #define RYANLIB_LOGGER_FILE_UTIL_H_
 
-#include <stdio.h>
+#include <cstdio>
 #include <string>
 
 class FileUtil {

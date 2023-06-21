@@ -1,5 +1,5 @@
-#ifndef RYANLIB_TIMER_TIMER_QUEUE_H
-#define RYANLIB_TIMER_TIMER_QUEUE_H
+#ifndef RYANLIB_TIMER_TIMER_QUEUE_H_
+#define RYANLIB_TIMER_TIMER_QUEUE_H_
 
 #include <set>
 #include <vector>
@@ -53,4 +53,4 @@ class TimerQueue {
   bool calling_expired_timers_;  // 标明正在获取超时定时器
 };
 
-#endif  // RYANLIB_TIMER_TIMER_QUEUE_H
+#endif  // RYANLIB_TIMER_TIMER_QUEUE_H_

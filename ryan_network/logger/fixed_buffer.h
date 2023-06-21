@@ -1,9 +1,9 @@
 #ifndef RYANLIB_LOGGER_FIXED_BUFFER_H_
 #define RYANLIB_LOGGER_FIXED_BUFFER_H_
 
-#include <assert.h>
-#include <string.h>
-#include <strings.h>
+#include <cassert>
+#include <cstring>
+#include <cstrings>
 
 #include <string>
 

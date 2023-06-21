@@ -5,8 +5,8 @@
 #include <vector>
 
 #include "channel.h"
-#include "noncopyable.h"
 #include "timestamp.h"
+#include "noncopyable.h"
 
 // muduo库中多路事件分发器的核心IO复用模块
 class Poller : Noncopyable {

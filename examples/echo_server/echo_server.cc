@@ -1,7 +1,7 @@
-#include "async_logging.h"
 #include "event_loop.h"
-#include "logging.h"
 #include "tcp_server.h"
+#include "logging.h"
+#include "async_logging.h"
 
 class EchoServer {
  public:

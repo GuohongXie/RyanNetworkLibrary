@@ -1,8 +1,8 @@
 #include "memory_pool.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstring>
 
 void MemoryPool::CreatePool() {
   // if (size < PAGE_SIZE || size % PAGE_SIZE != 0)

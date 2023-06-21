@@ -32,4 +32,4 @@ class Socket : Noncopyable {
   const int sockfd_;
 };
 
-#endif  // RYANLIB_NET_SOCKET_H_
+#endif //RYANLIB_NET_SOCKET_H_
