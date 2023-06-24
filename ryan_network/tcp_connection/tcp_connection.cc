@@ -2,7 +2,7 @@
 
 #include <errno.h>
 #include <netinet/tcp.h>
-#include <string.h>
+#include <cstring>
 #include <sys/socket.h>
 #include <sys/types.h>
 
