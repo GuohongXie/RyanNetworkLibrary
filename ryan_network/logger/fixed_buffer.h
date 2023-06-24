@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <cstring>
-#include <cstrings>
+#include <strings.h>
 
 #include <string>
 
