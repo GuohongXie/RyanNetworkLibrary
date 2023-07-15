@@ -33,14 +33,14 @@ void Thread::Start() {
     //获取线程id
     tid_ = current_thread::Tid();
     // v操作
-    sem_post(&sem);
+    ::sem_post(&sem);
     //开启一个新线程专门执行该线程函数
     func_();
   }));
   //这里必须等待获取上面新创建的线程的tid
   //未获取到信号则不会执行sem_post,所以会被阻塞住
   //如果不使用信号量操作，则别的线程访问tid的时候，可能上面的线程还没有获取到tid
-  sem_wait(&sem);
+  ::sem_wait(&sem);
 }
 
 void Thread::Join() {
