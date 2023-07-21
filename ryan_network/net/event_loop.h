@@ -40,6 +40,10 @@ class EventLoop : Noncopyable {
   void QueueInLoop(Functor cb);
 
   // 用来唤醒loop所在的线程
+  //当一个线程阻塞在epoll_wait()上时，另一个线程往此epollfd添加一个新的监视fd会发生什么
+  //新fd上的时间会不会在此次epoll_wait()调用中返回？
+  //为了稳妥起见，我们应该把对同一个epoll fd的操作（添加，删除，修改，等待）等等
+  //都放到一个线程中执行，这正是我们需要EventLoop::Wakeup()的原因
   void Wakeup();
 
   // EventLoop的方法 => Poller

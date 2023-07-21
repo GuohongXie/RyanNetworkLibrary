@@ -143,7 +143,7 @@ void EventLoop::QueueInLoop(Functor cb) {
 
 void EventLoop::Wakeup() {
   uint64_t one = 1;
-  ssize_t n = write(wakeup_fd_, &one, sizeof(one));
+  ssize_t n = ::write(wakeup_fd_, &one, sizeof(one));
   if (n != sizeof(one)) {
     LOG_ERROR << "EventLoop::wakeup writes " << n << " bytes instead of 8";
   }
@@ -151,7 +151,7 @@ void EventLoop::Wakeup() {
 
 void EventLoop::HandleRead() {
   uint64_t one = 1;
-  ssize_t n = read(wakeup_fd_, &one, sizeof(one));
+  ssize_t n = ::read(wakeup_fd_, &one, sizeof(one));
   if (n != sizeof(one)) {
     LOG_ERROR << "EventLoop::HandleRead() reads " << n << " bytes instead of 8";
   }
