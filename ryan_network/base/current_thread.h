@@ -7,7 +7,7 @@
 #include <cstdint>
 
 namespace current_thread {
-extern __thread int t_cached_tid;  //保存tid缓冲，避免多次系统调用
+extern thread_local int t_cached_tid;  //保存tid缓冲，避免多次系统调用
 void CacheTid();
 
 //内联函数

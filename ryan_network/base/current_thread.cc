@@ -1,7 +1,7 @@
 #include "current_thread.h"
 
 namespace current_thread {
-__thread int t_cached_tid = 0;
+thread_local int t_cached_tid = 0;
 
 void CacheTid() {
   if (t_cached_tid == 0) {

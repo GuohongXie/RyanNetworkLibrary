@@ -1,11 +1,12 @@
 # Editors.
 *.sw*
-.vscode
+#.vscode
 .DS_Store
 bazel-*
-compile_commands.json
+#compile_commands.json
 
 # Build directory.
 build/
 out/
 cmake-build-debug/
+.cache/

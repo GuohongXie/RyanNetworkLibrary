@@ -5,6 +5,10 @@
 static const char digits[] = {'9', '8', '7', '6', '5', '4', '3', '2', '1', '0',
                               '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
+//整数到字符串的转换，可以视为itoa()的标准答案
+//Matthew Wilson 的《 Efficient Integer to String Conversions 》系列文章 
+//他的巧妙之处在千，用一个对称的 digits 数组搞定了负数转换的边界条件
+//（ 二进制补码 的正负整数表示范围不对称）
 template <typename T>
 void LogStream::FormatInteger(T num) {
   if (buffer_.Avail() >= kMaxNumericSize) {
