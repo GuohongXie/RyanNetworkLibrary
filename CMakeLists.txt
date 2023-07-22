@@ -37,12 +37,12 @@ file(GLOB SRC_TIMER ${PROJECT_SOURCE_DIR}/ryan_network/timer/*.cc)
 set(CXX_FLAGS
     -g
     -Wall
-    -std=c++11
+    -std=c++17
     -O0
     )
 
 set(CMAKE_CXX_FLAGS_DEBUG "-O0")
-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -std=c++17")
 
 
 find_package(Boost REQUIRED)
@@ -78,6 +78,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 # 加载example
 add_subdirectory(examples/echo_server)
 add_subdirectory(examples/twisted/finger)
+add_subdirectory(examples/sudoku)
 
 #加载test
 add_subdirectory(ryan_network/base/test)
