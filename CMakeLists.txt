@@ -77,6 +77,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 # 加载example
 add_subdirectory(examples/echo_server)
+add_subdirectory(examples/twisted/finger)
 
 #加载test
 add_subdirectory(ryan_network/base/test)
