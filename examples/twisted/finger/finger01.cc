@@ -1,9 +1,6 @@
-#include "muduo/net/EventLoop.h"
-
-using namespace muduo;
-using namespace muduo::net;
+#include "event_loop.h"
 
 int main() {
   EventLoop loop;
-  loop.loop();
+  loop.Loop();
 }

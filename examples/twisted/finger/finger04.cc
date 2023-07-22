@@ -1,20 +1,18 @@
-#include "muduo/net/EventLoop.h"
-#include "muduo/net/TcpServer.h"
+#include "event_loop.h"
+#include "tcp_server.h"
 
-using namespace muduo;
-using namespace muduo::net;
 
-void onMessage(const TcpConnectionPtr& conn, Buffer* buf,
+void OnMessage(const TcpConnectionPtr& conn, Buffer* buf,
                Timestamp receiveTime) {
-  if (buf->findCRLF()) {
-    conn->shutdown();
+  if (buf->FindCRLF()) {
+    conn->Shutdown();
   }
 }
 
 int main() {
   EventLoop loop;
   TcpServer server(&loop, InetAddress(1079), "Finger");
-  server.setMessageCallback(onMessage);
-  server.start();
-  loop.loop();
+  server.SetMessageCallback(OnMessage);
+  server.Start();
+  loop.Loop();
 }

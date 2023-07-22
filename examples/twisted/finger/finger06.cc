@@ -1,16 +1,14 @@
 #include <map>
 
-#include "muduo/net/EventLoop.h"
-#include "muduo/net/TcpServer.h"
+#include "event_loop.h"
+#include "tcp_server.h"
 
-using namespace muduo;
-using namespace muduo::net;
 
-typedef std::map<string, string> UserMap;
+typedef std::map<std::string, std::string> UserMap;
 UserMap users;
 
-string getUser(const string& user) {
-  string result = "No such user";
+std::string GetUser(const std::string& user) {
+  std::string result = "No such user";
   UserMap::iterator it = users.find(user);
   if (it != users.end()) {
     result = it->second;
@@ -18,21 +16,21 @@ string getUser(const string& user) {
   return result;
 }
 
-void onMessage(const TcpConnectionPtr& conn, Buffer* buf,
+void OnMessage(const TcpConnectionPtr& conn, Buffer* buf,
                Timestamp receiveTime) {
-  const char* crlf = buf->findCRLF();
+  const char* crlf = buf->FindCRLF();
   if (crlf) {
-    string user(buf->peek(), crlf);
-    conn->send(getUser(user) + "\r\n");
-    buf->retrieveUntil(crlf + 2);
-    conn->shutdown();
+    std::string user(buf->Peek(), crlf);
+    conn->Send(GetUser(user) + "\r\n");
+    buf->RetrieveUntil(crlf + 2);
+    conn->Shutdown();
   }
 }
 
 int main() {
   EventLoop loop;
   TcpServer server(&loop, InetAddress(1079), "Finger");
-  server.setMessageCallback(onMessage);
-  server.start();
-  loop.loop();
+  server.SetMessageCallback(OnMessage);
+  server.Start();
+  loop.Loop();
 }

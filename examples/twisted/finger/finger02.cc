@@ -1,12 +1,10 @@
-#include "muduo/net/EventLoop.h"
-#include "muduo/net/TcpServer.h"
+#include "event_loop.h"
+#include "tcp_server.h"
 
-using namespace muduo;
-using namespace muduo::net;
 
 int main() {
   EventLoop loop;
   TcpServer server(&loop, InetAddress(1079), "Finger");
-  server.start();
-  loop.loop();
+  server.Start();
+  loop.Loop();
 }
