@@ -96,11 +96,6 @@
 },
 {
   "directory": "/home/guohong/ryan_cc_projects/ryan_network/build/release",
-  "command": "/usr/bin/c++  -Dryan_network_EXPORTS -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/base -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/buffer -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/http -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/logger -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/memory_pool -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/mysql -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/net -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/tcp_connection -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/timer  -O2 -DNDEBUG -fPIC   -o CMakeFiles/ryan_network.dir/ryan_network/net/connector.cc.o -c /home/guohong/ryan_cc_projects/ryan_network/ryan_network/net/connector.cc",
-  "file": "/home/guohong/ryan_cc_projects/ryan_network/ryan_network/net/connector.cc"
-},
-{
-  "directory": "/home/guohong/ryan_cc_projects/ryan_network/build/release",
   "command": "/usr/bin/c++  -Dryan_network_EXPORTS -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/base -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/buffer -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/http -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/logger -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/memory_pool -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/mysql -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/net -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/tcp_connection -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/timer  -O2 -DNDEBUG -fPIC   -o CMakeFiles/ryan_network.dir/ryan_network/net/default_poller.cc.o -c /home/guohong/ryan_cc_projects/ryan_network/ryan_network/net/default_poller.cc",
   "file": "/home/guohong/ryan_cc_projects/ryan_network/ryan_network/net/default_poller.cc"
 },
@@ -138,11 +133,6 @@
   "directory": "/home/guohong/ryan_cc_projects/ryan_network/build/release",
   "command": "/usr/bin/c++  -Dryan_network_EXPORTS -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/base -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/buffer -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/http -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/logger -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/memory_pool -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/mysql -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/net -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/tcp_connection -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/timer  -O2 -DNDEBUG -fPIC   -o CMakeFiles/ryan_network.dir/ryan_network/net/socket.cc.o -c /home/guohong/ryan_cc_projects/ryan_network/ryan_network/net/socket.cc",
   "file": "/home/guohong/ryan_cc_projects/ryan_network/ryan_network/net/socket.cc"
-},
-{
-  "directory": "/home/guohong/ryan_cc_projects/ryan_network/build/release",
-  "command": "/usr/bin/c++  -Dryan_network_EXPORTS -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/base -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/buffer -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/http -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/logger -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/memory_pool -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/mysql -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/net -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/tcp_connection -I/home/guohong/ryan_cc_projects/ryan_network/ryan_network/timer  -O2 -DNDEBUG -fPIC   -o CMakeFiles/ryan_network.dir/ryan_network/tcp_connection/TcpClient.cc.o -c /home/guohong/ryan_cc_projects/ryan_network/ryan_network/tcp_connection/TcpClient.cc",
-  "file": "/home/guohong/ryan_cc_projects/ryan_network/ryan_network/tcp_connection/TcpClient.cc"
 },
 {
   "directory": "/home/guohong/ryan_cc_projects/ryan_network/build/release",
