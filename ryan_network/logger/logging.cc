@@ -10,7 +10,7 @@ thread_local time_t t_lastSecond;
 
 const char* GetErrnoMsg(int saved_errno) {
   return strerror_r(saved_errno, thread_info::t_errnobuf,
-                      sizeof(thread_info::t_errnobuf));
+                    sizeof(thread_info::t_errnobuf));
 }
 
 // 根据Level返回Level名字
@@ -91,6 +91,9 @@ Logger::Logger(const char* file, int line, Logger::LogLevel level,
     : impl_(level, 0, file, line) {
   impl_.stream_ << func << ' ';
 }
+
+Logger::Logger(const char* file, int line, bool to_abort)
+    : impl_(to_abort ? FATAL : ERROR, errno, file, line) {}
 
 Logger::~Logger() {
   impl_.Finish();

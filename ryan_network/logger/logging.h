@@ -2,10 +2,10 @@
 #define RYANLIB_LOGGER_LOGGING_H_
 
 #include <errno.h>
-#include <cstdio>
-#include <cstring>
 #include <sys/time.h>
 
+#include <cstdio>
+#include <cstring>
 #include <functional>
 
 #include "log_stream.h"
@@ -44,6 +44,7 @@ class Logger {
   Logger(const char* file, int line);
   Logger(const char* file, int line, LogLevel level);
   Logger(const char* file, int line, LogLevel level, const char* func);
+  Logger(const char* file, int line, bool to_abort);
   ~Logger();
 
   // 流是会改变的
@@ -90,7 +91,10 @@ const char* GetErrnoMsg(int saved_errno);
  * 当日志等级小于对应等级才会输出
  * 比如设置等级为FATAL，则logLevel等级大于DEBUG和INFO，DEBUG和INFO等级的日志就不会输出
  */
-#define LOG_DEBUG                  \
+#define LOG_TRACE                                        \
+  if (log_level() <= Logger::TRACE) \
+  Logger(__FILE__, __LINE__, Logger::TRACE, __func__).stream()
+#define LOG_DEBUG                   \
   if (log_level() <= Logger::DEBUG) \
   Logger(__FILE__, __LINE__, Logger::DEBUG, __func__).stream()
 #define LOG_INFO \
@@ -98,5 +102,7 @@ const char* GetErrnoMsg(int saved_errno);
 #define LOG_WARN Logger(__FILE__, __LINE__, Logger::WARN).stream()
 #define LOG_ERROR Logger(__FILE__, __LINE__, Logger::ERROR).stream()
 #define LOG_FATAL Logger(__FILE__, __LINE__, Logger::FATAL).stream()
+#define LOG_SYSERR Logger(__FILE__, __LINE__, false).stream()
+#define LOG_SYSFATAL Logger(__FILE__, __LINE__, true).stream()
 
 #endif  // RYANLIB_LOGGER_LOGGING_H_
