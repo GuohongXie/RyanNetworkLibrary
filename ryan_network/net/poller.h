@@ -5,8 +5,9 @@
 #include <vector>
 
 #include "channel.h"
-#include "timestamp.h"
 #include "noncopyable.h"
+#include "timestamp.h"
+#include "event_loop.h"
 
 // muduo库中多路事件分发器的核心IO复用模块
 class Poller : Noncopyable {
@@ -17,6 +18,8 @@ class Poller : Noncopyable {
   virtual ~Poller() = default;
 
   // 需要交给派生类实现的接口
+  // Poller::Poll()是Poller的核心函数，用于获取当前活跃的IO事件，
+  // 然后填充到调用方传入的activeChannels中，返回poll(2) return的时间戳
   virtual Timestamp Poll(int timeoutMs, ChannelList* activeChannels) = 0;
   virtual void UpdateChannel(Channel* channel) = 0;
   virtual void RemoveChannel(Channel* channel) = 0;
@@ -32,6 +35,10 @@ class Poller : Noncopyable {
    * 所以外面会单独创建一个 DefaultPoller.cc 的文件去实现
    */
   static Poller* NewDefaultPoller(EventLoop* Loop);
+  
+  void AssertInLoopThread() const {
+    owner_loop_->AssertInLoopThread();
+  }
 
  protected:
   using ChannelMap = std::unordered_map<int, Channel*>;

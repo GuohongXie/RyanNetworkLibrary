@@ -3,12 +3,13 @@
 #include <fcntl.h>
 #include <sys/eventfd.h>
 #include <unistd.h>
+#include <cassert>
 
 #include "logging.h"
 #include "poller.h"
 
 // 防止一个线程创建多个EventLoop (thread_local)
-__thread EventLoop* t_loop_in_this_thread = nullptr;
+thread_local EventLoop* t_loop_in_this_thread = nullptr;
 
 // 定义默认的Poller IO复用接口的超时时间
 const int kPollTimeMs = 10000;
@@ -22,10 +23,15 @@ int CreateEventfd() {
   return evfd;
 }
 
-// EventLoop* EventLoop::GetEventLoopOfCurrentThread() {
-//  return t_loop_in_this_thread;
-//}
+EventLoop* EventLoop::GetEventLoopOfCurrentThread() {
+  return t_loop_in_this_thread;
+}
 
+//EventLoop对象会记住本对象所属的线程 thread_id_
+//创建了EventLoop对象的线程就是IO线程
+//其主要功能是运行事件循环EventLoop::Loop()
+//EventLoop对象的生命周期和所属的线程一样长
+//它不必是heap对象，也不需要跨线程创建，因此不需要锁
 EventLoop::EventLoop()
     : looping_(false),
       quit_(false),
@@ -38,6 +44,9 @@ EventLoop::EventLoop()
       current_active_channel_(nullptr) {
   LOG_DEBUG << "EventLoop created " << this << " the index is " << thread_id_;
   LOG_DEBUG << "EventLoop created wakeupFd " << wakeup_channel_->fd();
+  //one loop per thread, 顾名思义，一个线程只能有一个EventLoop对象
+  //因此EventLoop的构造函数会检查当前是否已经创建了其他EventLoop对象
+  //遇到错误就终止程序(LOG_FATAL)
   if (t_loop_in_this_thread) {
     LOG_FATAL << "Another EventLoop" << t_loop_in_this_thread
               << " exists in this thread " << thread_id_;
@@ -63,6 +72,9 @@ EventLoop::~EventLoop() {
 }
 
 void EventLoop::Loop() {
+  //事件循环只能在IO线程中运行，因此EventLoop::Loop()会检查这一pre-condition
+  assert(!looping_);
+  AssertInLoopThread();
   looping_ = true;
   quit_ = false;
 
@@ -135,11 +147,11 @@ void EventLoop::QueueInLoop(Functor cb) {
   }
 }
 
-// void EventLoop::AbortNotInLoopThread() {
-//  LOG_FATAL << "EventLoop::AbortNotInLoopThread - EventLoop " << this
-//            << " was created in thread_id_ = " << thread_id_
-//            << ", current thread id = " << current_thread::Tid();
-//}
+ void EventLoop::AbortNotInLoopThread() {
+  LOG_FATAL << "EventLoop::AbortNotInLoopThread - EventLoop " << this
+            << " was created in thread_id_ = " << thread_id_
+            << ", current thread id = " << current_thread::Tid();
+}
 
 void EventLoop::Wakeup() {
   uint64_t one = 1;

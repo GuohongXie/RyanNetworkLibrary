@@ -2,7 +2,9 @@
 #define RYANLIB_NET_EPOLL_POLLER_H_
 
 #include <sys/epoll.h>
+#include <poll.h>
 #include <unistd.h>
+#include <cstring>
 
 #include <vector>
 

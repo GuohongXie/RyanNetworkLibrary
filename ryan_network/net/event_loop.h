@@ -8,9 +8,9 @@
 #include <vector>
 
 #include "current_thread.h"
+#include "noncopyable.h"
 #include "timer_queue.h"
 #include "timestamp.h"
-#include "noncopyable.h"
 
 class Channel;
 class Poller;
@@ -52,12 +52,18 @@ class EventLoop : Noncopyable {
   bool HasChannel(Channel* channel);
 
   // 判断EventLoop是否在自己的线程
+  //接口设计会明确哪些成员函数是安全的，可以跨线程调用；
+  //哪些成员函数是不安全的，只能在IO线程中调用
+  //为了能在运行时检查这些pre-condition，
+  //EventLoop 提供了IsInLoopThread()和AssertInLoopThread()两个函数
+  //事件循环只能在IO线程中运行，因此EventLoop::Loop()会检查这一pre-condition
   bool IsInLoopThread() const { return thread_id_ == current_thread::Tid(); }
-  // void AssertInLoopThread() {
-  //  if (!IsInLoopThread()) {
-  //    AbortNotInLoopThread();
-  //  }
-  //}
+
+  void AssertInLoopThread() {
+    if (!IsInLoopThread()) {
+      AbortNotInLoopThread();
+    }
+  }
 
   /**
    * 定时任务相关函数
@@ -76,10 +82,10 @@ class EventLoop : Noncopyable {
     timer_queue_->AddTimer(std::move(cb), timestamp, interval);
   }
 
-  //  static EventLoop* GetEventLoopOfCurrentThread();
+  static EventLoop* GetEventLoopOfCurrentThread();
 
  private:
-  // void AbortNotInLoopThread();
+  void AbortNotInLoopThread();
   void HandleRead();
   void DoPendingFunctors();
 
