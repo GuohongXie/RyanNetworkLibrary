@@ -4,18 +4,11 @@ cmake_minimum_required(VERSION 3.0)
 # 设置项目名称
 project(ryan_network C CXX)
 
+enable_testing()
+
 # 添加搜索路径
 include_directories(
     ${PROJECT_SOURCE_DIR}/ryan_network
-    #${PROJECT_SOURCE_DIR}/ryan_network/base
-    #${PROJECT_SOURCE_DIR}/ryan_network/buffer
-    #${PROJECT_SOURCE_DIR}/ryan_network/http
-    #${PROJECT_SOURCE_DIR}/ryan_network/logger
-    #${PROJECT_SOURCE_DIR}/ryan_network/memory_pool
-    #${PROJECT_SOURCE_DIR}/ryan_network/mysql
-    #${PROJECT_SOURCE_DIR}/ryan_network/net
-    #${PROJECT_SOURCE_DIR}/ryan_network/tcp_connection
-    #${PROJECT_SOURCE_DIR}/ryan_network/timer
     )
 
 
@@ -38,17 +31,24 @@ file(GLOB SRC_TIMER ${PROJECT_SOURCE_DIR}/ryan_network/timer/*.cc)
 set(CXX_FLAGS
     -g
     -Wall
-    -std=c++17
+    -std=c++11
     -O0
     )
 
-set(CMAKE_CXX_FLAGS_DEBUG "-O0")
-set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -std=c++17")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -std=c++11 -DDEBUG")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -std=c++11")
 
-
-find_package(Boost REQUIRED)
+find_package(Boost) #REQUIRED
 find_library(BOOST_TEST_LIBRARY NAMES boost_unit_test_framework)
+if(BOOST_TEST_LIBRARY)
 include_directories(${Boost_INCLUDE_DIRS})
+endif()
+
+# 找到并链接Google Test库
+find_package(GTest) #REQUIRED
+if(GTest_FOUND)
+  include_directories(${GTEST_INCLUDE_DIRS})
+endif()
 
 # 生成动态库 ryan_network
 add_library(ryan_network SHARED 
@@ -87,4 +87,3 @@ add_subdirectory(ryan_network/buffer/test)
 add_subdirectory(ryan_network/logger/test)
 add_subdirectory(ryan_network/memory_pool/test)
 add_subdirectory(ryan_network/net/test)
-#add_subdirectory(ryan_network/timer/test)

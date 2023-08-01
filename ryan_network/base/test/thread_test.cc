@@ -12,12 +12,12 @@ void Mysleep(int seconds) {
   nanosleep(&t, NULL);
 }
 
-void ThreadFunc() { printf("Tid=%d\n", current_thread::Tid()); }
+void ThreadFunc() { printf("tid=%d\n", current_thread::Tid()); }
 
-void ThreadFunc2(int x) { printf("Tid=%d, x=%d\n", current_thread::Tid(), x); }
+void ThreadFunc2(int x) { printf("tid=%d, x=%d\n", current_thread::Tid(), x); }
 
 void ThreadFunc3() {
-  printf("Tid=%d\n", current_thread::Tid());
+  printf("tid=%d\n", current_thread::Tid());
   Mysleep(1);
 }
 
@@ -26,11 +26,11 @@ class Foo {
   explicit Foo(double x) : x_(x) {}
 
   void MemberFunc() {
-    printf("Tid=%d, Foo::x_=%f\n", current_thread::Tid(), x_);
+    printf("tid=%d, Foo::x_=%f\n", current_thread::Tid(), x_);
   }
 
   void MemberFunc2(const std::string& text) {
-    printf("Tid=%d, Foo::x_=%f, text=%s\n", current_thread::Tid(), x_,
+    printf("tid=%d, Foo::x_=%f, text=%s\n", current_thread::Tid(), x_,
            text.c_str());
   }
 
@@ -39,17 +39,17 @@ class Foo {
 };
 
 int main() {
-  printf("pid=%d, Tid=%d\n", ::getpid(), current_thread::Tid());
+  printf("pid=%d, tid=%d\n", ::getpid(), current_thread::Tid());
 
   Thread t1(ThreadFunc);
   t1.Start();
-  printf("t1.Tid=%d\n", t1.tid());
+  printf("t1.tid=%d\n", t1.tid());
   t1.Join();
 
   Thread t2(std::bind(ThreadFunc2, 42),
             "thread for free function with argument");
   t2.Start();
-  printf("t2.Tid=%d\n", t2.tid());
+  printf("t2.tid=%d\n", t2.tid());
   t2.Join();
 
   Foo foo(87.53);

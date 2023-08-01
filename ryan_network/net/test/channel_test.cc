@@ -8,6 +8,7 @@
 #include <unistd.h>
 
 #include "net/event_loop.h"
+#include "net/callback.h"
 #include "logger/logging.h"
 
 void Print(const char* msg) {

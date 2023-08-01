@@ -1,10 +1,12 @@
 #include "logger/log_stream.h"
 
+#include <cstdint>
 #include <algorithm>
 
 static const char digits[] = {'9', '8', '7', '6', '5', '4', '3', '2', '1', '0',
                               '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
+const char digitsHex[] = "0123456789ABCDEF";
 //整数到字符串的转换，可以视为itoa()的标准答案
 //Matthew Wilson 的《 Efficient Integer to String Conversions 》系列文章 
 //他的巧妙之处在千，用一个对称的 digits 数组搞定了负数转换的边界条件
@@ -91,8 +93,33 @@ LogStream& LogStream::operator<<(char c) {
   return *this;
 }
 
-LogStream& LogStream::operator<<(const void* data) {
-  *this << static_cast<const char*>(data);
+//LogStream& LogStream::operator<<(const void* data) {
+//  *this << static_cast<const char*>(data);
+//  return *this;
+//}
+
+size_t ConvertHex(char buf[], uintptr_t value) {
+  uintptr_t i = value;
+  char* p = buf;
+  do {
+    int lsd = static_cast<int>(i % 16);
+    i /= 16;
+    *p++ = digitsHex[lsd];
+  } while (i != 0);
+  *p = '\0';
+  std::reverse(buf, p);
+  return p - buf;
+}
+
+LogStream& LogStream::operator<<(const void* p) {
+  uintptr_t v = reinterpret_cast<uintptr_t>(p);
+  if (buffer_.Avail() >= kMaxNumericSize) {
+    char* buf = buffer_.Current();
+    buf[0] = '0';
+    buf[1] = 'x';
+    size_t len = ConvertHex(buf + 2, v);
+    buffer_.Add(len + 2);
+  }
   return *this;
 }
 

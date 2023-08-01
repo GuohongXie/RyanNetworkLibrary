@@ -1,2 +1,2 @@
-add_executable( memory_pool_unittest memory_pool_unittest.cc)
-target_link_libraries( memory_pool_unittest ryan_network)
+add_executable( memory_pool_test memory_pool_test.cc)
+target_link_libraries( memory_pool_test ryan_network)

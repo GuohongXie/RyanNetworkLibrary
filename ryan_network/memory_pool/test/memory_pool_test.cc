@@ -21,13 +21,13 @@ void ShowInfo(MemoryPool* Mpool, char* str) {
     }
     if (i == 1) {
       printf(
-          "第%02d块small block  已使用:%4ld  剩余空间:%4ld  引用:%4d  "
+          "the %02dth small block  used:%4ld  remaining:%4ld  refer:%4d  "
           "failed:%4d\n",
           i, (unsigned char*)head->last_ - (unsigned char*)pool,
           head->end_ - head->last_, head->quote_, head->failed_);
     } else {
       printf(
-          "第%02d块small block  已使用:%4ld  剩余空间:%4ld  引用:%4d  "
+          "the %02dth small block  used:%4ld  remaining:%4ld  refer:%4d  "
           "failed:%4d\n",
           i, (unsigned char*)head->last_ - (unsigned char*)head,
           head->end_ - head->last_, head->quote_, head->failed_);
@@ -38,7 +38,7 @@ void ShowInfo(MemoryPool* Mpool, char* str) {
   i = 0;
   for (large = pool->large_list_; large; large = large->next_, i++) {
     if (large->address_ != nullptr) {
-      printf("第%d块large block  size=%d\n", i, large->size_);
+      printf("the %dth large block  size=%d\n", i, large->size_);
     }
   }
   printf("\r\n\r\n------end pool status------\r\n\r\n");
@@ -56,28 +56,28 @@ void test1() {
   for (int i = 0; i < 50; i++) {
     memoryVector[i] = pool.malloc(512);
   }
-  ShowInfo(&pool, "申请50个512字节的内存块");
+  ShowInfo(&pool, "apply for 50 blocks of 512 bytes");
 
   // 销毁30个512字节的内存块
   for (int i = 0; i < 50; i++) {
     pool.FreeMemory(memoryVector[i]);
   }
-  ShowInfo(&pool, "销毁50个512字节的内存块");
+  ShowInfo(&pool, "destroy 50 blocks of 512 bytes");
 
   // 申请30个5120字节的内存块
   for (int i = 0; i < 30; i++) {
     memoryVector[i] = pool.malloc(5120);
   }
-  ShowInfo(&pool, "申请30个5120字节的内存块");
+  ShowInfo(&pool, "apply for 30 blocks of 512 bytes");
 
   // 销毁30个5120字节的内存块
   for (int i = 0; i < 30; i++) {
     pool.FreeMemory(memoryVector[i]);
   }
-  ShowInfo(&pool, "销毁30个5120字节的内存块");
+  ShowInfo(&pool, "destroy 30 blocks of 512 bytes");
 
   pool.ResetPool();
-  ShowInfo(&pool, "重置内存池");
+  ShowInfo(&pool, "reset the memory pool");
 
   pool.DestroyPool();
 }

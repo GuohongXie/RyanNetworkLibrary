@@ -22,6 +22,17 @@ int CreateTimerfd() {
   return timerfd;
 }
 
+void ReadTimerfd(int timerfd, Timestamp now) {
+  uint64_t howmany;
+  ssize_t n = ::read(timerfd, &howmany, sizeof(howmany));
+  LOG_TRACE << "TimerQueue::HandleRead() " << howmany << " at "
+            << now.ToString();
+  if (n != sizeof howmany) {
+    LOG_ERROR << "TimerQueue::HandleRead() reads " << n
+              << " bytes instead of 8";
+  }
+}
+
 TimerQueue::TimerQueue(EventLoop* loop)
     : loop_(loop),
       timerfd_(CreateTimerfd()),
