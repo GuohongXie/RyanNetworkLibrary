@@ -97,6 +97,14 @@ BOOST_AUTO_TEST_CASE(testBufferPrepend) {
   BOOST_CHECK_EQUAL(buf.PrependableBytes(), Buffer::kCheapPrepend - 4);
 }
 
+BOOST_AUTO_TEST_CASE(testBufferFindEOL) {
+  Buffer buf;
+  buf.Append(string(100000, 'x'));
+  const char* null = nullptr;
+  BOOST_CHECK_EQUAL(buf.FindEOL(), null);
+  BOOST_CHECK_EQUAL(buf.FindEOL(buf.Peek() + 90000), null);
+}
+
 void output(Buffer&& buf, const void* inner) {
   Buffer newbuf(std::move(buf));
   // printf("New Buffer at %p, inner %p\n", &newbuf, newbuf.Peek());

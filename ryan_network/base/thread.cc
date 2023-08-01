@@ -1,8 +1,10 @@
+#include "base/thread.h"
 #include "base/current_thread.h"
 
 #include <semaphore.h>
 
-#include "base/thread.h"
+#include "base/timestamp.h"
+
 
 
 
@@ -60,3 +62,10 @@ void Thread::SetDefaultName() {
   }
 }
 
+void current_thread::SleepUsec(int64_t usec) {
+  struct timespec ts = {0, 0};
+  ts.tv_sec = static_cast<time_t>(usec / Timestamp::kMicroSecondsPerSecond);
+  ts.tv_nsec =
+      static_cast<long>(usec % Timestamp::kMicroSecondsPerSecond * 1000);
+  ::nanosleep(&ts, nullptr);
+}

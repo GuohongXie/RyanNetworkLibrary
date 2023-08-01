@@ -11,13 +11,13 @@ Timestamp Timestamp::Now() {
   return Timestamp(seconds * kMicroSecondsPerSecond + tv.tv_usec);
 }
 
-//std::string Timestamp::ToString() const {
-//  char buf[32] = {0};
-//  int64_t seconds = micro_seconds_since_epoch_ / kMicroSecondsPerSecond;
-//  int64_t microseconds = micro_seconds_since_epoch_ % kMicroSecondsPerSecond;
-//  snprintf(buf, sizeof(buf), "%ld.%06ld", seconds, microseconds);
-//  return buf;
-//}
+std::string Timestamp::ToString() const {
+  char buf[32] = {0};
+  int64_t seconds = micro_seconds_since_epoch_ / kMicroSecondsPerSecond;
+  int64_t microseconds = micro_seconds_since_epoch_ % kMicroSecondsPerSecond;
+  snprintf(buf, sizeof(buf), "%ld.%06ld", seconds, microseconds);
+  return buf;
+}
 
 // 2023/06/12 19:44:28
 // 2023/06/12 19:44:28.952562
@@ -42,9 +42,11 @@ std::string Timestamp::ToFormattedString(bool show_micro_seconds) const {
   return buf;
 }
 
-// int main() {
-//  Timestamp time;
-//  std::cout << time.Now().ToFormattedString() << std::endl;
-//  std::cout << time.Now().ToFormattedString(true) << std::endl;
-//  return 0;
-//}
+#if 0
+int main() {
+  Timestamp time;
+  std::cout << time.Now().ToFormattedString() << std::endl;
+  std::cout << time.Now().ToFormattedString(true) << std::endl;
+  return 0;
+}
+#endif

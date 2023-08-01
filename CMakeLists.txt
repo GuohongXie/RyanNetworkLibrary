@@ -83,7 +83,7 @@ add_subdirectory(examples/echo_server)
 
 #加载test
 add_subdirectory(ryan_network/base/test)
-#add_subdirectory(ryan_network/buffer/test)
+add_subdirectory(ryan_network/buffer/test)
 add_subdirectory(ryan_network/logger/test)
 add_subdirectory(ryan_network/memory_pool/test)
 add_subdirectory(ryan_network/net/test)

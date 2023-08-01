@@ -8,7 +8,7 @@
 #include "net/event_loop.h"
 #include "base/thread.h"
 
-void Print(EventLoop* p = NULL) {
+void Print(EventLoop* p = nullptr) {
   printf("Print: pid = %d, tid = %d, loop = %p\n", ::getpid(),
          current_thread::Tid(), p);
 }

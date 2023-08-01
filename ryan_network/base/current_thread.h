@@ -9,6 +9,8 @@
 namespace current_thread {
 extern thread_local int t_cached_tid;  //保存tid缓冲，避免多次系统调用
 void CacheTid();
+bool IsMainThread(); 
+void SleepUsec(int64_t usec); // for test
 
 //内联函数
 inline int Tid() {

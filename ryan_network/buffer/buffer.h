@@ -1,6 +1,8 @@
 #ifndef RYANLIB_BUFFER_BUFFER_H_
 #define RYANLIB_BUFFER_BUFFER_H_
 
+#include <cassert>
+#include <cstring>  // memchr
 #include <algorithm>
 #include <string>
 #include <vector>
@@ -43,6 +45,32 @@ class Buffer {
   // 返回缓冲区中可读数据的起始地址
   const char* Peek() const { return Begin() + reader_index_; }
 
+  const char* FindCRLF() const {
+    // FIXME: replace with memmem()?
+    const char* crlf = std::search(Peek(), BeginWrite(), kCRLF, kCRLF + 2);
+    return crlf == BeginWrite() ? nullptr : crlf;
+  }
+
+  const char* FindCRLF(const char* start) const {
+    assert(Peek() <= start);
+    assert(start <= BeginWrite());
+    // FIXME: replace with memmem()?
+    const char* crlf = std::search(start, BeginWrite(), kCRLF, kCRLF + 2);
+    return crlf == BeginWrite() ? NULL : crlf;
+  }
+
+  const char* FindEOL() const {
+    const void* eol = memchr(Peek(), '\n', ReadableBytes());
+    return static_cast<const char*>(eol);
+  }
+
+  const char* FindEOL(const char* start) const {
+    assert(Peek() <= start);
+    assert(start <= BeginWrite());
+    const void* eol = memchr(start, '\n', BeginWrite() - start);
+    return static_cast<const char*>(eol);
+  }
+
   void RetrieveUntil(const char* end) { Retrieve(end - Peek()); }
 
   // onMessage string <- Buffer
@@ -58,12 +86,6 @@ class Buffer {
       RetrieveAll();
     }
   }
-
-  //void Prepend(const void* /*restrict*/ data, size_t len) {
-  //  reader_index_ -= len;
-  //  const char* d = static_cast<const char*>(data);
-  //  std::copy(d, d + len, Begin() + reader_index_);
-  //}
 
   // 全部读完，则直接将可读缓冲区指针移动到写缓冲区指针那
   void RetrieveAll() {
@@ -103,10 +125,9 @@ class Buffer {
   // string::data() 转换成字符数组，但是没有 '\0'
   void Append(const std::string& str) { Append(str.data(), str.size()); }
 
-  // void append(const char *data)
-  // {
-  //     append(data, sizeof(data));
-  // }
+  void Append(const char *data) {
+    Append(data, sizeof(data));
+  }
 
   // 把[data, data+len]内存上的数据添加到缓冲区中
   void Append(const char* data, size_t len) {
@@ -115,10 +136,11 @@ class Buffer {
     writer_index_ += len;
   }
 
-  const char* FindCRLF() const {
-    // FIXME: replace with memmem()?
-    const char* crlf = std::search(Peek(), BeginWrite(), kCRLF, kCRLF + 2);
-    return crlf == BeginWrite() ? NULL : crlf;
+  void Prepend(const void* /*restrict*/ data, size_t len) {
+    assert(len <= PrependableBytes());
+    reader_index_ -= len;
+    const char* d = static_cast<const char*>(data);
+    std::copy(d, d + len, Begin() + reader_index_);
   }
 
   char* BeginWrite() { return Begin() + writer_index_; }

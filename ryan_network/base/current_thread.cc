@@ -8,4 +8,7 @@ void CacheTid() {
     t_cached_tid = static_cast<pid_t>(::syscall(SYS_gettid));
   }
 }
+
+bool IsMainThread() { return Tid() == ::getpid(); }
+
 }  // namespace current_thread
