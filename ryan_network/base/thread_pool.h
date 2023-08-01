@@ -1,14 +1,14 @@
 #ifndef RYANLIB_BASE_THREAD_POOL_H_
 #define RYANLIB_BASE_THREAD_POOL_H_
 
-#include <condition_variable>
+#include <vector>
 #include <deque>
 #include <mutex>
-#include <vector>
+#include <condition_variable>
 
-#include "logging.h"
-#include "noncopyable.h"
-#include "thread.h"
+#include "logger/logging.h"
+#include "base/noncopyable.h"
+#include "base/thread.h"
 
 class ThreadPool : Noncopyable {
  public:

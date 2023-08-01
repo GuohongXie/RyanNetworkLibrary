@@ -1,7 +1,7 @@
 #ifndef RYANLIB_NET_SOCKET_H_
 #define RYANLIB_NET_SOCKET_H_
 
-#include "noncopyable.h"
+#include "base/noncopyable.h"
 
 class InetAddress;
 

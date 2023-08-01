@@ -1,10 +1,11 @@
 #ifndef RYANLIB_BASE_TIMESTAMP_H_
 #define RYANLIB_BASE_TIMESTAMP_H_
 
-#include <sys/time.h>
-
 #include <iostream>
 #include <string>
+
+#include <sys/time.h>
+
 class Timestamp {
  public:
   Timestamp() : micro_seconds_since_epoch_(0) {}

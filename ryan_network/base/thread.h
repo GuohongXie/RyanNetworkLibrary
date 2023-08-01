@@ -1,13 +1,13 @@
 #ifndef RYANLIB_BASE_THREAD_H_
 #define RYANLIB_BASE_THREAD_H_
 
+#include <string>
 #include <atomic>
 #include <functional>
 #include <memory>
-#include <string>
 #include <thread>
 
-#include "noncopyable.h"
+#include "base/noncopyable.h"
 
 class Thread : Noncopyable {
  public:

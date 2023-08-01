@@ -1,13 +1,14 @@
-#include "socket.h"
+#include "net/socket.h"
+
+#include <cstring>
 
 #include <netinet/tcp.h>
-#include <cstring>
 #include <sys/socket.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include "inet_address.h"
-#include "logging.h"
+#include "net/inet_address.h"
+#include "logger/logging.h"
 
 Socket::~Socket() { ::close(sockfd_); }
 

@@ -1,11 +1,12 @@
 #ifndef RYANLIB_NET_INET_ADDRESS_H_
 #define RYANLIB_NET_INET_ADDRESS_H_
 
+#include <cstring>
+#include <string>
+
 #include <arpa/inet.h>
 #include <netinet/in.h>
-#include <cstring>
 
-#include <string>
 
 class InetAddress {
  public:

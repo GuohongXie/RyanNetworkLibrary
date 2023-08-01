@@ -1,13 +1,13 @@
-#ifndef RYANLIB_LOGGER_FIXED_BUFFER_H_
-#define RYANLIB_LOGGER_FIXED_BUFFER_H_
+#ifndef RYANLIB_BUFFER_FIXED_BUFFER_H_
+#define RYANLIB_BUFFER_FIXED_BUFFER_H_
 
 #include <cassert>
 #include <cstring>
-#include <strings.h>
-
 #include <string>
 
-#include "noncopyable.h"
+#include <strings.h>
+
+#include "base/noncopyable.h"
 
 const int kSmallBuffer = 4000;
 const int kLargeBuffer = 4000 * 1000;
@@ -43,4 +43,4 @@ class FixedBuffer : Noncopyable {
   char* curr_;
 };
 
-#endif  // RYANLIB_LOGGER_FIXED_BUFFER_H_
+#endif  // RYANLIB_BUFFER_FIXED_BUFFER_H_

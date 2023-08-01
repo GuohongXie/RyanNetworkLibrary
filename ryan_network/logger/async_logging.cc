@@ -1,8 +1,8 @@
-#include "async_logging.h"
+#include "logger/async_logging.h"
 
 #include <cstdio>
 
-#include "timestamp.h"
+#include "base/timestamp.h"
 
 AsyncLogging::AsyncLogging(const std::string& basename, off_t roll_size,
                            int flush_interval)

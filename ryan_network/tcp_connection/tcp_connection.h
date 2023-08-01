@@ -5,11 +5,11 @@
 #include <memory>
 #include <string>
 
-#include "buffer.h"
-#include "callback.h"
-#include "inet_address.h"
-#include "timestamp.h"
-#include "noncopyable.h"
+#include "buffer/buffer.h"
+#include "net/callback.h"
+#include "net/inet_address.h"
+#include "base/timestamp.h"
+#include "base/noncopyable.h"
 
 class Channel;
 class EventLoop;

@@ -1,8 +1,10 @@
-#include "thread.h"
+#include "base/current_thread.h"
 
 #include <semaphore.h>
 
-#include "current_thread.h"
+#include "base/thread.h"
+
+
 
 std::atomic_int32_t Thread::num_created_(0);
 

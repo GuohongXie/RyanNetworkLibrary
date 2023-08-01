@@ -1,8 +1,8 @@
-#include "http_context.h"
-#include "http_request.h"
-#include "http_response.h"
-#include "http_server.h"
-#include "timestamp.h"
+#include "http/http_context.h"
+#include "http/http_request.h"
+#include "http/http_response.h"
+#include "http/http_server.h"
+#include "base/timestamp.h"
 
 extern char favicon[555];
 bool benchmark = false;

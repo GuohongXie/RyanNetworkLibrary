@@ -4,7 +4,7 @@
 #include <condition_variable>
 #include <mutex>
 
-#include "noncopyable.h"
+#include "base/noncopyable.h"
 
 class CountDownLatch : public Noncopyable {
  public:

@@ -1,7 +1,7 @@
 #ifndef RYANLIB_HTTP_HTTP_CONTEXT_H_
 #define RYANLIB_HTTP_HTTP_CONTEXT_H_
 
-#include "http_request.h"
+#include "http/http_request.h"
 
 class Buffer;
 

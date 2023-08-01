@@ -1,6 +1,6 @@
-#include "event_loop_thread.h"
+#include "net/event_loop_thread.h"
 
-#include "event_loop.h"
+#include "net/event_loop.h"
 
 EventLoopThread::EventLoopThread(const ThreadInitCallback& cb,
                                  const std::string& name)

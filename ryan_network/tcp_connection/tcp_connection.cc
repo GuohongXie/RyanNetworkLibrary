@@ -1,18 +1,18 @@
-#include "tcp_connection.h"
+#include "tcp_connection/tcp_connection.h"
 
-#include <errno.h>
-#include <netinet/tcp.h>
+#include <cerrno>
 #include <cstring>
-#include <sys/socket.h>
-#include <sys/types.h>
-
 #include <functional>
 #include <string>
 
-#include "channel.h"
-#include "event_loop.h"
-#include "logging.h"
-#include "socket.h"
+#include <netinet/tcp.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+
+#include "net/channel.h"
+#include "net/event_loop.h"
+#include "logger/logging.h"
+#include "net/socket.h"
 
 static EventLoop* CheckLoopNotNull(EventLoop* loop) {
   // 如果传入EventLoop没有指向有意义的地址则出错

@@ -1,10 +1,10 @@
 #ifndef RYANLIB_BASE_CURRENT_THREAD_H_
 #define RYANLIB_BASE_CURRENT_THREAD_H_
 
+#include <cstdint>
+
 #include <sys/syscall.h>
 #include <unistd.h>
-
-#include <cstdint>
 
 namespace current_thread {
 extern thread_local int t_cached_tid;  //保存tid缓冲，避免多次系统调用

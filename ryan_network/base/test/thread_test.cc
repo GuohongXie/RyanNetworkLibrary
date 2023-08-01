@@ -1,11 +1,11 @@
-#include "thread.h"
+#include "base/thread.h"
 
-#include <stdio.h>
-#include <unistd.h>
-
+#include <cstdio>
 #include <string>
 
-#include "current_thread.h"
+#include <unistd.h>
+
+#include "base/current_thread.h"
 
 void Mysleep(int seconds) {
   timespec t = {seconds, 0};

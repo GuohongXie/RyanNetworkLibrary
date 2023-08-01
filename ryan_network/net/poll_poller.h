@@ -1,11 +1,10 @@
 // This is an internal header file, you should not include this.
-
 #ifndef RYANLIB_NET_POLL_POLLER_H_
 #define RYANLIB_NET_POLL_POLLER_H_
 
 #include <vector>
 
-#include "poller.h"
+#include "net/poller.h"
 
 struct pollfd;
 

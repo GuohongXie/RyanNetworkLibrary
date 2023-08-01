@@ -1,10 +1,11 @@
-#include "buffer.h"
+#include "buffer/buffer.h"
 
-#include <errno.h>
+#include <cerrno>
+
 #include <sys/uio.h>
 #include <unistd.h>
 
-#include "logging.h"
+#include "logger/logging.h"
 
 const char Buffer::kCRLF[] = "\r\n";
 //static size_t kCheapPrepend = 8;

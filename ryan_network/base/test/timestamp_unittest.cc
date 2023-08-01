@@ -1,7 +1,6 @@
-#include "timestamp.h"
+#include "base/timestamp.h"
 
-#include <stdio.h>
-
+#include <cstdio>
 #include <iostream>
 #include <vector>
 

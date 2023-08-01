@@ -5,8 +5,8 @@
 #include <functional>
 #include <mutex>
 
-#include "thread.h"
-#include "noncopyable.h"
+#include "base/thread.h"
+#include "base/noncopyable.h"
 
 // one loop per thread
 class EventLoop;

@@ -1,16 +1,16 @@
 #ifndef RYANLIB_LOGGER_ASYNC_LOGGING_H_
 #define RYANLIB_LOGGER_ASYNC_LOGGING_H_
 
+#include <vector>
 #include <condition_variable>
 #include <memory>
 #include <mutex>
-#include <vector>
 
-#include "fixed_buffer.h"
-#include "log_file.h"
-#include "log_stream.h"
-#include "noncopyable.h"
-#include "thread.h"
+#include "buffer/fixed_buffer.h"
+#include "logger/log_file.h"
+#include "logger/log_stream.h"
+#include "base/noncopyable.h"
+#include "base/thread.h"
 
 class AsyncLogging {
  public:

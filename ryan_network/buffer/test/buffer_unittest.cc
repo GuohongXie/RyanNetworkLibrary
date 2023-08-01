@@ -1,4 +1,4 @@
-#include "buffer.h"
+#include "buffer/buffer.h"
 
 //#define BOOST_TEST_MODULE BufferTest
 #define BOOST_TEST_MAIN

@@ -6,15 +6,16 @@ project(ryan_network C CXX)
 
 # 添加搜索路径
 include_directories(
-    ${PROJECT_SOURCE_DIR}/ryan_network/base
-    ${PROJECT_SOURCE_DIR}/ryan_network/buffer
-    ${PROJECT_SOURCE_DIR}/ryan_network/http
-    ${PROJECT_SOURCE_DIR}/ryan_network/logger
-    ${PROJECT_SOURCE_DIR}/ryan_network/memory_pool
-    ${PROJECT_SOURCE_DIR}/ryan_network/mysql
-    ${PROJECT_SOURCE_DIR}/ryan_network/net
-    ${PROJECT_SOURCE_DIR}/ryan_network/tcp_connection
-    ${PROJECT_SOURCE_DIR}/ryan_network/timer
+    ${PROJECT_SOURCE_DIR}/ryan_network
+    #${PROJECT_SOURCE_DIR}/ryan_network/base
+    #${PROJECT_SOURCE_DIR}/ryan_network/buffer
+    #${PROJECT_SOURCE_DIR}/ryan_network/http
+    #${PROJECT_SOURCE_DIR}/ryan_network/logger
+    #${PROJECT_SOURCE_DIR}/ryan_network/memory_pool
+    #${PROJECT_SOURCE_DIR}/ryan_network/mysql
+    #${PROJECT_SOURCE_DIR}/ryan_network/net
+    #${PROJECT_SOURCE_DIR}/ryan_network/tcp_connection
+    #${PROJECT_SOURCE_DIR}/ryan_network/timer
     )
 
 
@@ -77,8 +78,8 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 # 加载example
 add_subdirectory(examples/echo_server)
-add_subdirectory(examples/twisted/finger)
-add_subdirectory(examples/sudoku)
+#add_subdirectory(examples/twisted/finger)
+#add_subdirectory(examples/sudoku)
 
 #加载test
 add_subdirectory(ryan_network/base/test)

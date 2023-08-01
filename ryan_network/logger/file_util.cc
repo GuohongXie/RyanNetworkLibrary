@@ -1,6 +1,6 @@
-#include "file_util.h"
+#include "logger/file_util.h"
 
-#include "logging.h"
+#include "logger/logging.h"
 
 FileUtil::FileUtil(std::string& fileName)
     : fp_(::fopen(fileName.c_str(), "ae")), written_bytes_(0) {

@@ -1,9 +1,9 @@
 #ifndef RYANLIB_NET_ACCEPTOR_H_
 #define RYANLIB_NET_ACCEPTOR_H_
 
-#include "channel.h"
-#include "noncopyable.h"
-#include "socket.h"
+#include "net/channel.h"
+#include "base/noncopyable.h"
+#include "net/socket.h"
 
 class EventLoop;
 class InetAddress;

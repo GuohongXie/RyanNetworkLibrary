@@ -1,6 +1,6 @@
-#include "logging.h"
+#include "logger/logging.h"
 
-#include "current_thread.h"
+#include "base/current_thread.h"
 
 namespace thread_info {
 thread_local char t_errnobuf[512];

@@ -1,9 +1,9 @@
-#include "http_response.h"
+#include "http/http_response.h"
 
-#include <stdio.h>
-#include <string.h>
+#include <cstdio>
+#include <cstring>
 
-#include "buffer.h"
+#include "buffer/buffer.h"
 
 void HttpResponse::AppendToBuffer(Buffer* output) const {
   // 响应行

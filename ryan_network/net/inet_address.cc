@@ -1,4 +1,4 @@
-#include "inet_address.h"
+#include "net/inet_address.h"
 
 InetAddress::InetAddress(uint16_t port, std::string ip) {
   ::bzero(&addr_, sizeof(addr_));

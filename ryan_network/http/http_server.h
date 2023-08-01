@@ -3,9 +3,9 @@
 
 #include <string>
 
-#include "logging.h"
-#include "noncopyable.h"
-#include "tcp_server.h"
+#include "logger/logging.h"
+#include "base/noncopyable.h"
+#include "tcp_connection/tcp_server.h"
 
 class HttpRequest;
 class HttpResponse;

@@ -1,4 +1,4 @@
-#include "count_down_latch.h"
+#include "base/count_down_latch.h"
 
 CountDownLatch::CountDownLatch(int count) : count_(count) {}
 

@@ -1,7 +1,6 @@
-#include "mysql_conn_pool.h"
+#include "mysql/mysql_conn_pool.h"
 
-#include <assert.h>
-
+#include <cassert>
 #include <fstream>
 #include <thread>
 

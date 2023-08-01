@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "fixed_buffer.h"
-#include "noncopyable.h"
+#include "buffer/fixed_buffer.h"
+#include "base/noncopyable.h"
 
 //比如SourceFile类和时间类就会用到
 // const char* data_;

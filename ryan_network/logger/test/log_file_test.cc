@@ -1,8 +1,8 @@
-#include "log_file.h"
+#include "logger/log_file.h"
 
 #include <unistd.h>
 
-#include "logging.h"
+#include "logger/logging.h"
 
 std::unique_ptr<LogFile> g_logFile;
 

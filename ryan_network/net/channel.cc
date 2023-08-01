@@ -1,6 +1,6 @@
-#include "channel.h"
+#include "net/channel.h"
 
-#include "event_loop.h"
+#include "net/event_loop.h"
 
 const int Channel::kNoneEvent = 0;
 const int Channel::kReadEvent = EPOLLIN | EPOLLPRI;

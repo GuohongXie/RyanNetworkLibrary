@@ -1,10 +1,11 @@
-#include "event_loop.h"
-#include "thread.h"
+#include "net/event_loop.h"
 
-#include <assert.h>
-#include <stdio.h>
+#include <cassert>
+#include <cstdio>
+
 #include <unistd.h>
 
+#include "base/thread.h"
 
 EventLoop* g_loop;
 

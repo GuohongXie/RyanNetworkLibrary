@@ -1,10 +1,11 @@
 #ifndef RYANLIB_MYSQL_MYSQL_CONN_H_
 #define RYANLIB_MYSQL_MYSQL_CONN_H_
 
-#include <mysql/mysql.h>
-
 #include <chrono>
 #include <iostream>
+
+#include <mysql/mysql.h>
+
 using std::chrono::steady_clock;
 
 class MysqlConn {

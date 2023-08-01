@@ -4,8 +4,8 @@
 #include <set>
 #include <vector>
 
-#include "channel.h"
-#include "timestamp.h"
+#include "net/channel.h"
+#include "base/timestamp.h"
 
 class EventLoop;
 class Timer;

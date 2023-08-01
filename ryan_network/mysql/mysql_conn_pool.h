@@ -1,14 +1,15 @@
 #ifndef RYANLIB_MYSQL_MYSQL_CONN_POOL_H_
 #define RYANLIB_MYSQL_MYSQL_CONN_POOL_H_
 
-#include "mysql_conn.h"
-#include "nlohmann_json.hpp"
-using json = nlohmann::json;
+#include "mysql/mysql_conn.h"
 
 #include <condition_variable>
 #include <memory>
 #include <mutex>
 #include <queue>
+
+#include "nlohmann_json.hpp"
+using json = nlohmann::json;
 
 class MysqlConnPool {
  public:

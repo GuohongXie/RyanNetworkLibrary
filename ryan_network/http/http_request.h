@@ -3,8 +3,8 @@
 
 #include <unordered_map>
 
-#include "noncopyable.h"
-#include "timestamp.h"
+#include "base/noncopyable.h"
+#include "base/timestamp.h"
 
 class HttpRequest {
  public:

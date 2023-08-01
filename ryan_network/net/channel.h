@@ -1,14 +1,14 @@
 #ifndef RYANLIB_NET_CHANNEL_H_
 #define RYANLIB_NET_CHANNEL_H_
 
-#include <sys/epoll.h>
-
 #include <functional>
 #include <memory>
 
-#include "logging.h"
-#include "timestamp.h"
-#include "noncopyable.h"
+#include <sys/epoll.h>
+
+#include "logger/logging.h"
+#include "base/timestamp.h"
+#include "base/noncopyable.h"
 
 // 前置声明，不引用头文件防止暴露太多信息
 class EventLoop;
