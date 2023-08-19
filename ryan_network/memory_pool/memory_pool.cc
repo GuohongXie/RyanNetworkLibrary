@@ -1,5 +1,6 @@
 #include "memory_pool/memory_pool.h"
 
+#include <cstddef>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -29,8 +30,6 @@ void MemoryPool::CreatePool() {
   pool_->head_->end_ = (unsigned char*)pool_ + PAGE_SIZE;
   pool_->head_->failed_ = 0;
   pool_->current_ = pool_->head_;
-
-  return;
 }
 
 void MemoryPool::DestroyPool() {
@@ -55,7 +54,7 @@ void MemoryPool::DestroyPool() {
 }
 
 // 分配大块内存
-void* MemoryPool::MallocLargeNode(unsigned long size) {
+void* MemoryPool::MallocLargeNode(size_t size) {
   unsigned char* addr;
   int ret = posix_memalign((void**)&addr, MP_ALIGNMENT, size);
   if (ret) {
@@ -94,7 +93,7 @@ void* MemoryPool::MallocLargeNode(unsigned long size) {
 }
 
 // 分配小块内存
-void* MemoryPool::MallocSmallNode(unsigned long size) {
+void* MemoryPool::MallocSmallNode(size_t size) {
   unsigned char* block;
   int ret = posix_memalign((void**)&block, MP_ALIGNMENT, PAGE_SIZE);
   if (ret) {
@@ -102,12 +101,12 @@ void* MemoryPool::MallocSmallNode(unsigned long size) {
   }
 
   // 获取新块的 small_node 节点
-  SmallNode* small_node = (SmallNode*)block;
+  auto* small_node = (SmallNode*)block;
   small_node->end_ = block + PAGE_SIZE;
   small_node->next_ = nullptr;
 
   // 分配新块的起始位置
-  unsigned char* addr =
+  auto* addr =
       (unsigned char*)mp_align_ptr(block + sizeof(SmallNode), MP_ALIGNMENT);
   small_node->last_ = addr + size;
   small_node->quote_++;
@@ -130,7 +129,7 @@ void* MemoryPool::MallocSmallNode(unsigned long size) {
   return addr;
 }
 
-void* MemoryPool::malloc(unsigned long size) {
+void* MemoryPool::malloc(size_t size) {
   if (size <= 0) {
     return nullptr;
   }
@@ -161,7 +160,7 @@ void* MemoryPool::malloc(unsigned long size) {
   return MallocSmallNode(size);
 }
 
-void* MemoryPool::Calloc(unsigned long size) {
+void* MemoryPool::Calloc(size_t size) {
   void* addr = malloc(size);
   if (addr != nullptr) {
     memset(addr, 0, size);

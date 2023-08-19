@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/bin/bash
 
 set -x
+
+rm -rf build
 
 SOURCE_DIR=`pwd`
 BUILD_DIR=${BUILD_DIR:-./build}
