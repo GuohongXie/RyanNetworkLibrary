@@ -14,6 +14,19 @@
 #include "logger/logging.h"
 #include "net/socket.h"
 
+void DefaultConnectionCallback(const TcpConnectionPtr& conn) {
+  LOG_TRACE << conn->LocalAddress().ToIpPort() << " -> "
+            << conn->PeerAddress().ToIpPort() << " is "
+            << (conn->Connected() ? "UP" : "DOWN");
+  // do not call conn->ForceClose(), because some users want to register message
+  // callback only.
+}
+
+void DefaultMessageCallback(const TcpConnectionPtr&, Buffer* buf,
+                                        Timestamp) {
+  buf->RetrieveAll();
+}
+
 static EventLoop* CheckLoopNotNull(EventLoop* loop) {
   // 如果传入EventLoop没有指向有意义的地址则出错
   // 正常来说在 TcpServer::Start 这里就生成了新线程和对应的EventLoop

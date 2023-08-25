@@ -102,4 +102,8 @@ class TcpConnection : Noncopyable,
   Buffer output_buffer_;  // 发送数据的缓冲区
 };
 
+void DefaultConnectionCallback(const TcpConnectionPtr& conn);
+void DefaultMessageCallback(const TcpConnectionPtr& conn, Buffer* buffer,
+                            Timestamp receiveTime);
+
 #endif  // RYANLIB_TCP_CONNECTION_TCP_CONNECTION_H_

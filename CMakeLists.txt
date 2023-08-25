@@ -78,7 +78,7 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 # 加载example
 add_subdirectory(examples/echo_server)
-#add_subdirectory(examples/twisted/finger)
+add_subdirectory(examples/twisted/finger)
 #add_subdirectory(examples/sudoku)
 
 #加载test

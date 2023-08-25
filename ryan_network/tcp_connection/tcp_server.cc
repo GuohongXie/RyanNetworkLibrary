@@ -5,6 +5,7 @@
 #include <functional>
 
 #include "logger/logging.h"
+#include "tcp_connection/tcp_connection.h"
 
 // 检查传入的 baseLoop 指针是否有意义
 static EventLoop* CheckLoopNotNull(EventLoop* loop) {
@@ -21,8 +22,8 @@ TcpServer::TcpServer(EventLoop* loop, const InetAddress& listenAddr,
       name_(nameArg),
       acceptor_(new Acceptor(loop, listenAddr, option == kReusePort)),
       thread_pool_(new EventLoopThreadPool(loop, name_)),
-      connection_callback_(),
-      message_callback_(),
+      connection_callback_(DefaultConnectionCallback),
+      message_callback_(DefaultMessageCallback),
       write_complete_callback_(),
       thread_init_callback_(),
       started_(0),
