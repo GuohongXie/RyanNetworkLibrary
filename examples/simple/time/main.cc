@@ -1,8 +1,8 @@
 #include <unistd.h>
 
-#include "time.h"
-#include "logging.h"
-#include "event_loop.h"
+#include "examples/simple/time/time.h"
+#include "logger/logging.h"
+#include "net/event_loop.h"
 
 
 int main() {

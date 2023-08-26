@@ -1,12 +1,16 @@
-#include "chargen.h"
+#include "examples/simple/chargen/chargen.h"
 
-#include <stdio.h>
+#include <cstdio>
+
+using std::placeholders::_1;
+using std::placeholders::_2;
+using std::placeholders::_3;
 
 ChargenServer::ChargenServer(EventLoop* loop, const InetAddress& listen_addr,
                              bool print)
     : server_(loop, listen_addr, "ChargenServer"),
       transferred_(0),
-      start_time_(Timestamp::now()) {
+      start_time_(Timestamp::Now()) {
   server_.SetConnectionCallback(
       std::bind(&ChargenServer::OnConnection, this, _1));
   server_.SetMessageCallback(
@@ -31,25 +35,25 @@ ChargenServer::ChargenServer(EventLoop* loop, const InetAddress& listen_addr,
 void ChargenServer::Start() { server_.Start(); }
 
 void ChargenServer::OnConnection(const TcpConnectionPtr& conn) {
-  LOG_INFO << "ChargenServer - " << conn->peerAddress().toIpPort() << " -> "
-           << conn->localAddress().toIpPort() << " is "
-           << (conn->connected() ? "UP" : "DOWN");
-  if (conn->connected()) {
-    conn->setTcpNoDelay(true);
-    conn->send(message_);
+  LOG_INFO << "ChargenServer - " << conn->PeerAddress().ToIpPort() << " -> "
+           << conn->LocalAddress().ToIpPort() << " is "
+           << (conn->Connected() ? "UP" : "DOWN");
+  if (conn->Connected()) {
+    conn->SetTcpNoDelay(true);
+    conn->Send(message_);
   }
 }
 
 void ChargenServer::OnMessage(const TcpConnectionPtr& conn, Buffer* buf,
                               Timestamp time) {
-  std::string msg(buf->retrieveAllAsString());
+  std::string msg(buf->RetrieveAllAsString());
   LOG_INFO << conn->name() << " discards " << msg.size()
-           << " bytes received at " << time.toString();
+           << " bytes received at " << time.ToString();
 }
 
 void ChargenServer::OnWriteComplete(const TcpConnectionPtr& conn) {
   transferred_ += message_.size();
-  conn->send(message_);
+  conn->Send(message_);
 }
 
 void ChargenServer::PrintThroughput() {

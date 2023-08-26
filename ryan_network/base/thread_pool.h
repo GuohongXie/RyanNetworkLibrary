@@ -20,16 +20,20 @@ class ThreadPool : Noncopyable {
   void SetThreadInitCallback(const ThreadFunction& cb) {
     thread_init_callback_ = cb;
   }
-  void SetThreadSize(const int& num) { thread_size_ = num; }
-  void Start();
+  void Start(int num_threads);
   void Stop();
 
   const std::string& name() const { return name_; }
   size_t QueueSize() const;
 
-  void Add(ThreadFunction ThreadFunction);
+  void AddTask(ThreadFunction ThreadFunction);
 
  private:
+  //暂时只提供在Start中设置num_threads的版本，故这两个函数暂时先不暴露接口
+  //隐藏起来
+  void Start();
+  void set_num_threads(int num) { num_threads_ = num; }
+
   bool IsFull() const;
   void RunInThread();
 
@@ -40,7 +44,7 @@ class ThreadPool : Noncopyable {
   std::vector<std::unique_ptr<Thread>> threads_;
   std::deque<ThreadFunction> queue_;
   bool running_;
-  size_t thread_size_;
+  size_t num_threads_;
 };
 
 #endif  // RYANLIB_BASE_THREAD_POOL_H_

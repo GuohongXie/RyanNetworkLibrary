@@ -9,6 +9,7 @@ enable_testing()
 # 添加搜索路径
 include_directories(
     ${PROJECT_SOURCE_DIR}/ryan_network
+    ${PROJECT_SOURCE_DIR}
     )
 
 
@@ -27,7 +28,7 @@ file(GLOB SRC_NET ${PROJECT_SOURCE_DIR}/ryan_network/net/*.cc)
 file(GLOB SRC_TCP_CONNECTION ${PROJECT_SOURCE_DIR}/ryan_network/tcp_connection/*.cc)
 file(GLOB SRC_TIMER ${PROJECT_SOURCE_DIR}/ryan_network/timer/*.cc)
 
-# 设置编译选项
+# 设置编译选项(没用上)
 set(CXX_FLAGS
     -g
     -Wall
@@ -35,8 +36,9 @@ set(CXX_FLAGS
     -O0
     )
 
-set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -std=c++11 -DDEBUG")
-#set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -std=c++11")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g -std=c++17 -DDEBUG")
+set(CMAKE_CXX_FLAGS_RELEASE "-O0 -g -std=c++17")
+#set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DNDEBUG -std=c++17")
 
 find_package(Boost) #REQUIRED
 find_library(BOOST_TEST_LIBRARY NAMES boost_unit_test_framework)
@@ -78,8 +80,12 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 
 # 加载example
 add_subdirectory(examples/echo_server)
-add_subdirectory(examples/twisted/finger)
-#add_subdirectory(examples/sudoku)
+add_subdirectory(examples/filetransfer)
+add_subdirectory(examples/finger)
+add_subdirectory(examples/idleconnection)
+add_subdirectory(examples/simple)
+add_subdirectory(examples/sudoku)
+add_subdirectory(examples/timer)
 
 #加载test
 add_subdirectory(ryan_network/base/test)

@@ -1,63 +1,64 @@
 #include <stdio.h>
 #include <unistd.h>
 
+#include <functional>
 #include <utility>
 
 #include "examples/sudoku/sudoku.h"
-#include "muduo/base/Atomic.h"
-#include "muduo/base/Logging.h"
-#include "muduo/base/Thread.h"
-#include "muduo/base/ThreadPool.h"
-#include "muduo/net/EventLoop.h"
-#include "muduo/net/InetAddress.h"
-#include "muduo/net/TcpServer.h"
+#include "logger/logging.h"
+#include "base/thread.h"
+#include "base/thread_pool.h"
+#include "net/event_loop.h"
+#include "net/inet_address.h"
+#include "tcp_connection/tcp_server.h"
 
-using namespace muduo;
-using namespace muduo::net;
+using std::placeholders::_1;
+using std::placeholders::_2;
+using std::placeholders::_3;
 
 class SudokuServer {
  public:
-  SudokuServer(EventLoop* loop, const InetAddress& listenAddr, int numThreads)
+  SudokuServer(EventLoop* loop, const InetAddress& listenAddr, int num_threads)
       : server_(loop, listenAddr, "SudokuServer"),
-        numThreads_(numThreads),
-        startTime_(Timestamp::now()) {
-    server_.setConnectionCallback(
-        std::bind(&SudokuServer::onConnection, this, _1));
-    server_.setMessageCallback(
-        std::bind(&SudokuServer::onMessage, this, _1, _2, _3));
+        num_threads_(num_threads),
+        start_time_(Timestamp::Now()) {
+    server_.SetConnectionCallback(
+        std::bind(&SudokuServer::OnConnection, this, _1));
+    server_.SetMessageCallback(
+        std::bind(&SudokuServer::OnMessage, this, _1, _2, _3));
   }
 
-  void start() {
-    LOG_INFO << "starting " << numThreads_ << " threads.";
-    threadPool_.start(numThreads_);
-    server_.start();
+  void Start() {
+    LOG_INFO << "starting " << num_threads_ << " threads.";
+    threadPool_.Start(num_threads_);
+    server_.Start();
   }
 
  private:
-  void onConnection(const TcpConnectionPtr& conn) {
-    LOG_TRACE << conn->peerAddress().toIpPort() << " -> "
-              << conn->localAddress().toIpPort() << " is "
-              << (conn->connected() ? "UP" : "DOWN");
+  void OnConnection(const TcpConnectionPtr& conn) {
+    LOG_TRACE << conn->PeerAddress().ToIpPort() << " -> "
+              << conn->LocalAddress().ToIpPort() << " is "
+              << (conn->Connected() ? "UP" : "DOWN");
   }
 
-  void onMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp) {
+  void OnMessage(const TcpConnectionPtr& conn, Buffer* buf, Timestamp) {
     LOG_DEBUG << conn->name();
-    size_t len = buf->readableBytes();
+    size_t len = buf->ReadableBytes();
     while (len >= kCells + 2) {
-      const char* crlf = buf->findCRLF();
+      const char* crlf = buf->FindCRLF();
       if (crlf) {
-        string request(buf->peek(), crlf);
-        buf->retrieveUntil(crlf + 2);
-        len = buf->readableBytes();
-        if (!processRequest(conn, request)) {
-          conn->send("Bad Request!\r\n");
-          conn->shutdown();
+        std::string request(buf->Peek(), crlf);
+        buf->RetrieveUntil(crlf + 2);
+        len = buf->ReadableBytes();
+        if (!ProcessRequest(conn, request)) {
+          conn->Send("Bad Request!\r\n");
+          conn->Shutdown();
           break;
         }
       } else if (len > 100)  // id + ":" + kCells + "\r\n"
       {
-        conn->send("Id too long!\r\n");
-        conn->shutdown();
+        conn->Send("Id too long!\r\n");
+        conn->Shutdown();
         break;
       } else {
         break;
@@ -65,12 +66,12 @@ class SudokuServer {
     }
   }
 
-  bool processRequest(const TcpConnectionPtr& conn, const string& request) {
-    string id;
-    string puzzle;
+  bool ProcessRequest(const TcpConnectionPtr& conn, const std::string& request) {
+    std::string id;
+    std::string puzzle;
     bool goodRequest = true;
 
-    string::const_iterator colon = find(request.begin(), request.end(), ':');
+    std::string::const_iterator colon = find(request.begin(), request.end(), ':');
     if (colon != request.end()) {
       id.assign(request.begin(), colon);
       puzzle.assign(colon + 1, request.end());
@@ -78,42 +79,42 @@ class SudokuServer {
       puzzle = request;
     }
 
-    if (puzzle.size() == implicit_cast<size_t>(kCells)) {
-      threadPool_.run(std::bind(&solve, conn, puzzle, id));
+    if (puzzle.size() == static_cast<size_t>(kCells)) {
+      threadPool_.AddTask(std::bind(&solve, conn, puzzle, id));
     } else {
       goodRequest = false;
     }
     return goodRequest;
   }
 
-  static void solve(const TcpConnectionPtr& conn, const string& puzzle,
-                    const string& id) {
+  static void solve(const TcpConnectionPtr& conn, const std::string& puzzle,
+                    const std::string& id) {
     LOG_DEBUG << conn->name();
-    string result = solveSudoku(puzzle);
+    std::string result = solveSudoku(puzzle);
     if (id.empty()) {
-      conn->send(result + "\r\n");
+      conn->Send(result + "\r\n");
     } else {
-      conn->send(id + ":" + result + "\r\n");
+      conn->Send(id + ":" + result + "\r\n");
     }
   }
 
   TcpServer server_;
   ThreadPool threadPool_;
-  int numThreads_;
-  Timestamp startTime_;
+  int num_threads_;
+  Timestamp start_time_;
 };
 
 int main(int argc, char* argv[]) {
-  LOG_INFO << "pid = " << getpid() << ", tid = " << CurrentThread::tid();
-  int numThreads = 0;
+  LOG_INFO << "pid = " << getpid() << ", tid = " << current_thread::Tid();
+  int num_threads = 0;
   if (argc > 1) {
-    numThreads = atoi(argv[1]);
+    num_threads = atoi(argv[1]);
   }
   EventLoop loop;
   InetAddress listenAddr(9981);
-  SudokuServer server(&loop, listenAddr, numThreads);
+  SudokuServer server(&loop, listenAddr, num_threads);
 
-  server.start();
+  server.Start();
 
-  loop.loop();
+  loop.Loop();
 }

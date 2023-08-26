@@ -1,23 +1,23 @@
-#ifndef MUDUO_EXAMPLES_SIMPLE_DISCARD_DISCARD_H
-#define MUDUO_EXAMPLES_SIMPLE_DISCARD_DISCARD_H
+#ifndef RYANLIB_EXAMPLES_SIMPLE_DISCARD_DISCARD_H_
+#define RYANLIB_EXAMPLES_SIMPLE_DISCARD_DISCARD_H_
 
-#include "muduo/net/TcpServer.h"
+#include "tcp_connection/tcp_server.h"
 
 // RFC 863
 class DiscardServer {
  public:
-  DiscardServer(muduo::net::EventLoop* loop,
-                const muduo::net::InetAddress& listenAddr);
+  DiscardServer(EventLoop* loop,
+                const InetAddress& listenAddr);
 
-  void start();
+  void Start();
 
  private:
-  void onConnection(const muduo::net::TcpConnectionPtr& conn);
+  void OnConnection(const TcpConnectionPtr& conn);
 
-  void onMessage(const muduo::net::TcpConnectionPtr& conn,
-                 muduo::net::Buffer* buf, muduo::Timestamp time);
+  void OnMessage(const TcpConnectionPtr& conn,
+                 Buffer* buf, Timestamp time);
 
-  muduo::net::TcpServer server_;
+  TcpServer server_;
 };
 
-#endif  // MUDUO_EXAMPLES_SIMPLE_DISCARD_DISCARD_H
+#endif  // RYANLIB_EXAMPLES_SIMPLE_DISCARD_DISCARD_H_

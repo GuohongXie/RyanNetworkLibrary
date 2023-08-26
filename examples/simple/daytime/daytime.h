@@ -1,23 +1,23 @@
-#ifndef MUDUO_EXAMPLES_SIMPLE_DAYTIME_DAYTIME_H
-#define MUDUO_EXAMPLES_SIMPLE_DAYTIME_DAYTIME_H
+#ifndef RYANLIB_EXAMPLES_SIMPLE_DAYTIME_DAYTIME_H_
+#define RYANLIB_EXAMPLES_SIMPLE_DAYTIME_DAYTIME_H_
 
-#include "muduo/net/TcpServer.h"
+#include "tcp_connection/tcp_server.h"
 
 // RFC 867
 class DaytimeServer {
  public:
-  DaytimeServer(muduo::net::EventLoop* loop,
-                const muduo::net::InetAddress& listenAddr);
+  DaytimeServer(EventLoop* loop,
+                const InetAddress& listenAddr);
 
-  void start();
+  void Start();
 
  private:
-  void onConnection(const muduo::net::TcpConnectionPtr& conn);
+  void OnConnection(const TcpConnectionPtr& conn);
 
-  void onMessage(const muduo::net::TcpConnectionPtr& conn,
-                 muduo::net::Buffer* buf, muduo::Timestamp time);
+  void OnMessage(const TcpConnectionPtr& conn,
+                 Buffer* buf, Timestamp time);
 
-  muduo::net::TcpServer server_;
+  TcpServer server_;
 };
 
-#endif  // MUDUO_EXAMPLES_SIMPLE_DAYTIME_DAYTIME_H
+#endif  // RYANLIB_EXAMPLES_SIMPLE_DAYTIME_DAYTIME_H_

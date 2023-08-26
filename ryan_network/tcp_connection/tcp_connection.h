@@ -4,6 +4,7 @@
 #include <atomic>
 #include <memory>
 #include <string>
+#include <any>
 
 #include "buffer/buffer.h"
 #include "net/callback.h"
@@ -28,13 +29,30 @@ class TcpConnection : Noncopyable,
   const InetAddress& PeerAddress() const { return peer_addr_; }
 
   bool Connected() const { return state_ == kConnected; }
+  bool DisConnected() const { return state_ == kDisconnected; }
 
   // 发送数据
+  void Send(const void* data, int len);
   void Send(const std::string& buf);
   void Send(Buffer* buf);
 
   // 关闭连接
   void Shutdown();
+
+  void ForceClose();
+  void ForceCloseWithDelay(double seconds);
+  void SetTcpNoDelay(bool on);
+
+  //reading or not
+  void StartRead();
+  void StopRead();
+  bool IsReading() const {
+    return reading_;
+  };  // NOT thread safe, may race with start/stopReadInLoop
+
+  void SetContext(const std::any& context) { context_ = context; }
+  const std::any& GetContext() const { return context_; }
+  std::any* GetMutableContext() { return &context_; }
 
   // 保存用户自定义的回调函数
   void SetConnectionCallback(const ConnectionCallback& cb) {
@@ -63,6 +81,7 @@ class TcpConnection : Noncopyable,
     kDisconnecting  // 正在断开连接
   };
   void SetState(StateE state) { state_ = state; }
+  const char* StateToString() const;
 
   // 注册到channel上的回调函数，poller通知后会调用这些函数处理
   // 然后这些函数最后会再调用从用户那里传来的回调函数
@@ -74,7 +93,12 @@ class TcpConnection : Noncopyable,
   void SendInLoop(const void* message, size_t len);
   void SendInLoop(const std::string& message);
   void ShutdownInLoop();
+  void ForceCloseInLoop();
 
+  void StartReadInLoop();
+  void StopReadInLoop();
+
+ private:
   EventLoop* loop_;  // 属于哪个subLoop（如果是单线程则为mainLoop）
   const std::string name_;
   std::atomic_int state_;  // 连接状态
@@ -100,6 +124,7 @@ class TcpConnection : Noncopyable,
 
   Buffer input_buffer_;   // 读取数据的缓冲区
   Buffer output_buffer_;  // 发送数据的缓冲区
+  std::any context_;
 };
 
 void DefaultConnectionCallback(const TcpConnectionPtr& conn);

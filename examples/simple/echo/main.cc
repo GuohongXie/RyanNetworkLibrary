@@ -1,8 +1,8 @@
 #include <unistd.h>
 
-#include "echo.h"
-#include "logging.h"
-#include "event_loop.h"
+#include "examples/simple/echo/echo.h"
+#include "logger/logging.h"
+#include "net/event_loop.h"
 
 int main() {
   LOG_INFO << "pid = " << ::getpid();

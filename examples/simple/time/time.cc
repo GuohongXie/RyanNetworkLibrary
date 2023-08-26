@@ -1,14 +1,19 @@
-#include "time.h"
+#include "examples/simple/time/time.h"
 
-#include "logging.h"
-#include "Endian.h"
+#include <functional>
 
+#include "logger/logging.h"
+#include "net/endian.h"
+
+using std::placeholders::_1;
+using std::placeholders::_2;
+using std::placeholders::_3;
 
 TimeServer::TimeServer(EventLoop* loop,
                        const InetAddress& listen_addr)
     : server_(loop, listen_addr, "TimeServer") {
-  server_.setConnectionCallback(std::bind(&TimeServer::OnConnection, this, _1));
-  server_.setMessageCallback(
+  server_.SetConnectionCallback(std::bind(&TimeServer::OnConnection, this, _1));
+  server_.SetMessageCallback(
       std::bind(&TimeServer::OnMessage, this, _1, _2, _3));
 }
 
@@ -21,8 +26,8 @@ void TimeServer::OnConnection(const TcpConnectionPtr& conn) {
   if (conn->Connected()) {
     time_t now = ::time(NULL);
     //大小端转换
-    int32_t be32 = sockets::HostToNetwork32(static_cast<int32_t>(now));
-    conn->Send(&be32, sizeof be32);
+    int32_t be32 = HostToNetwork32(static_cast<int32_t>(now));
+    conn->Send(&be32, sizeof(be32));
     conn->Shutdown();
   }
 }

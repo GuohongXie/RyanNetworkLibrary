@@ -5,30 +5,28 @@
 #include "examples/simple/discard/discard.h"
 #include "examples/simple/echo/echo.h"
 #include "examples/simple/time/time.h"
-#include "muduo/base/Logging.h"
-#include "muduo/net/EventLoop.h"
+#include "logger/logging.h"
+#include "net/event_loop.h"
 
-using namespace muduo;
-using namespace muduo::net;
 
 int main() {
   LOG_INFO << "pid = " << getpid();
   EventLoop loop;  // one loop shared by multiple servers
 
   ChargenServer chargenServer(&loop, InetAddress(2019));
-  chargenServer.start();
+  chargenServer.Start();
 
   DaytimeServer daytimeServer(&loop, InetAddress(2013));
-  daytimeServer.start();
+  daytimeServer.Start();
 
   DiscardServer discardServer(&loop, InetAddress(2009));
-  discardServer.start();
+  discardServer.Start();
 
   EchoServer echoServer(&loop, InetAddress(2007));
-  echoServer.start();
+  echoServer.Start();
 
   TimeServer timeServer(&loop, InetAddress(2037));
-  timeServer.start();
+  timeServer.Start();
 
-  loop.loop();
+  loop.Loop();
 }

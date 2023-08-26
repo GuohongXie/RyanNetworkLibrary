@@ -11,6 +11,7 @@
 #include "base/noncopyable.h"
 #include "timer/timer_queue.h"
 #include "base/timestamp.h"
+#include "net/callback.h"
 
 class Channel;
 class Poller;
@@ -65,19 +66,24 @@ class EventLoop : Noncopyable {
     }
   }
 
-  /**
-   * 定时任务相关函数
-   */
-  void RunAt(Timestamp timestamp, Functor&& cb) {
+  ///定时任务相关函数
+
+  /// Runs callback at 'time'.
+  /// Safe to call from other threads.
+  void RunAt(Timestamp timestamp, TimerCallback&& cb) {
     timer_queue_->AddTimer(std::move(cb), timestamp, 0.0);
   }
 
-  void RunAfter(double waitTime, Functor&& cb) {
-    Timestamp time(AddTime(Timestamp::Now(), waitTime));
+  /// Runs callback after wait_time seconds.
+  /// Safe to call from other threads.
+  void RunAfter(double wait_time, TimerCallback&& cb) {
+    Timestamp time(AddTime(Timestamp::Now(), wait_time));
     RunAt(time, std::move(cb));
   }
 
-  void RunEvery(double interval, Functor&& cb) {
+  /// Runs callback every interval seconds.
+  /// Safe to call from other threads.
+  void RunEvery(double interval, TimerCallback&& cb) {
     Timestamp timestamp(AddTime(Timestamp::Now(), interval));
     timer_queue_->AddTimer(std::move(cb), timestamp, interval);
   }

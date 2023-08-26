@@ -1,7 +1,7 @@
 #ifndef RYANLIB_EXAMPLES_SIMPLE_CHARGEN_CHARGEN_H_
 #define RYANLIB_EXAMPLES_SIMPLE_CHARGEN_CHARGEN_H_
 
-#include "tcp_server.h"
+#include "tcp_connection/tcp_server.h"
 
 // RFC 864
 class ChargenServer {

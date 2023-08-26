@@ -1,6 +1,6 @@
-#include "echo.h"
+#include "examples/simple/echo/echo.h"
 
-#include "logging.h"
+#include "logger/logging.h"
 
 using std::placeholders::_1;
 using std::placeholders::_2;
@@ -15,7 +15,7 @@ EchoServer::EchoServer(EventLoop* loop,
       std::bind(&EchoServer::OnMessage, this, _1, _2, _3));
 }
 
-void EchoServer::Start() { server_.start(); }
+void EchoServer::Start() { server_.Start(); }
 
 void EchoServer::OnConnection(const TcpConnectionPtr& conn) {
   LOG_INFO << "EchoServer - " << conn->PeerAddress().ToIpPort() << " -> "
@@ -25,7 +25,7 @@ void EchoServer::OnConnection(const TcpConnectionPtr& conn) {
 
 void EchoServer::OnMessage(const TcpConnectionPtr& conn,
                            Buffer* buf, Timestamp time) {
-  std::string msg(buf->retrieveAllAsString());
+  std::string msg(buf->RetrieveAllAsString());
   LOG_INFO << conn->name() << " echo " << msg.size() << " bytes, "
            << "data received at " << time.ToString();
   conn->Send(msg);

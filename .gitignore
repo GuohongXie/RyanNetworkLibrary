@@ -1,5 +1,6 @@
 # Editors.
 *.sw*
+.idea
 #.vscode
 .DS_Store
 bazel-*

@@ -1,7 +1,7 @@
 #ifndef RYANLIB_EXAMPLES_SIMPLE_TIME_TIME_H_
 #define RYANLIB_EXAMPLES_SIMPLE_TIME_TIME_H_
 
-#include "tcp_server.h"
+#include "tcp_connection/tcp_server.h"
 
 // RFC 868
 class TimeServer {
@@ -15,7 +15,7 @@ class TimeServer {
   void OnConnection(const TcpConnectionPtr& conn);
 
   void OnMessage(const TcpConnectionPtr& conn,
-                 Buffer* buf, muduo::Timestamp time);
+                 Buffer* buf, Timestamp time);
 
   TcpServer server_;
 };

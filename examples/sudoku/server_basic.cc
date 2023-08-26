@@ -1,14 +1,14 @@
-#include <stdio.h>
+#include <cstdio>
 #include <unistd.h>
 
 #include <utility>
 
-#include "sudoku.h"
-#include "logging.h"
-#include "thread.h"
-#include "event_loop.h"
-#include "inet_address.h"
-#include "tcp_server.h"
+#include "examples/sudoku/sudoku.h"
+#include "logger/logging.h"
+#include "base/thread.h"
+#include "net/event_loop.h"
+#include "net/inet_address.h"
+#include "tcp_connection/tcp_server.h"
 
 
 class SudokuServer {
@@ -40,7 +40,7 @@ class SudokuServer {
         std::string request(buf->Peek(), crlf);
         buf->RetrieveUntil(crlf + 2);
         len = buf->ReadableBytes();
-        if (!processRequest(conn, request)) {
+        if (!ProcessRequest(conn, request)) {
           conn->Send("Bad Request!\r\n");
           conn->Shutdown();
           break;
@@ -56,7 +56,7 @@ class SudokuServer {
     }
   }
 
-  bool processRequest(const TcpConnectionPtr& conn, const std::string& request) {
+  bool ProcessRequest(const TcpConnectionPtr& conn, const std::string& request) {
     std::string id;
     std::string puzzle;
     bool goodRequest = true;

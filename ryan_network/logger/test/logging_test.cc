@@ -50,12 +50,12 @@ int main() {
   ::getppid();  // for ltrace and strace
 
   ThreadPool pool("pool");
-  pool.SetThreadSize(5);
-  pool.Add(LogInThread);
-  pool.Add(LogInThread);
-  pool.Add(LogInThread);
-  pool.Add(LogInThread);
-  pool.Add(LogInThread);
+  pool.Start(5);
+  pool.AddTask(LogInThread);
+  pool.AddTask(LogInThread);
+  pool.AddTask(LogInThread);
+  pool.AddTask(LogInThread);
+  pool.AddTask(LogInThread);
 
   LOG_TRACE << "trace";
   LOG_DEBUG << "debug";

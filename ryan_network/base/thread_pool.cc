@@ -13,8 +13,8 @@ ThreadPool::~ThreadPool() {
 
 void ThreadPool::Start() {
   running_ = true;
-  threads_.reserve(thread_size_);
-  for (int i = 0; i < thread_size_; ++i) {
+  threads_.reserve(num_threads_);
+  for (int i = 0; i < num_threads_; ++i) {
     char id[32];
     snprintf(id, sizeof(id), "%d", i + 1);
     threads_.emplace_back(
@@ -22,7 +22,24 @@ void ThreadPool::Start() {
     threads_[i]->Start();
   }
   // 不创建新线程
-  if (thread_size_ == 0 && thread_init_callback_) {
+  if (num_threads_ == 0 && thread_init_callback_) {
+    thread_init_callback_();
+  }
+}
+
+void ThreadPool::Start(int num_threads) {
+  assert(threads_.empty());
+  set_num_threads(num_threads);
+  running_ = true;
+  threads_.reserve(num_threads_);
+  for (int i = 0; i < num_threads; ++i) {
+    char id[32];
+    snprintf(id, sizeof(id), "%d", i + 1);
+    threads_.emplace_back(
+        new Thread(std::bind(&ThreadPool::RunInThread, this), name_ + id));
+    threads_[i]->Start();
+  }
+  if (num_threads == 0 && thread_init_callback_) {
     thread_init_callback_();
   }
 }
@@ -38,7 +55,7 @@ size_t ThreadPool::QueueSize() const {
   return queue_.size();
 }
 
-void ThreadPool::Add(ThreadFunction ThreadFunction) {
+void ThreadPool::AddTask(ThreadFunction ThreadFunction) {
   std::unique_lock<std::mutex> lock(mutex_);
   queue_.push_back(ThreadFunction);
   cond_.notify_one();

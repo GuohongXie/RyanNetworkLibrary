@@ -1,6 +1,6 @@
 #include <unistd.h>
 
-#include "chargen.h"
+#include "examples/simple/chargen/chargen.h"
 
 int main() {
   LOG_INFO << "pid = " << ::getpid();

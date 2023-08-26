@@ -1,7 +1,7 @@
 #ifndef RYANLIB_EXAMPLES_SIMPLE_ECHO_ECHO_H_
 #define RYANLIB_EXAMPLES_SIMPLE_ECHO_ECHO_H_
 
-#include "tcp_server.h"
+#include "tcp_connection/tcp_server.h"
 
 // RFC 862
 class EchoServer {
@@ -15,7 +15,7 @@ class EchoServer {
   void OnConnection(const TcpConnectionPtr& conn);
 
   void OnMessage(const TcpConnectionPtr& conn,
-                 Buffer* buf, muduo::Timestamp time);
+                 Buffer* buf, Timestamp time);
 
   TcpServer server_;
 };

@@ -9,6 +9,7 @@
 #include <sys/socket.h>
 #include <sys/types.h>
 
+#include "base/weak_callback.h"
 #include "net/channel.h"
 #include "net/event_loop.h"
 #include "logger/logging.h"
@@ -68,6 +69,11 @@ TcpConnection::~TcpConnection() {
 }
 
 // 发送数据
+void TcpConnection::Send(const void* data, int len) {
+  std::string message(static_cast<const char*>(data), len);
+  this->Send(message);
+}
+
 void TcpConnection::Send(const std::string& buf) {
   if (state_ == kConnected) {
     if (loop_->IsInLoopThread()) {
@@ -170,6 +176,78 @@ void TcpConnection::ShutdownInLoop() {
   }
 }
 
+void TcpConnection::ForceClose() {
+  // FIXME: use compare and swap
+  if (state_ == kConnected || state_ == kDisconnecting) {
+    SetState(kDisconnecting);
+    loop_->QueueInLoop(std::bind(&TcpConnection::ForceCloseInLoop, shared_from_this()));
+  }
+}
+
+void TcpConnection::ForceCloseWithDelay(double seconds) {
+  if (state_ == kConnected || state_ == kDisconnecting) {
+    SetState(kDisconnecting);
+    loop_->RunAfter(
+        seconds, MakeWeakCallback(
+                     shared_from_this(),
+                     &TcpConnection::ForceClose));  // not forceCloseInLoop to
+                                                    // avoid race condition
+  }
+}
+
+void TcpConnection::ForceCloseInLoop() {
+  loop_->AssertInLoopThread();
+  if (state_ == kConnected || state_ == kDisconnecting) {
+    // as if we received 0 byte in handleRead();
+    this->HandleClose();
+  }
+}
+
+const char* TcpConnection::StateToString() const {
+  switch (state_) {
+    case kDisconnected:
+      return "kDisconnected";
+    case kConnecting:
+      return "kConnecting";
+    case kConnected:
+      return "kConnected";
+    case kDisconnecting:
+      return "kDisconnecting";
+    default:
+      return "unknown state";
+  }
+}
+
+void TcpConnection::SetTcpNoDelay(bool on) {
+  socket_->SetTcpNoDelay(on);
+}
+
+
+void TcpConnection::StartRead() {
+  loop_->RunInLoop(std::bind(&TcpConnection::StartReadInLoop, this));
+}
+
+void TcpConnection::StartReadInLoop() {
+  loop_->AssertInLoopThread();
+  if (!reading_ || !channel_->IsReading()) {
+    channel_->EnableReading();
+    reading_ = true;
+  }
+}
+
+void TcpConnection::StopRead() {
+  loop_->RunInLoop(std::bind(&TcpConnection::StopReadInLoop, this));
+}
+
+void TcpConnection::StopReadInLoop() {
+  loop_->AssertInLoopThread();
+  if (reading_ || channel_->IsReading()) {
+    channel_->DisableReading();
+    reading_ = false;
+  }
+}
+
+
 // 连接建立
 void TcpConnection::ConnectEstablished() {
   SetState(kConnected);  // 建立连接，设置一开始状态为连接态
@@ -250,12 +328,15 @@ void TcpConnection::HandleWrite() {
 }
 
 void TcpConnection::HandleClose() {
+  loop_->AssertInLoopThread();
+  LOG_TRACE << "fd = " << channel_->fd() << " state = " << StateToString();
+  assert(state_ == kConnected || state_ == kDisconnecting);
   SetState(kDisconnected);  // 设置状态为关闭连接状态
   channel_->DisableAll();   // 注销Channel所有感兴趣事件
 
-  TcpConnectionPtr connPtr(shared_from_this());
-  connection_callback_(connPtr);
-  close_callback_(connPtr);  // 关闭连接得回调
+  TcpConnectionPtr guard_this(shared_from_this());
+  connection_callback_(guard_this);
+  close_callback_(guard_this);  // 关闭连接得回调
 }
 
 void TcpConnection::HandleError() {
