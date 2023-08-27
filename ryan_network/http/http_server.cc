@@ -6,10 +6,8 @@
 #include "http/http_request.h"
 #include "http/http_response.h"
 
-/**
- * 默认的http回调函数
- * 设置响应状态码，响应信息并关闭连接
- */
+/// 默认的http回调函数
+/// 设置响应状态码，响应信息并关闭连接
 void DefaultHttpCallback(const HttpRequest&, HttpResponse* resp) {
   resp->SetStatusCode(HttpResponse::k404NotFound);
   resp->SetStatusMessage("Not Found");

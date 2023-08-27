@@ -1,9 +1,8 @@
 #ifndef RYANLIB_HTTP_HTTP_REQUEST_H_
 #define RYANLIB_HTTP_HTTP_REQUEST_H_
 
-#include <unordered_map>
+#include <map>
 
-#include "base/noncopyable.h"
 #include "base/timestamp.h"
 
 class HttpRequest {
@@ -101,7 +100,7 @@ class HttpRequest {
     return result;
   }
 
-  const std::unordered_map<std::string, std::string>& headers() const {
+  const std::map<std::string, std::string>& headers() const {
     return headers_;
   }
 
@@ -120,7 +119,7 @@ class HttpRequest {
   std::string path_;                                      // 请求路径
   std::string query_;                                     // 询问参数
   Timestamp receive_time_;                                // 请求时间
-  std::unordered_map<std::string, std::string> headers_;  // 请求头部列表
+  std::map<std::string, std::string> headers_;  // 请求头部列表
 };
 
 #endif  // RYANLIB_HTTP_HTTP_REQUEST_H_

@@ -1,45 +1,58 @@
-#include "http/http_context.h"
+#include <sys/socket.h>  // SO_REUSEPORT
+
+#include <map>
+#include <string>
+
+#include "logger/logging.h"
+#include "net/event_loop.h"
+#include "net/event_loop_thread_pool.h"
 #include "http/http_request.h"
 #include "http/http_response.h"
 #include "http/http_server.h"
-#include "base/timestamp.h"
 
 extern char favicon[555];
 bool benchmark = false;
 
-void OnRequest(const HttpRequest& req, HttpResponse* resp) {
-  std::cout << "Headers " << req.MethodString() << " " << req.path()
-            << std::endl;
+std::map<std::string, std::string> redirections;
 
-  // 打印头部
+void onRequest(const HttpRequest& req, HttpResponse* resp) {
+  LOG_INFO << "Headers " << req.MethodString() << " " << req.path();
   if (!benchmark) {
     const std::map<std::string, std::string>& headers = req.headers();
-    for (const auto& header : headers) {
-      std::cout << header.first << ": " << header.second << std::endl;
+    for (std::map<std::string, std::string>::const_iterator it = headers.begin();
+         it != headers.end(); ++it) {
+      LOG_DEBUG << it->first << ": " << it->second;
     }
   }
 
-  if (req.path() == "/") {
+  // TODO: support PUT and DELETE to create new redirections on-the-fly.
+
+  std::map<std::string, std::string>::const_iterator it = redirections.find(req.path());
+  if (it != redirections.end()) {
+    resp->SetStatusCode(HttpResponse::k301MovedPermanently);
+    resp->SetStatusMessage("Moved Permanently");
+    resp->AddHeader("Location", it->second);
+    // resp->setCloseConnection(true);
+  } else if (req.path() == "/") {
     resp->SetStatusCode(HttpResponse::k200Ok);
     resp->SetStatusMessage("OK");
     resp->SetContentType("text/html");
-    resp->AddHeader("Server", "Muduo");
     std::string now = Timestamp::Now().ToFormattedString();
+    std::map<std::string, std::string>::const_iterator i = redirections.begin();
+    std::string text;
+    for (; i != redirections.end(); ++i) {
+      text.append("<ul>" + i->first + " =&gt; " + i->second + "</ul>");
+    }
+
     resp->SetBody(
-        "<html><head><title>This is title</title></head>"
-        "<body><h1>Hello</h1>Now is " +
-        now + "</body></html>");
+        "<html><head><title>My tiny short url service</title></head>"
+        "<body><h1>Known redirections</h1>" +
+        text + "Now is " + now + "</body></html>");
   } else if (req.path() == "/favicon.ico") {
     resp->SetStatusCode(HttpResponse::k200Ok);
     resp->SetStatusMessage("OK");
     resp->SetContentType("image/png");
     resp->SetBody(std::string(favicon, sizeof favicon));
-  } else if (req.path() == "/hello") {
-    resp->SetStatusCode(HttpResponse::k200Ok);
-    resp->SetStatusMessage("OK");
-    resp->SetContentType("text/plain");
-    resp->AddHeader("Server", "Muduo");
-    resp->SetBody("hello, world!\n");
   } else {
     resp->SetStatusCode(HttpResponse::k404NotFound);
     resp->SetStatusMessage("Not Found");
@@ -48,11 +61,46 @@ void OnRequest(const HttpRequest& req, HttpResponse* resp) {
 }
 
 int main(int argc, char* argv[]) {
+  redirections["/1"] = "http://chenshuo.com";
+  redirections["/2"] = "http://blog.csdn.net/Solstice";
+
+  int numThreads = 0;
+  if (argc > 1) {
+    benchmark = true;
+    Logger::SetLogLevel(Logger::WARN);
+    numThreads = atoi(argv[1]);
+  }
+
+#ifdef SO_REUSEPORT
+  LOG_WARN << "SO_REUSEPORT";
   EventLoop loop;
-  HttpServer server(&loop, InetAddress(8080), "http-server");
-  server.SetHttpCallback(OnRequest);
-  server.Start();
+  EventLoopThreadPool threadPool(&loop, "shorturl");
+  if (numThreads > 1) {
+    threadPool.SetThreadNum(numThreads);
+  } else {
+    numThreads = 1;
+  }
+  threadPool.Start();
+
+  std::vector<std::unique_ptr<HttpServer>> servers;
+  for (int i = 0; i < numThreads; ++i) {
+    servers.emplace_back(new HttpServer(threadPool.GetNextLoop(),
+                                        InetAddress(8000), "shorturl",
+                                        TcpServer::kReusePort));
+    servers.back()->SetHttpCallback(onRequest);
+    servers.back()->GetLoop()->RunInLoop(
+        std::bind(&HttpServer::Start, servers.back().get()));
+  }
   loop.Loop();
+#else
+  LOG_WARN << "Normal";
+  EventLoop loop;
+  HttpServer server(&loop, InetAddress(8000), "shorturl");
+  server.setHttpCallback(onRequest);
+  server.setThreadNum(numThreads);
+  server.start();
+  loop.loop();
+#endif
 }
 
 char favicon[555] = {
