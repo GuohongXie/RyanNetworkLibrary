@@ -22,26 +22,26 @@ using std::placeholders::_3;
 
 class SudokuServer : Noncopyable {
  public:
-  SudokuServer(EventLoop* loop, const InetAddress& listenAddr,
-               int numEventLoops, int numThreads, bool nodelay)
-      : server_(loop, listenAddr, "SudokuServer"),
-        threadPool_(),
-        numThreads_(numThreads),
-        tcpNoDelay_(nodelay),
+  SudokuServer(EventLoop* loop, const InetAddress& listen_addr,
+               int num_event_loops, int num_threads, bool nodelay)
+      : server_(loop, listen_addr, "SudokuServer"),
+        thread_pool_(),
+        num_threads_(num_threads),
+        tcp_no_delay_(nodelay),
         startTime_(Timestamp::Now()) {
-    LOG_INFO << "Use " << numEventLoops << " IO threads.";
+    LOG_INFO << "Use " << num_event_loops << " IO threads.";
     LOG_INFO << "TCP no delay " << nodelay;
 
     server_.SetConnectionCallback(
         std::bind(&SudokuServer::OnConnection, this, _1));
     server_.SetMessageCallback(
         std::bind(&SudokuServer::OnMessage, this, _1, _2, _3));
-    server_.SetThreadNum(numEventLoops);
+    server_.SetThreadNum(num_event_loops);
   }
 
   void Start() {
-    LOG_INFO << "Starting " << numThreads_ << " computing threads.";
-    threadPool_.Start(numThreads_);
+    LOG_INFO << "Starting " << num_threads_ << " computing threads.";
+    thread_pool_.Start(num_threads_);
     server_.Start();
   }
 
@@ -51,7 +51,7 @@ class SudokuServer : Noncopyable {
               << conn->LocalAddress().ToIpPort() << " is "
               << (conn->Connected() ? "UP" : "DOWN");
     if (conn->Connected()) {
-      if (tcpNoDelay_) conn->SetTcpNoDelay(true);
+      if (tcp_no_delay_) conn->SetTcpNoDelay(true);
       conn->SetHighWatermarkCallback(
           std::bind(&SudokuServer::HighWatermark, this, _1, _2),
           5 * 1024 * 1024);
@@ -127,14 +127,14 @@ class SudokuServer : Noncopyable {
       req.puzzle.assign(colon + 1, request.end());
     } else {
       // when using thread pool, an id must be provided in the request.
-      if (numThreads_ > 1) return false;
+      if (num_threads_ > 1) return false;
       req.puzzle = request;
     }
 
     if (req.puzzle.size() == static_cast<size_t>(kCells)) {
       bool throttle = std::any_cast<bool>(conn->GetContext());
-      if (threadPool_.QueueSize() < 1000 * 1000 && !throttle) {
-        threadPool_.AddTask(std::bind(&SudokuServer::Solve, this, conn, req));
+      if (thread_pool_.QueueSize() < 1000 * 1000 && !throttle) {
+        thread_pool_.RunTask(std::bind(&SudokuServer::Solve, this, conn, req));
       } else {
         if (req.id.empty()) {
           conn->Send("ServerTooBusy\r\n");
@@ -149,7 +149,7 @@ class SudokuServer : Noncopyable {
 
   void Solve(const TcpConnectionPtr& conn, const Request& req) {
     LOG_DEBUG << conn->name();
-    std::string result = solveSudoku(req.puzzle);
+    std::string result = SolveSudoku(req.puzzle);
     if (req.id.empty()) {
       conn->Send(result + "\r\n");
     } else {
@@ -158,9 +158,9 @@ class SudokuServer : Noncopyable {
   }
 
   TcpServer server_;
-  ThreadPool threadPool_;
-  const int numThreads_;
-  const bool tcpNoDelay_;
+  ThreadPool thread_pool_;
+  const int num_threads_;
+  const bool tcp_no_delay_;
   const Timestamp startTime_;
 };
 
@@ -168,22 +168,22 @@ int main(int argc, char* argv[]) {
   LOG_INFO << argv[0]
            << " [number of IO threads] [number of worker threads] [-n]";
   LOG_INFO << "pid = " << getpid() << ", tid = " << current_thread::Tid();
-  int numEventLoops = 0;
-  int numThreads = 0;
+  int num_event_loops = 0;
+  int num_threads = 0;
   bool nodelay = false;
   if (argc > 1) {
-    numEventLoops = std::stoi(argv[1]);
+    num_event_loops = std::stoi(argv[1]);
   }
   if (argc > 2) {
-    numThreads = std::stoi(argv[2]);
+    num_threads = std::stoi(argv[2]);
   }
   if (argc > 3 && std::string(argv[3]) == "-n") {
     nodelay = true;
   }
 
   EventLoop loop;
-  InetAddress listenAddr(9981);
-  SudokuServer server(&loop, listenAddr, numEventLoops, numThreads, nodelay);
+  InetAddress listen_addr(9981);
+  SudokuServer server(&loop, listen_addr, num_event_loops, num_threads, nodelay);
 
   server.Start();
 

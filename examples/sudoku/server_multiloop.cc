@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <functional>
+#include <string>
 #include <utility>
 
 #include <unistd.h>
@@ -19,19 +20,19 @@ using std::placeholders::_3;
 
 class SudokuServer {
  public:
-  SudokuServer(EventLoop* loop, const InetAddress& listen_addr, int num_threads)
+  SudokuServer(EventLoop* loop, const InetAddress& listen_addr, int num_event_loops)
       : server_(loop, listen_addr, "SudokuServer"),
-        num_threads_(num_threads),
+        num_event_loops_(num_event_loops),
         start_time_(Timestamp::Now()) {
     server_.SetConnectionCallback(
         std::bind(&SudokuServer::OnConnection, this, _1));
     server_.SetMessageCallback(
         std::bind(&SudokuServer::OnMessage, this, _1, _2, _3));
-    server_.SetThreadNum(num_threads);
+    server_.SetThreadNum(num_event_loops);
   }
 
   void Start() {
-    LOG_INFO << "starting " << num_threads_ << " threads.";
+    LOG_INFO << "starting " << num_event_loops_ << " threads.";
     server_.Start();
   }
 
@@ -82,7 +83,7 @@ class SudokuServer {
 
     if (puzzle.size() == static_cast<size_t>(kCells)) {
       LOG_DEBUG << conn->name();
-      std::string result = solveSudoku(puzzle);
+      std::string result = SolveSudoku(puzzle);
       if (id.empty()) {
         conn->Send(result + "\r\n");
       } else {
@@ -95,19 +96,19 @@ class SudokuServer {
   }
 
   TcpServer server_;
-  int num_threads_;
+  int num_event_loops_;
   Timestamp start_time_;
 };
 
 int main(int argc, char* argv[]) {
   LOG_INFO << "pid = " << getpid() << ", tid = " << current_thread::Tid();
-  int num_threads = 0;
+  int num_event_loops = 0;
   if (argc > 1) {
-    num_threads = atoi(argv[1]);
+    num_event_loops = std::stoi(argv[1]);
   }
   EventLoop loop;
   InetAddress listen_addr(9981);
-  SudokuServer server(&loop, listen_addr, num_threads);
+  SudokuServer server(&loop, listen_addr, num_event_loops);
 
   server.Start();
 

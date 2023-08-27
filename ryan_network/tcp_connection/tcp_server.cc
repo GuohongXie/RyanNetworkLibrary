@@ -54,7 +54,7 @@ void TcpServer::SetThreadNum(int num_threads) {
 // 开启服务器监听
 void TcpServer::Start() {
   if (started_++ == 0) {
-    // 启动底层的lopp线程池
+    // 启动底层的loop线程池
     thread_pool_->Start(thread_init_callback_);
     // acceptor_.get()绑定时候需要地址
     loop_->RunInLoop(std::bind(&Acceptor::Listen, acceptor_.get()));

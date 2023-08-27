@@ -15,9 +15,9 @@ void ShowInfo() { LOG_INFO << current_thread::Tid(); }
 void test1() {
   ThreadPool pool;
   for (int i = 0; i < 5000; i++) {
-    pool.AddTask(ShowInfo);
+    pool.RunTask(ShowInfo);
   }
-  pool.AddTask([] { ::sleep(5); });
+  pool.RunTask([] { ::sleep(5); });
   pool.Start(4);
 }
 

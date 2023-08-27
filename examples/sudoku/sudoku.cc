@@ -237,7 +237,7 @@ class SudokuSolver {
   }
 };
 
-std::string solveSudoku(const std::string_view& puzzle) {
+std::string SolveSudoku(const std::string_view& puzzle) {
   assert(puzzle.size() == kCells);
 
   std::string result = kNoSolution;

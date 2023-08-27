@@ -4,7 +4,7 @@
 #include <string>
 #include <string_view>
 
-std::string solveSudoku(const std::string_view& puzzle);
+std::string SolveSudoku(const std::string_view& puzzle);
 const int kCells = 81;
 extern const char kNoSolution[];
 

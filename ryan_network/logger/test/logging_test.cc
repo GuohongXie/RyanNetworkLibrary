@@ -51,11 +51,11 @@ int main() {
 
   ThreadPool pool("pool");
   pool.Start(5);
-  pool.AddTask(LogInThread);
-  pool.AddTask(LogInThread);
-  pool.AddTask(LogInThread);
-  pool.AddTask(LogInThread);
-  pool.AddTask(LogInThread);
+  pool.RunTask(LogInThread);
+  pool.RunTask(LogInThread);
+  pool.RunTask(LogInThread);
+  pool.RunTask(LogInThread);
+  pool.RunTask(LogInThread);
 
   LOG_TRACE << "trace";
   LOG_DEBUG << "debug";

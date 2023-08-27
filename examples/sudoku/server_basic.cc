@@ -77,7 +77,7 @@ class SudokuServer {
 
     if (puzzle.size() == static_cast<size_t>(kCells)) {
       LOG_DEBUG << conn->name();
-      std::string result = solveSudoku(puzzle);
+      std::string result = SolveSudoku(puzzle);
       if (id.empty()) {
         conn->Send(result + "\r\n");
       } else {

@@ -1,8 +1,9 @@
-#include <stdio.h>
-#include <unistd.h>
-
+#include <cstdio>
+#include <string>
 #include <functional>
 #include <utility>
+
+#include <unistd.h>
 
 #include "examples/sudoku/sudoku.h"
 #include "logger/logging.h"
@@ -20,8 +21,8 @@ using std::placeholders::_3;
 
 class SudokuServer {
  public:
-  SudokuServer(EventLoop* loop, const InetAddress& listenAddr, int num_threads)
-      : server_(loop, listenAddr, "SudokuServer"),
+  SudokuServer(EventLoop* loop, const InetAddress& listen_addr, int num_threads)
+      : server_(loop, listen_addr, "SudokuServer"),
         num_threads_(num_threads),
         start_time_(Timestamp::Now()) {
     server_.SetConnectionCallback(
@@ -32,7 +33,7 @@ class SudokuServer {
 
   void Start() {
     LOG_INFO << "starting " << num_threads_ << " threads.";
-    threadPool_.Start(num_threads_);
+    thread_pool_.Start(num_threads_);
     server_.Start();
   }
 
@@ -82,17 +83,17 @@ class SudokuServer {
     }
 
     if (puzzle.size() == static_cast<size_t>(kCells)) {
-      threadPool_.AddTask(std::bind(&solve, conn, puzzle, id));
+      thread_pool_.RunTask(std::bind(&Solve, conn, puzzle, id));
     } else {
       goodRequest = false;
     }
     return goodRequest;
   }
 
-  static void solve(const TcpConnectionPtr& conn, const std::string& puzzle,
+  static void Solve(const TcpConnectionPtr& conn, const std::string& puzzle,
                     const std::string& id) {
     LOG_DEBUG << conn->name();
-    std::string result = solveSudoku(puzzle);
+    std::string result = SolveSudoku(puzzle);
     if (id.empty()) {
       conn->Send(result + "\r\n");
     } else {
@@ -101,7 +102,7 @@ class SudokuServer {
   }
 
   TcpServer server_;
-  ThreadPool threadPool_;
+  ThreadPool thread_pool_;
   int num_threads_;
   Timestamp start_time_;
 };
@@ -110,11 +111,11 @@ int main(int argc, char* argv[]) {
   LOG_INFO << "pid = " << getpid() << ", tid = " << current_thread::Tid();
   int num_threads = 0;
   if (argc > 1) {
-    num_threads = atoi(argv[1]);
+    num_threads = std::stoi(argv[1]);
   }
   EventLoop loop;
-  InetAddress listenAddr(9981);
-  SudokuServer server(&loop, listenAddr, num_threads);
+  InetAddress listen_addr(9981);
+  SudokuServer server(&loop, listen_addr, num_threads);
 
   server.Start();
 

@@ -22,20 +22,20 @@ using std::placeholders::_3;
 class SudokuServer : Noncopyable {
  public:
   SudokuServer(EventLoop* loop, const InetAddress& listen_addr,
-               int numEventLoops, int num_threads, bool nodelay)
+               int num_event_loops, int num_threads, bool nodelay)
       : server_(loop, listen_addr, "SudokuServer"),
         thread_pool_(),
         num_threads_(num_threads),
         tcp_no_delay_(nodelay),
         startTime_(Timestamp::Now()) {
-    LOG_INFO << "Use " << numEventLoops << " IO threads.";
+    LOG_INFO << "Use " << num_event_loops << " IO threads.";
     LOG_INFO << "TCP no delay " << nodelay;
 
     server_.SetConnectionCallback(
         std::bind(&SudokuServer::OnConnection, this, _1));
     server_.SetMessageCallback(
         std::bind(&SudokuServer::OnMessage, this, _1, _2, _3));
-    server_.SetThreadNum(numEventLoops);
+    server_.SetThreadNum(num_event_loops);
   }
 
   void Start() {
@@ -100,7 +100,7 @@ class SudokuServer : Noncopyable {
     }
 
     if (req.puzzle.size() == static_cast<size_t>(kCells)) {
-      thread_pool_.AddTask(std::bind(&SudokuServer::Solve, this, conn, req));
+      thread_pool_.RunTask(std::bind(&SudokuServer::Solve, this, conn, req));
       return true;
     }
     return false;
@@ -108,7 +108,7 @@ class SudokuServer : Noncopyable {
 
   void Solve(const TcpConnectionPtr& conn, const Request& req) {
     LOG_DEBUG << conn->name();
-    std::string result = solveSudoku(req.puzzle);
+    std::string result = SolveSudoku(req.puzzle);
     if (req.id.empty()) {
       conn->Send(result + "\r\n");
     } else {
@@ -127,14 +127,14 @@ int main(int argc, char* argv[]) {
   LOG_INFO << argv[0]
            << " [number of IO threads] [number of worker threads] [-n]";
   LOG_INFO << "pid = " << getpid() << ", tid = " << current_thread::Tid();
-  int numEventLoops = 0;
+  int num_event_loops = 0;
   int num_threads = 0;
   bool nodelay = false;
   if (argc > 1) {
-    numEventLoops = atoi(argv[1]);
+    num_event_loops = std::stoi(argv[1]);
   }
   if (argc > 2) {
-    num_threads = atoi(argv[2]);
+    num_threads = std::stoi(argv[2]);
   }
   if (argc > 3 && std::string(argv[3]) == "-n") {
     nodelay = true;
@@ -142,7 +142,7 @@ int main(int argc, char* argv[]) {
 
   EventLoop loop;
   InetAddress listen_addr(9981);
-  SudokuServer server(&loop, listen_addr, numEventLoops, num_threads, nodelay);
+  SudokuServer server(&loop, listen_addr, num_event_loops, num_threads, nodelay);
 
   server.Start();
 
