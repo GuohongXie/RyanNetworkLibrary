@@ -1,17 +1,19 @@
 add_executable(sudoku_solver_basic server_basic.cc sudoku.cc)
 target_link_libraries(sudoku_solver_basic ryan_network)
 
-#add_executable(sudoku_solver_multiloop server_multiloop.cc sudoku.cc)
-#target_link_libraries(sudoku_solver_multiloop ryan_network)
+add_executable(sudoku_solver_multiloop server_multiloop.cc sudoku.cc)
+target_link_libraries(sudoku_solver_multiloop ryan_network)
 
 add_executable(sudoku_solver_threadpool server_threadpool.cc sudoku.cc)
 target_link_libraries(sudoku_solver_threadpool ryan_network)
 
-#add_executable(sudoku_solver_hybrid server_hybrid.cc sudoku.cc)
-#target_link_libraries(sudoku_solver_hybrid muduo_inspect)
+if(Boost_FOUND)
+add_executable(sudoku_solver_hybrid server_hybrid.cc sudoku.cc)
+target_link_libraries(sudoku_solver_hybrid ${Boost_LIBRARIES} ryan_network)
 
-#add_executable(sudoku_solver_prod server_prod.cc sudoku.cc)
-#target_link_libraries(sudoku_solver_prod muduo_inspect)
+add_executable(sudoku_solver_prod server_prod.cc sudoku.cc)
+target_link_libraries(sudoku_solver_prod ${Boost_LIBRARIES} ryan_network)
+endif()
 
 
 #add_executable(sudoku_client_batch batch.cc sudoku.cc)

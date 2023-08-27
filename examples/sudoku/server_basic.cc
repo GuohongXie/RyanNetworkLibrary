@@ -11,15 +11,21 @@
 #include "tcp_connection/tcp_server.h"
 
 
+namespace {
+using std::placeholders::_1;
+using std::placeholders::_2;
+using std::placeholders::_3;
+} // namespace
+
 class SudokuServer {
  public:
   SudokuServer(EventLoop* loop, const InetAddress& listenAddr)
       : server_(loop, listenAddr, "SudokuServer"),
         startTime_(Timestamp::Now()) {
     server_.SetConnectionCallback(
-        std::bind(&SudokuServer::OnConnection, this, std::placeholders::_1));
+        std::bind(&SudokuServer::OnConnection, this, _1));
     server_.SetMessageCallback(
-        std::bind(&SudokuServer::OnMessage, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+        std::bind(&SudokuServer::OnMessage, this, _1, _2, _3));
   }
 
   void Start() { server_.Start(); }

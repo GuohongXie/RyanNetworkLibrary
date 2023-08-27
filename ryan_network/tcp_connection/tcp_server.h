@@ -45,7 +45,7 @@ class TcpServer : Noncopyable {
   }
 
   // 设置底层subLoop的个数
-  void SetThreadNum(int numThreads);
+  void SetThreadNum(int num_threads);
 
   // 开启服务器监听
   void Start();
