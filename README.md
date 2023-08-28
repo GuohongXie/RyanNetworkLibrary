@@ -3,9 +3,17 @@
 
 ## 项目介绍
 
-本项目是参考 muduo 实现的基于 Reactor 模型的多线程网络库。
+本项目是参考 `muduo` 实现的基于 `Reactor` 模型的多线程网络库。
+
+
 这个项目作为本人的网络编程学习和练手项目，的是利用从头编写写网络库，学习多线程网络程序的各种编程模型和最佳实践。
-本项目主要作为一个练习项目，因此只实现了muduo的部分功能，如 `thread_pool`、`buffer`、`async_logger`、`poller`、`event_loop`、`tcp_server` 等。而没有实现 `tcp_client`、`time_zone`、`protobuf`、`protorpc`、`inspect` 等功能。
+
+
+本项目主要作为一个练习项目，因此只实现了muduo的部分功能，如 `thread_pool`、`buffer`、`async_logger`、`poller`、`event_loop`、`tcp_server` 等。
+
+而没有实现 `tcp_client`、`time_zone`、`protobuf`、`protorpc`、`inspect` 等功能。
+
+
 主要基于 `C++11` 编写，也用到了少部分 `C++17` 特性 (如 `std::any` 等)。
 
 
@@ -16,7 +24,7 @@
 - 基于自实现的双缓冲区实现异步日志，由后端线程负责定时向磁盘写入前端日志信息，避免数据落盘时阻塞网络服务。
 - 使用 `Linux` 的 `timerfd` 通知到期任务，将定时任务与事件循环高效结合，用统一的方式处理 `I/O` 事件和定时事件。使用 `std::map` (底层使用红黑树) 管理定时任务。
 - 遵循 `RAII` 管理资源，如使用智能指针管理内存，使用 `RAII` 类封装 `socket fd` 的打开关闭，减小`resource leak`风险。
-- 基于本项目实现的网络库, 实现了一个基础的 `http` 库, 利用有限状态机解析 `HTTP` 请求报文。
+- 基于本项目实现的网络库, 实现了一个简易的 `http` 库, 利用有限状态机解析 `HTTP` 请求报文。
 - 使用 `gtest` 进行单元测试
 
 *另外两个补充的部分作为练手，并没有使用到上述实现的网络库，主要是为了顺便熟悉一下资源池化技术*
